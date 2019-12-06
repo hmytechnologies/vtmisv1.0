@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Chosen/Select2 Template</title>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.min.css">
+    <style type="text/css">
+      .limitedNumbChosen, .limitedNumbSelect2{
+  width: 400px;
+}
+    </style>
+  </head>
+  <body>
+
+    <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.jquery.min.js"></script>
+    <script>// Additional logic goes here
+      $(document).ready(function(){
+  //Chosen
+  $(".limitedNumbChosen").chosen({
+        max_selected_options: 3,
+    placeholder_text_multiple: "Which are two of most productive days of your week"
+    })
+    .bind("chosen:maxselected", function (){
+        window.alert("You reached your limited number of selections which is 2 selections!");
+    })
+  //Select2
+  $(".limitedNumbSelect2").select2({
+        maximumSelectionLength: 2,
+    placeholder: "Which are two of most productive days of your week"
+    })
+});
+    </script>
+
+    <h4>Limited Number of Selections using Chosen</h4>
+    <form name="" action="test.php" method="post">
+        <select class="limitedNumbChosen" name="chosen" multiple="true">
+        <option value="1">Monday</option>
+        <option value="2">Tuesday</option>
+        <option value="3">Wednesday</option>
+        <option value="4">Thursday</option>
+        <option value="5">Friday</option>
+        <option value="6">Saturday</option>
+        <option value="7">Sunday</option>
+        </select>
+        <input type="submit" name="" value="Submit">
+        </form>
+  </body>
+</html>

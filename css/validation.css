@@ -1,0 +1,22 @@
+.register{width: 400px;}
+.register p {
+    width: 100%;
+}
+.register label {
+    width: 120px;
+    color: #333;
+    float: left;
+}
+input.error {
+    border: 1px red;
+}
+label.error{
+    width: 100%;
+    color: red;
+    font-style: regular;
+    margin-left: 120px;
+    margin-bottom: 5px;
+}
+.register input.submit {
+    margin-left: 120px;
+}

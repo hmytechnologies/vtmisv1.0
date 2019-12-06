@@ -1,0 +1,10 @@
+<?php
+	if($_SESSION['role_session']==2)
+	{
+		include("homestudent.php");
+	}
+	else
+	{
+		include("dashboard.php");
+	}
+?>

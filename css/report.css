@@ -1,0 +1,63 @@
+.monthly_rental_payment_daily th {
+        white-space: nowrap;
+    }
+    .monthly_rental_payment_daily td {
+        white-space: nowrap;
+        padding: 4px
+    }
+    div.dashboardBox {
+        border: 1px solid #999999;
+        width: 100%;
+        margin-right: 0px;
+        margin-bottom: 0px;
+        float: left;
+    }
+    div.dashboardBoxBody {
+        padding: 8px;
+        height: 400px;
+        overflow: auto;
+    }
+    .monthly_rental_payment_daily a {
+        color: #0000ff;
+    }
+    .pound_symbol {
+        margin-right: 5px;
+    }
+    table.standardTable {
+        position: relative;
+        width: 100%;
+    }
+    table.standardTable tr.hover {
+        background-color: #A6A6A6;
+        font-size: 11px;
+        font-family: Arial;
+        font-weight: normal;
+        padding: 4px;
+        text-align: left;
+        cursor: pointer;
+    }
+    .standardTable th {
+        font-size: 12px;
+        background-color: #888888;
+        color: #FFFFFF;
+        font-weight: bold;
+        text-align: left;
+        border: 1px solid #AAAAAA;
+    }
+    .standardTable td {
+        font-size: 11px;
+    }
+    .bold {
+        font-weight: bold;
+    }
+    .left {
+        text-align: left !important;
+    }
+    [id^=tab_] {
+        position: relative;
+        overflow: hidden;
+    }
+    .outer_table {
+        width:795px;    
+        table-layout:fixed;
+    }

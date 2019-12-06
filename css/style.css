@@ -1,0 +1,112 @@
+            @charset "UTF-8";
+            /* CSS Document */
+
+            body {
+                width:100px;
+	            height:100px;
+              background-color:lightgray;
+            font-family: 'Segoe UI','Raleway', sans-serif;
+            }
+
+            p {
+	            color:#CCC;
+            }
+
+            .spacing {
+	            padding-top:7px;
+	            padding-bottom:7px;
+            }
+            .middlePage {
+	            width: 680px;
+                height: 500px;
+                position: absolute;
+                top:0;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                margin: auto;
+            }
+
+            .logo {
+	            color:#CCC;
+            }
+            .inner-addon { 
+                position: relative; 
+            }
+
+            /* style icon */
+            .inner-addon .glyphicon {
+              position: absolute;
+              padding: 10px;
+              pointer-events: none;
+            }
+
+            /* align icon */
+            .left-addon .glyphicon  { left:  0px;}
+            .right-addon .glyphicon { right: 0px;}
+
+            /* add padding  */
+            .left-addon input  { padding-left:  30px; }
+            .right-addon input { padding-right: 30px; }
+            .row{
+                    overflow: hidden; 
+                }
+
+            [class*="col-"]{
+                margin-bottom: -99999px;
+                padding-bottom: 99999px;
+            }
+            /* columns of same height styles */
+
+            .row-full-height {
+              height: 100%;
+            }
+            .col-full-height {
+              height: 100%;
+              vertical-align: middle;
+            }
+            .row-same-height {
+              display: table;
+              width: 100%;
+              /* fix overflow */
+              table-layout: fixed;
+            }
+            .col-xs-height {
+              display: table-cell;
+              float: none !important;
+            }
+
+            @media (min-width: 768px) {
+              .col-sm-height {
+                display: table-cell;
+                float: none !important;
+              }
+            }
+            @media (min-width: 992px) {
+              .col-md-height {
+                display: table-cell;
+                float: none !important;
+              }
+            }
+            @media (min-width: 1200px) {
+              .col-lg-height {
+                display: table-cell;
+                float: none !important;
+              }
+            }
+            /* vertical alignment styles */
+
+            .col-top {
+              vertical-align: top;
+            }
+            .col-middle {
+              vertical-align: middle;
+            }
+            .col-bottom {
+              vertical-align: bottom;
+            }
+            .bosom-none {
+                margin-right: -2.5%; 
+                margin-top:-2.5%;
+                margin-left: -2.5%; 
+            }
