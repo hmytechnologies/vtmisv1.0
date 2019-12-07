@@ -1,9 +1,9 @@
 <?php
-ini_set ('display_errors', 1);
-error_reporting (E_ALL | E_STRICT);
+/*ini_set ('display_errors', 1);
+error_reporting (E_ALL | E_STRICT);*/
 include('DB.php');
 $db = new DBHelper();
-$userID=$_SESSION['user_session'];
+//$userID=$_SESSION['user_session'];
 if(isset($_REQUEST['action_type']) && !empty($_REQUEST['action_type'])) {
 if ($_REQUEST['action_type'] == 'edit') {
 if (!empty($_POST['instructorID'])) {
