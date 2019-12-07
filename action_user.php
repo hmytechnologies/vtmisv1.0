@@ -143,12 +143,6 @@ if(isset($_REQUEST['action_type']) && !empty($_REQUEST['action_type'])) {
         $phoneNumber = $_POST['phoneNumber'];
         $roleID=$_POST['roleID'];
 
-        /*if(!empty($_POST['centerID']))
-            $officeID=$_POST['centerID'];
-        /*else if(!empty($_POST['departmentID']))
-            $officeID=$_POST['departmentID'];
-        else
-            $officeID=0;
         if(!empty($_POST['centerID']))
         {
             $departmentID=$_POST['centerID'];
@@ -156,12 +150,13 @@ if(isset($_REQUEST['action_type']) && !empty($_REQUEST['action_type'])) {
         else
         {
             $departmentID=0;
-        }*/
+        }
             $editUserData = array(
                 'firstName' => $fname,
                 'lastName' => $lname,
                 'email' => $email,
                 'phoneNumber' => $phoneNumber,
+                'departmentID' =>$departmentID,
                 'login'=>1
             );
         $userID=$_POST['userID'];
@@ -176,9 +171,7 @@ if(isset($_REQUEST['action_type']) && !empty($_REQUEST['action_type'])) {
         $condition_roles=array('userID'=>$userID,'status'=>1);
         $update_role = $db->update($tblUserRole,$roleData,$condition_roles);
 
-        //for instructors and hod
-        //for Instructor,HoD,Deans-Information must be save to instructor table
-        /*if($roleID == 3 || $roleID == 4 || $roleID == 9)
+       if($_POST['officeID'] == 2)
         {
             $chk_inst=$db->getRows("instructor",array('where'=>array('userID'=>$userID)));
             if(!empty($chk_inst))
@@ -190,6 +183,7 @@ if(isset($_REQUEST['action_type']) && !empty($_REQUEST['action_type'])) {
                     'instructorName' => $name,
                     'phoneNumber' => $phoneNumber,
                     'email' => $email,
+                    'centerID'=>$_POST['centerID'],
                     'departmentID' => $_POST['departmentID'],
                     'instructorStatus' => 1,
                     'status'=>0
@@ -204,6 +198,7 @@ if(isset($_REQUEST['action_type']) && !empty($_REQUEST['action_type'])) {
                     'instructorName' => $name,
                     'phoneNumber' => $phoneNumber,
                     'email' => $email,
+                    'centerID'=>$_POST['centerID'],
                     'departmentID' => $_POST['departmentID'],
                     'instructorStatus' => 1,
                     'isLogin' => 1,
@@ -212,9 +207,8 @@ if(isset($_REQUEST['action_type']) && !empty($_REQUEST['action_type'])) {
                 );
                 $insert = $db->insert("instructor", $instructorData);
 
-                //var_dump($instructorData);
             }
-        }*/
+        }
 
         $to = $email;
         $subject = 'Login details for StAR';

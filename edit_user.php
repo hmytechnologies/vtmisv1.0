@@ -37,6 +37,14 @@ $userID=$db->my_simple_crypt($_REQUEST['id'],'d');
 $userData = $db->getRows('users',array('where'=>array('userID'=>$userID)));
 if(!empty($userData)) {
     foreach($userData as $user) {
+
+        $statusRole = $db->getRows("userroles", array('where' => array('userID' => $userID, 'status' => 1)));
+        if (!empty($statusRole)) {
+            foreach ($statusRole as $srole) {
+                $main_role = $srole['roleID'];
+            }
+        }
+        $officeID=$db->getData('roles','officeID','roleID',$main_role);
         ?>
 
         <form name="" method="post" enctype="multipart/form-data" action="action_user.php">
@@ -148,17 +156,24 @@ if(!empty($userData)) {
                                 </div>
 
                                 <?php
-                                if ($sroleID == 9) {
+                                if ($officeID == 2) {
+
+                                    $centerID = $db->getData('instructor','centerID','userID',$userID);
+                                    $departmentID = $db->getData('instructor','departmentID','userID',$userID);
+
+
+
+
                                     ?>
                                     <div class="col-lg-4">
                                         <div class="form-group">
-                                            <label for="email">School Name</label>
-                                            <select name="schoolID" class="form-control">
+                                            <label for="email">Center Name</label>
+                                            <select name="centerID" class="form-control">
                                                 <?php
-                                                if (!empty($user['departmentID'])) {
+                                                if(!empty($centerID)) {
                                                     ?>
-                                                    <option value="<?php echo $user['departmentID']; ?>"><?php
-                                                        echo $db->getData("schools", "schoolName", "schoolID", $user['departmentID']);
+                                                    <option value="<?php echo $centerID; ?>"><?php
+                                                        echo $db->getData("center_registration", "centerName", "centerRegistrationID", $centerID);
                                                         ?></option>
                                                     <?php
                                                 } else {
@@ -166,18 +181,14 @@ if(!empty($userData)) {
                                                     <option value="">Select Here</option>
                                                     <?php
                                                 }
-                                                $departments = $db->getRows('schools', array('order_by' => 'schoolID ASC'));
-                                                if (!empty($departments)) {
-                                                    ?>
-
-                                                    <?php
-                                                    $count = 0;
-                                                    foreach ($departments as $level) {
+                                                $center = $db->getRows('center_registration', array('order_by' => 'centerRegistrationID ASC'));
+                                                if (!empty($center)) {
+                                                    foreach ($center as $cent) {
                                                         $count++;
-                                                        $departmentName = $level['schoolName'];
-                                                        $departmentID = $level['schoolID'];
+                                                        $centerName = $cent['centerName'];
+                                                        $centerID = $cent['centerRegistationID'];
                                                         ?>
-                                                        <option value="<?php echo $departmentID; ?>"><?php echo $departmentName; ?></option>
+                                                        <option value="<?php echo $centerID; ?>"><?php echo $centerName; ?></option>
                                                     <?php }
                                                 } ?>
                                             </select>
@@ -189,13 +200,12 @@ if(!empty($userData)) {
                                             <label for="email">Department Name</label>
                                             <select name="departmentID" class="form-control">
                                                 <?php
-                                                //get department from instructor department
-                                                $deptID=$db->getData("instructor","departmentID","departmentID",$userID);
-                                                if(!empty($deptID))
+
+                                                if(!empty($departmentID))
                                                 {
                                                     ?>
-                                                    <option value="<?php echo $deptID; ?>"><?php
-                                                        echo $db->getData("departments", "departmentName", "departmentID", $deptID);
+                                                    <option value="<?php echo $departmentID; ?>"><?php
+                                                        echo $db->getData("departments", "departmentName", "departmentID", $departmentID);
                                                         ?></option>
                                                     <?php
                                                 } else {
@@ -223,48 +233,7 @@ if(!empty($userData)) {
                                     </div>
                                     <?php
                                 }
-                                else {
-                                    if($sroleID != 2) {
-                                        ?>
 
-                                        <div class="col-lg-4">
-                                            <div class="form-group">
-                                                <label for="email">Department Name</label>
-                                                <select name="departmentID" class="form-control">
-                                                    <?php
-                                                    if (!empty($user['departmentID'])) {
-                                                        ?>
-                                                        <option value="<?php echo $user['departmentID']; ?>"><?php
-                                                            echo $db->getData("departments", "departmentName", "departmentID", $user['departmentID']);
-                                                            ?></option>
-                                                        <?php
-                                                    } else {
-                                                        ?>
-                                                        <option value="">Select Here</option>
-                                                        <?php
-                                                    }
-                                                    $departments = $db->getRows('departments', array('order_by' => 'departmentID ASC'));
-                                                    if (!empty($departments)) {
-                                                        ?>
-
-                                                        <?php
-                                                        $count = 0;
-                                                        foreach ($departments as $level) {
-                                                            $count++;
-                                                            $departmentName = $level['departmentName'];
-                                                            $departmentID = $level['departmentID'];
-                                                            ?>
-                                                            <option value="<?php echo $departmentID; ?>"><?php echo $departmentName; ?></option>
-                                                        <?php }
-                                                    } ?>
-                                                </select>
-
-                                            </div>
-                                        </div>
-
-                                        <?php
-                                    }
-                                }
                                     ?>
 
 
@@ -290,6 +259,7 @@ if(!empty($userData)) {
                 <div class="col-lg-3">
                     <input type="hidden" name="action_type" value="edituser"/>
                     <input type="hidden" name="userID" value="<?php echo $userID; ?>">
+                    <input type="hidden" name="officeID" value="<?php echo $officeID;?>">
                     <input type="submit" name="doSubmit" value="Save Records" class="btn btn-primary form-control">
                 </div>
                 <div class="col-lg-3">
