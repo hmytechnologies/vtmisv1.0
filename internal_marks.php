@@ -97,7 +97,7 @@ $instructorID=$db->getData("instructor","instructorID","userID",$_SESSION['user_
         {
             $role='all';
         }
-        $courseprogramme = $db->getAssessmentCourse($academicYearID);
+        $courseprogramme = $db->getAssessmentCourse($_SESSION['department_session'],$academicYearID);
         if (!empty($courseprogramme)) {
             ?>
             <div class="col-md-12">

@@ -210,6 +210,9 @@ if(!empty($_REQUEST['msg']))
                             <select name="instructorID[]" class="form-control chosen-select">
                               <?php
                                  $instructor = $db->getRows('instructor',array('where'=>array('instructorStatus'=>1),'order_by'=>' instructorName ASC'));
+
+                              $instructor = $db->getInstructor($_SESSION['department_session']);
+
                                  if(!empty($instructor)){
                                   echo"<option value=''>Please Select Here</option>";
                                   foreach($instructor as $inst){
@@ -315,7 +318,7 @@ if(!empty($_REQUEST['msg']))
                             <td><?php echo $courseName;?></td>
                                 <td><?php echo $db->getData("programme_level","programmeLevel","programmeLevelID",$programmeLevelID);?></td>
                             <td>
-                                <?php echo $db->getData("instructor", "instructorName", "instructorID", $dt['staffID']);?>(<?php echo $centerID;?>)
+                                <?php echo $db->getData("instructor", "instructorName", "instructorID", $dt['staffID']);?>
                             </td>
                             
                                 <td><a href="action_instructor_course.php?action_type=delete&academicYearID=<?php echo $db->my_simple_crypt($academicYearID,'e');?>&id=<?php echo $db->my_simple_crypt($centerProgrammeCourseID,'e');?>"

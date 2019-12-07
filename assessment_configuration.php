@@ -87,16 +87,9 @@ $instructorID=$db->getData("instructor","instructorID","userID",$_SESSION['user_
                 <div class="row">
                     <?php
                     if(isset($_POST['doFind'])=="View Records") {
-                        $semesterSettingID = $_POST['semesterID'];
-                        /*$today = date("Y-m-d");
-                        $sm = $db->readSemesterSetting($today);
-                        foreach ($sm as $s) {
-                            $semisterID = $s['semesterID'];
-                            $academicYearID = $s['academicYearID'];
-                            $semesterName = $s['semesterName'];
-                            $currentsemesterSettingID = $s['semesterSettingID'];
-                        }*/
-                        $courseprogramme = $db->getInstructorSemesterCourse($semesterSettingID, $instructorID);
+                        $academicYearID = $_POST['academicYearID'];
+
+                        $courseprogramme = $db->getInstructorAcademicCourse($academicYearID, $instructorID);
                         if (!empty($courseprogramme)) {
                             ?>
                             <div class="col-md-12">
@@ -111,14 +104,14 @@ $instructorID=$db->getData("instructor","instructorID","userID",$_SESSION['user_
                                             <thead>
                                             <tr>
                                                 <th>No.</th>
+                                                <th>Class Number</th>
                                                 <th>Course Name</th>
                                                 <th>Course Code</th>
                                                 <th>Course Type</th>
-                                                <th>Credits</th>
-                                                <th>Hours</th>
+                                                <th>Level Name</th>
+                                                <th>Trade Name</th>
                                                 <th>No.of Students</th>
-                                                <th>Batch</th>
-                                                <th>Process</th>
+                                                <th>View</th>
                                             </tr>
                                             </thead>
                                             <tbody>
@@ -128,7 +121,10 @@ $instructorID=$db->getData("instructor","instructorID","userID",$_SESSION['user_
                                             foreach ($courseprogramme as $std) {
                                                 $count++;
                                                 $courseID = $std['courseID'];
-                                                $batchID = $std['batchID'];
+                                                $classNumber = $std['classNumber'];
+                                                $programmeID = $std['programmeID'];
+                                                $programmeLevelID = $std['programmeLevelID'];
+
                                                 $course = $db->getRows('course', array('where' => array('courseID' => $courseID), 'order_by' => 'courseID ASC'));
                                                 if (!empty($course)) {
                                                     foreach ($course as $c) {
@@ -141,23 +137,24 @@ $instructorID=$db->getData("instructor","instructorID","userID",$_SESSION['user_
                                                     }
                                                 }
 
-                                                $studentNumber=$db->getStudentCourseSum($courseID,$semesterSettingID,$batchID);
+                                                $studentNumber=$db->getStudentCourseSum($_SESSION['department_session'],$academicYearID,$programmeLevelID,$programmeID);
+
 
                                                 $viewButton = '
 	   <div class="btn-group">
-	         <a href="index3.php?sp=marks_configuration&id=' . $db->encrypt($courseID) . '&sid=' . $db->encrypt($semesterSettingID).'&instID='.$db->encrypt($instructorID). '&bid=' . $db->encrypt($batchID). '"class="fa fa-tasks"></a>
+	         <a href="index3.php?sp=marks_configuration&id=' . $db->encrypt($courseID) . '&sid=' . $db->encrypt($semesterSettingID).'&instID='.$db->encrypt($instructorID). '&bid=' . $db->encrypt($batchID). '"class="fa fa-eye" title="View Configuration Settings"></a>
 	   </div>';
                                                 ?>
 
                                                 <tr>
                                                     <td><?php echo $count; ?></td>
+                                                    <td><?php echo $classNumber;?></td>
                                                     <td><?php echo $courseName; ?></td>
                                                     <td><?php echo $courseCode; ?></td>
                                                     <td><?php echo $db->getData("course_type", "courseType", "courseTypeID", $courseTypeID); ?></td>
-                                                    <td><?php echo $units; ?></td>
-                                                    <td><?php echo $nhours; ?></td>
+                                                    <td><?php echo $db->getData('programme_level','programmeLevel','programmeLevelID',$programmeLevelID); ?></td>
+                                                    <td><?php echo $db->getData('programmes','programmeName','programmeID',$programmeID); ?></td>
                                                     <td><?php echo $studentNumber; ?></td>
-                                                    <td><?php echo $db->getData("batch", "batchName", "batchID", $batchID); ?></td>
                                                     <td><?php echo $viewButton; ?></td>
                                                 </tr>
 

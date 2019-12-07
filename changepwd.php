@@ -1,57 +1,14 @@
-  <?php
-  session_start();
-  $userID = $_SESSION['user_session'];
-  $user_privilege=$_SESSION['role_session'];
-  $auth_user = new DBHelper();
-  $err = array();
-  $msg = array();
 
-    if(isset($_POST['doUpdate']) == 'Change Password')  
-    {
-        $userID=$_POST['userID'];
-        $phoneNumber=$_POST['phoneNumber'];
-        $email=$_POST['email'];
-    $user=$auth_user->getRows("users",array('where'=>array('userID'=>$userID),'order_by'=>'userID'));
-    foreach($user as $usr)
-    {
-        $password=$usr['password'];
-        $old_salt = substr($password,0,9);
-
-    //check for old password in md5 format
-        if($password === $auth_user->PwdHash($_POST['pwd_old'],$old_salt))
-        {
-            $newsha1 = $auth_user->PwdHash($_POST['password']);
-            $userData=array(
-                'password'=>$newsha1,
-                'login'=>1
-            );
-            $condition=array('userID'=>$userID);
-            $update=$auth_user->update("users",$userData, $condition);
-            header("Location: index3.php");
-        } 
-        else
-        {
-             $err[] = "Your old password is invalid";
-        }
-    }
-    }
-?>
 <script src="js/jquery-1.4.2.min.js"></script>
 
 <link href="css/validation.css" rel="stylesheet"> 
 <div class="row bg-danger alert-danger text-center " >
                     <?php
-	  /******************** ERROR MESSAGES*************************************************
-	  This code is to show error messages 
-	  **************************************************************************/
-	  if(!empty($err))  {
+	  if(!empty($_REQUEST['err']))  {
 	   echo "<div class=\"msg\">";
-	  foreach ($err as $e) {
-	    echo "$e <br>";
-	    }
+	  echo $_REQUEST['err'];
 	  echo "</div>";	
 	   }
-	  /******************************* END ********************************/	  
 	  ?>
                 </div>
   <div class="row well">
@@ -87,7 +44,7 @@
                     <div class="col-md-4">
                         <h4></h4>
                     </div>
-      <form name="register" method="post" id="register" action="" onsubmit="return checkForm(this);">
+      <form name="register" method="post" id="register" action="action_changepwd.php" onsubmit="return checkForm(this);">
                     <div class="col-md-12">
                             <div class="row">
                                 <div class="left-addon form-group has-feedback">

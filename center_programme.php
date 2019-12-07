@@ -145,23 +145,23 @@
                                     <th>Trade Type</th>
                                     <th>Trade Level</th>
                                     <th>Status</th>
-                                    <th>Edit</th>
+                                    <!--<th>Edit</th>-->
                                 </tr>
                                 </thead>
                                 <tbody>
                                 <?php
+                                $countl = 0;
                                 foreach($data as $dt)
                                 {
                                     $programmeID=$dt['programmeID'];
                                     /*$programmeLevelID=$dt['programmeLevelID'];*/
                                     $users=$db->getRows('programmes',array('where'=>array('programmeID'=>$programmeID)));
                                     if(!empty($users)) {
-                                    $count = 0;
                                     foreach ($users as $user) {
-                                        $count++;
+                                        $countl++;
                                         ?>
                                         <tr>
-                                            <td><?php echo $count; ?></td>
+                                            <td><?php echo $countl; ?></td>
                                             <td><?php echo $user['programmeName']; ?></td>
                                             <td><?php echo $user['programmeCode']; ?></td>
                                             <td><?php echo $user['programmeDuration']; ?></td>
@@ -182,12 +182,23 @@
                                                     echo "Active";
                                                 else
                                                     echo "Not Active";
+
+                                                if ($user['status'] == 1) {
+                                                $blockButton = '<a href="action_user.php?action_type=deactivate&id=' . $db->my_simple_crypt($user['userID'], 'e') . '" class="btn btn-success fa fa-unlock"  title="Deactivate User" onclick="return confirm("Are you sure,you want to Deactivate this User?");"></a>';
+                                                $statusOutput = "<span style='color: green'>Active</span>";
+                                                } else {
+                                                $blockButton = '<a href="action_user.php?action_type=activate&id=' . $db->my_simple_crypt($user['userID'], 'e') . '" class="btn btn-success fa fa-lock" title="Activate User" onclick="return confirm("Are you sure, you want to Activate this User?");"></a>';
+                                                $statusOutput = "<span style='color: red'>Blocked</span>";
+                                                }
+
                                                 ?>
+
                                             </td>
-                                            <td>
-                                                <a href="index3.php?sp=view_center_programmes&pid=<?php echo $db->my_simple_crypt($user['programmeID'], 'e');?>&centerID=<?php echo $_REQUEST['centerID'];?>"
+
+                                            <!--<td>
+                                                <a href="index3.php?sp=view_center_programmes&pid=<?php /*echo $db->my_simple_crypt($user['programmeID'], 'e');*/?>&centerID=<?php /*echo $_REQUEST['centerID'];*/?>"
                                                    class="glyphicon glyphicon-eye-open" title="View/Edit Details"></a>
-                                            </td>
+                                            </td>-->
                                         </tr>
                                     <?php }
                                 }

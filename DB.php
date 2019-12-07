@@ -1649,13 +1649,19 @@ public function getSemesterCourse($semesterID,$role,$depID)
 
     }
 
-    public function getAssessmentCourse($academicYearID)
+    public function getAssessmentCourse($center,$academicYearID)
     {
         try
         {
-            $query=$this->conn->prepare("SELECT DISTINCT centerProgrammeCourseID,c.courseID,courseCode,courseName,courseTypeID,programmeLevelID,programmeID,classNumber,staffID FROM center_programme_course cp,course c
-        where c.courseID=cp.courseID and academicYearID=:sID");
-            $query->execute(array(':sID'=>$academicYearID));
+            if($center=='all')
+            {
+                $query = $this->conn->prepare("SELECT DISTINCT centerProgrammeCourseID,c.courseID,courseCode,courseName,courseTypeID,programmeLevelID,programmeID,classNumber,staffID FROM center_programme_course cp,course c where c.courseID=cp.courseID and academicYearID=:sID");
+                $query->execute(array(':sID' => $academicYearID));
+            }
+            else {
+                $query = $this->conn->prepare("SELECT DISTINCT centerProgrammeCourseID,c.courseID,courseCode,courseName,courseTypeID,programmeLevelID,programmeID,classNumber,staffID FROM center_programme_course cp,course c where c.courseID=cp.courseID and cp.centerID=:center and  academicYearID=:sID");
+                $query->execute(array(':center'=>$center,':sID' => $academicYearID));
+            }
 
             $data=array();
             while($row=$query->fetch(PDO::FETCH_ASSOC))
@@ -2708,8 +2714,8 @@ public function getInstructorCourseProgramme($depID,$semID)
 {
     try
     {
-        $query=$this->conn->prepare("SELECT DISTINCT(ic.instructorID) from instructor_course ic,instructor i,departments d where d.departmentID=i.departmentID and i.instructorID=ic.instructorID and i.departmentID=:dep and semesterSettingID=:sem");
-        $query->execute(array(':dep'=>$depID,':sem'=>$semID));
+        $query=$this->conn->prepare("SELECT DISTINCT(staffID) from center_programme_course where  centerID=:center and academicYearID=:acadID");
+        $query->execute(array(':center'=>$depID,':acadID'=>$semID));
         $data=array();
         while($row=$query->fetch(PDO::FETCH_ASSOC))
         {
@@ -2746,7 +2752,7 @@ public function getIsntructorCourseProgramme($instructorID,$semID)
 {
     try
     {
-        $query=$this->conn->prepare("SELECT courseID,batchID from instructor_course ic where instructorID=:insID and semesterSettingID=:sem");
+        $query=$this->conn->prepare("SELECT courseID,classNumber,programmeLevelID,programmeID from center_programme_course where staffID=:insID and academicYearID=:sem");
         $query->execute(array(':insID'=>$instructorID,':sem'=>$semID));
         $data=array();
         while($row=$query->fetch(PDO::FETCH_ASSOC))
@@ -3001,13 +3007,13 @@ public function getGPARemarks($regNumber,$gpa)
    return $gpaOutput;
  }
  
- public function getInstructorSemesterCourse($semesterID,$instructorID)
+ public function getInstructorAcademicCourse($academicYearID,$instructorID)
  {
      try
      {
-          $query=$this->conn->prepare("SELECT courseID,batchID FROM instructor_course ic,instructor i
-             where i.instructorID=ic.instructorID and ic.instructorID=:instructor and semesterSettingID=:sID");
-             $query->execute(array(':instructor'=>$instructorID,':sID'=>$semesterID));
+          $query=$this->conn->prepare("SELECT courseID,classNumber,programmeID,programmeLevelID FROM center_programme_course cp,instructor i
+             where i.instructorID=cp.staffID and cp.staffID=:instructor and academicYearID=:acdID");
+             $query->execute(array(':instructor'=>$instructorID,':acdID'=>$academicYearID));
 
            /*$query=$this->conn->prepare("SELECT courseID,courseProgrammeID,batchID FROM courseprogramme cp,instructor i
             where i.instructorID=cp.instructorID and cp.instructorID=:instructor and  cp.semesterSettingID=:sID");
@@ -4332,6 +4338,20 @@ WHERE
             echo "Getting Data Error: ".$ex->getMessage();
         }
 
+    }
+
+
+    public function getInstructor($departmentID)
+    {
+
+            $query = $this->conn->prepare("SELECT instructorID,instructorName,salutation,officeNumber,email,phoneNumber,departmentID,instructorStatus FROM instructor where centerID=:center");
+            $query->execute(array(':center'=>$departmentID));
+        $data=array();
+        while($row=$query->fetch(PDO::FETCH_ASSOC))
+        {
+            $data[]=$row;
+        }
+        return $data;
     }
 
     /*public function getStudentProgrammeInfo($regNumber,$academicYearID)

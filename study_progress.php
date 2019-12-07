@@ -1,17 +1,3 @@
-<script src="bootbox/bootbox.min.js" type="text/javascript"></script>
-   <script type="text/javascript">
-    $(document).ready(function () {
-        $('a[data-toggle="tab"]').on('show.bs.tab', function (e) {
-            localStorage.setItem('activeTab', $(e.target).attr('href'));
-        });
-        var activeTab = localStorage.getItem('activeTab');
-        if (activeTab) {
-            $('#myTab a[href="' + activeTab + '"]').tab('show');
-        }
-    });
-
-   
-</script>
 <script type="text/javascript">
     $(document).ready(function () {
         var titleheader = $('#titleheader').text();
@@ -52,76 +38,19 @@
 </script>
 
 
-<script type="text/javascript">
-    $(document).ready(function () {
-        var titleheader = $('#titleheader').text();
-        $('#thirdtab').dataTable(
-            {
-                responsive:true,
-                scrollX:true,
-                paging: true,
-                dom: 'Blfrtip',
-                buttons:[
-                    {
-                        extend:'excel',
-                        title:titleheader,
-                        footer:false,
-                        exportOptions:{
-                            columns:[0,2,3,4,5,6,7,8]
-                        }
-                    },
-                    ,
-                    {
-                        extend:'csvHtml5',
-                        title: titleheader,
-                        customize: function (csv) {
-                            return titleheader+"\n"+  csv +"\n";
-                        },
-                        exportOptions:{
-                            columns:[0,2,3,4,5,6,7,8,9]
-                        }
-
-                    },
-                    {
-                        extend: 'pdfHtml5',
-                        title: titleheader,
-                        footer: true,
-                        exportOptions: {
-                            columns: [0,2,3,5,6,7,8]
-                        }
-                    }
-
-                ]
-            });
-    });
-</script>
-
-
 <?php $db=new DBHelper();
 ?>
 <div class="container">
   <div class="content">
       <h1>Student Management</h1>
       <hr>
-    <ul class="nav nav-tabs" id="myTab">
-        <!--<li><a data-toggle="tab" href="#list_student"><span style="font-size: 16px"><strong>List of Students by Programmes</strong></span></a></li>-->
-        <!--<li class="active"><a data-toggle="tab" href="#list_continue_student"><span style="font-size: 16px"><strong>List of Students By Study Year</strong></span></a></li>-->
-        <li class="active"><a data-toggle="tab" href="#status"><span style="font-size: 16px"><strong>Update Student Status</strong></span></a></li>
-<!--        <li><a data-toggle="tab" href="#transfer"><span style="font-size: 16px"><strong>Transfer Student</strong></span></a></li>
--->        <li><a data-toggle="tab" href="#view_remarks"><span style="font-size: 16px"><strong>Remarks Report</strong></span></a></li>
-    </ul>
 
-<div class="tab-content">
- <!-- Previous Semester -->
-        <div id="status" class="tab-pane fade in active">
-        <!-- Start -->
             <h3>Update Student Status</h3>
             <hr>
 <div class="form-group">
 <form name="" method="post" action="">
 <div class="col-xs-12">
-   
-   <div class="col-xs-2"><label name="Search">Search Student by Reg.Number:</label></div>
+   <div class="col-xs-4"><label name="Search">Search Student by Reg.Number:</label></div>
 	<div class="col-xs-4">
 		<input type="text" name="search_student" id="search_text" class="form-control">
 	</div>
@@ -131,6 +60,7 @@
 	</form>
 </div>
 <br><br>
+  <hr>
 <div class="row">
 	<?php
 			$db=new DBhelper();
@@ -433,157 +363,7 @@ if(!empty($_REQUEST['msg']))
     ?>
     </div>
         
-        <!-- End -->  
-		</div>
-    <!--start-->
-<div id="view_remarks" class="tab-pane fade">
-            <!-- Start -->
-            
-<h3>View Student Remarks</h3>
-            <hr>
-           <div class="row">
-            <form name="" method="post" action="">
-                        <div class="col-lg-3">
 
-                            <label for="MiddleName">Academic Year</label>
-                            <select name="academicYearID" class="form-control" required>
-                              <?php
-                               $adYear = $db->getRows('academic_year',array('order_by'=>'academicYear ASC'));
-                               if(!empty($adYear)){ 
-                                echo"<option value=''>Please Select Here</option>";
-                                $count = 0; foreach($adYear as $year){ $count++;
-                                $academic_year=$year['academicYear'];
-                                $academic_year_id=$year['academicYearID'];
-                               ?>
-                               <option value="<?php echo $academic_year_id;?>"><?php echo $academic_year;?></option>
-                               <?php }}
-           ?>
-                           </select>
-                        </div>
-
-
-                <div class="col-lg-3">
-                    <label for="MiddleName">Status Name</label>
-                    <select name="statusID" class="form-control" required>
-                        <?php
-                        $status = $db->getRows('status', array('order_by' => 'statusValue ASC'));
-                        if (!empty($status)) {
-                            echo "<option value=''>Please Select Here</option>";
-                            $count = 0;
-                            foreach ($status as $c) {
-                                $count++;
-                                $statusValue = $c['statusValue'];
-                                $statusID = $c['statusID'];
-                                ?>
-                                <option value="<?php echo $statusID; ?>"><?php echo $statusValue; ?></option>
-                            <?php }
-                        }
-                        ?>
-                    </select>
-                </div>
-                        
-                        
-                      <div class="col-lg-3">
-                      <label for=""></label>
-                      <input type="submit" name="doViewList" value="View List" class="btn btn-primary form-control" /></div>
-               </form>    
-        </div>      
-
-            
-        <?php
-        if(isset($_POST['doViewList'])=="View List")
-        {
-                $academicYearID=$_POST['academicYearID'];
-                $statusID=$_POST['statusID'];
-                $studentStatus=$db->getStudentYearStatus($academicYearID,$statusID);
-               if(!empty($studentStatus))
-               {
-        ?>
-    <h4><span class="text-danger" id="titleheader">
-                List of <?php echo $db->getData("status","statusValue","statusID",$statusID);?>
-            Students  in <?php echo $db->getData("academic_year","academicYear","academicYearID",$academicYearID);?>
-                </span></h4>
-    <hr>
-    <table  id="thirdtab" class="display nowrap">
-        <thead>
-        <tr>
-            <th>No.</th>
-            <th>Full Name</th>
-            <th>Gender</th>
-            <th>Reg.Number</th>
-            <th>Center Name</th>
-            <th>Trade Level</th>
-            <th>Trade Name</th>
-        </tr>
-        </thead>
-        <tbody>
-        <?php
-        $count = 0;
-        foreach($studentStatus as $st)
-        {
-            $count++;
-            $studentID=$st['studentID'];
-            $fname=$st['firstName'];
-            $mname=$st['middleName'];
-            $lname=$st['lastName'];
-            $programmeID=$st['programmeID'];
-            $semesterSettingID=$st['semesterSettingID'];
-            $name="$fname $mname $lname";
-            $regNumber=$st['registrationNumber'];
-
-
-            $student_prog=$db->getRows("student_programme",array("where"=>array("regNumber"=>$regNumber,'currentStatus'=>1)));
-            if(!empty($student_prog))
-            {
-                foreach($student_prog as $spg)
-                {
-                    $centerRegistrationID=$spg['centerID'];
-                    $programmeLevelID=$spg['programmeLevelID'];
-                    $programmeID=$spg['programmeID'];
-                }
-            }
-            else
-            {
-                $centerRegistrationID="";
-                $programmeLevelID="";
-                $programmeID="";
-            }
-
-
-            ?>
-            <tr>
-                <td><?php echo $count; ?></td>
-                <td><?php echo $name;?></td>
-                <td><?php echo $st['gender']; ?></td>
-                <td><?php echo $st['registrationNumber']; ?></td>
-                <td><?php echo $db->getData("center_registration","centerName","centerRegistrationID",$centerRegistrationID); ?></td>
-                <td><?php echo $db->getData("programme_level","programmeLevel","programmeLevelID",$programmeLevelID); ?></td>
-                <td><?php echo $db->getData("programmes","programmeName","programmeID",$programmeID); ?></td>
-
-            </tr>
-            <?php
-        }
-        ?>
-        </tbody>
-    </table>
-        <?php
-               }
-               else {
-                   ?>
-                   <h4><span class="text-danger">No Student(s) found......</span></h4>
-                   <?php
-               }
-
-        }
-        ?>
-
-        
-    
-              
-            <!-- End -->           
-</div>
 
             </div>
-      <!--end-->
-            
-</div></div>
+</div>

@@ -88,8 +88,8 @@ $instructorID=$db->getData("instructor","instructorID","userID",$_SESSION['user_
     <?php
     if(isset($_POST['doFind'])=="View Records") {
         $academicYearID = $_POST['academicYearID'];
-        /*$courseprogramme = $db->getInstructorSemesterCourse($academicYearID, $instructorID);*/
-        $courseprogramme = $db->getAssessmentCourse($academicYearID);
+        //$courseprogramme = $db->getInstructorSemesterCourse($academicYearID, $instructorID);
+        $courseprogramme = $db->getAssessmentCourse($_SESSION['department_session'],$academicYearID);
         if (!empty($courseprogramme)) {
             ?>
             <div class="col-md-12">
@@ -117,6 +117,7 @@ $instructorID=$db->getData("instructor","instructorID","userID",$_SESSION['user_
                             </thead>
                             <tbody>
                             <?php
+                            $count=0;
                             foreach ($courseprogramme as $std) {
                                 $count++;
                                 $courseID = $std['courseID'];

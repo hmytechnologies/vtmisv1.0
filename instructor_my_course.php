@@ -70,14 +70,9 @@ $instructorID=$db->getData("instructor","instructorID","userID",$_SESSION['user_
  <?php
 
 $today=date("Y-m-d");
-$sm=$db->readSemesterSetting($today);
-foreach ($sm as $s) {
-    $semisterID=$s['semesterID'];
-    $academicYearID=$s['academicYearID'];
-    $semesterName=$s['semesterName'];
-    $semesterSettingID=$s['semesterSettingID'];
-}
-$courseprogramme = $db->getInstructorSemesterCourse($semesterSettingID,$instructorID);
+$academicYearID=$db->getCurrentAcademicYear();
+
+$courseprogramme = $db->getInstructorAcademicCourse($academicYearID,$instructorID);
 if(!empty($courseprogramme))
 {
 ?>
@@ -85,17 +80,19 @@ if(!empty($courseprogramme))
  <div class="col-md-12">
  <div class="box box-solid box-primary">
      <div class="box-header with-border text-center">
-         <h3 class="box-title">List of Assigned Courses for <?php echo $semesterName;?></h3>
+         <h3 class="box-title">List of Assigned Courses for <?php echo $db->getData('academic_year','academicYear','academicYearID',$academicYearID);?></h3>
      </div>
-         <!-- /.box-header -->
           <div class="box-body">
 <table  id="" class="table table-striped table-bordered table-condensed">
   <thead>
   <tr>
     <th>No.</th>
+      <th>Class Number</th>
     <th>Subject Name</th>
     <th>Subject Code</th>
     <th>Subject Type</th>
+      <th>Level Name</th>
+      <th>Trade Name</th>
     <th>No.of Students</th>
       <th>Course Ouline</th>
     <th>View</th>
@@ -108,10 +105,11 @@ if(!empty($courseprogramme))
   foreach($courseprogramme as $std)
   {
             $count++;
-            $courseID=$std['courseID'];
-            $batchID=$std['batchID'];
-            // $courseProgrammeID=$std['courseProgrammeID'];
-     
+            $courseID = $std['courseID'];
+            $classNumber = $std['classNumber'];
+            $programmeID = $std['programmeID'];
+            $programmeLevelID = $std['programmeLevelID'];
+
      $course = $db->getRows('course',array('where'=>array('courseID'=>$courseID),'order_by'=>'courseID ASC'));
      if(!empty($course))
      {
@@ -126,8 +124,8 @@ if(!empty($courseprogramme))
              $totalHours+=$nhours;
          }
      }
-     
-     $studentNumber=$db->getStudentCourseSum($courseID,$semesterSettingID,$batchID);
+
+      $studentNumber=$db->getStudentCourseSum($_SESSION['department_session'],$academicYearID,$programmeLevelID,$programmeID);
      if($studentNumber>0)
      {
         $viewButton = '
@@ -146,13 +144,13 @@ if(!empty($courseprogramme))
 
  <tr>
  <td><?php echo $count;?></td>
+     <td><?php echo $classNumber;?></td>
  <td><?php echo $courseName;?></td>
  <td><?php echo $courseCode;?></td>
  <td><?php echo $db->getData("course_type","courseType","courseTypeID",$courseTypeID);?></td>
-  <td><?php echo $units;?></td>
-  <td><?php echo $nhours;?></td>
- <td><?php echo $studentNumber;?></td>
- <td><?php echo $db->getData("batch","batchName","batchID",$batchID);?></td>
+     <td><?php echo $db->getData('programme_level','programmeLevel','programmeLevelID',$programmeLevelID); ?></td>
+     <td><?php echo $db->getData('programmes','programmeName','programmeID',$programmeID); ?></td>
+     <td><?php echo $studentNumber;?></td>
      <td><?php
          if(!empty($courseOutline)) {
              ?>
