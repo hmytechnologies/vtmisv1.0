@@ -143,10 +143,10 @@ if(isset($_REQUEST['action_type']) && !empty($_REQUEST['action_type'])) {
         $phoneNumber = $_POST['phoneNumber'];
         $roleID=$_POST['roleID'];
 
-        if(!empty($_POST['centerID']))
+        /*if(!empty($_POST['centerID']))
             $officeID=$_POST['centerID'];
         /*else if(!empty($_POST['departmentID']))
-            $officeID=$_POST['departmentID'];*/
+            $officeID=$_POST['departmentID'];
         else
             $officeID=0;
         if(!empty($_POST['centerID']))
@@ -156,20 +156,18 @@ if(isset($_REQUEST['action_type']) && !empty($_REQUEST['action_type'])) {
         else
         {
             $departmentID=0;
-        }
+        }*/
             $editUserData = array(
                 'firstName' => $fname,
                 'lastName' => $lname,
                 'email' => $email,
                 'phoneNumber' => $phoneNumber,
-                'departmentID'=>$officeID,
                 'login'=>1
             );
         $userID=$_POST['userID'];
         $update_condition=array('userID'=>$userID);
         $update = $db->update($tblName, $editUserData,$update_condition);
 
-        var_dump($editUserData);
 
         $roleData = array(
             'roleID' => $_POST['roleID'],
@@ -180,7 +178,7 @@ if(isset($_REQUEST['action_type']) && !empty($_REQUEST['action_type'])) {
 
         //for instructors and hod
         //for Instructor,HoD,Deans-Information must be save to instructor table
-        if($roleID == 3 || $roleID == 4 || $roleID == 9)
+        /*if($roleID == 3 || $roleID == 4 || $roleID == 9)
         {
             $chk_inst=$db->getRows("instructor",array('where'=>array('userID'=>$userID)));
             if(!empty($chk_inst))
@@ -216,7 +214,7 @@ if(isset($_REQUEST['action_type']) && !empty($_REQUEST['action_type'])) {
 
                 //var_dump($instructorData);
             }
-        }
+        }*/
 
         $to = $email;
         $subject = 'Login details for StAR';
