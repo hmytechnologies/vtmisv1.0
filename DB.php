@@ -1649,7 +1649,7 @@ public function getSemesterCourse($semesterID,$role,$depID)
 
     }
 
-    public function getAssessmentCourse($center,$roleID,$academicYearID)
+    public function getAssessmentCourse($center,$academicYearID)
     {
         try
         {

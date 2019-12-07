@@ -69,7 +69,7 @@ $db=new DBHelper();
                               }
                               if($user_role==3 || $user_role==4) {
                                       ?>
-                                      <li><a href="index3.php?sp=instructor_mycourse">My Course</a></li>
+                                      <li><a href="index3.php?sp=instructor_mycourse">Course List</a></li>
                                   <li><a href="index3.php?sp=ass_conf">Assessment Configuration</a></li>
                                   <!--<li><a href="index3.php?sp=field_training">Field Training</a></li>
                                   <li><a href="index3.php?sp=project_research">Project/Research</a></li>-->
@@ -79,7 +79,7 @@ $db=new DBHelper();
                                   if($user_role==2)
                                   {
                                       ?>
-                                      <li><a href="index3.php?sp=mycourse">My Course</a></li>
+                                      <li><a href="index3.php?sp=mycourse">Course List</a></li>
                                     <li><a href="#">Internal Assessment</a></li>
                                    <li><a href="index3.php?sp=pcurricullum">Trade Curricullum</a></li>
                                       <?php
@@ -120,7 +120,7 @@ $db=new DBHelper();
                                       ?>
                                       <li><a href="index3.php?sp=term_marks">Term Result Management</a></li>
                                       <li><a href="index3.php?sp=internal_marks">Assessment Management</a></li>
-                                      <li><a href="index3.php?sp=instructor_exam_results">My Course Results</a></li>
+                                      <li><a href="index3.php?sp=instructor_exam_results">Course Results</a></li>
                                       <?php
                                   }
                                   if($user_role==2)
