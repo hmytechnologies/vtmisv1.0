@@ -88,7 +88,6 @@ $instructorID=$db->getData("instructor","instructorID","userID",$_SESSION['user_
     <?php
     if(isset($_POST['doFind'])=="View Records") {
         $academicYearID = $_POST['academicYearID'];
-        /*$courseprogramme = $db->getInstructorSemesterCourse($academicYearID, $instructorID);*/
         if($_SESSION['role_session']==3)
         {
             $role=$_SESSION['role_session'];
@@ -97,7 +96,16 @@ $instructorID=$db->getData("instructor","instructorID","userID",$_SESSION['user_
         {
             $role='all';
         }
-        $courseprogramme = $db->getAssessmentCourse($_SESSION['department_session'],$academicYearID);
+
+        if($role == 3)
+        {
+            $instructorID=$db->getData("instructor","instructorID","userID",$_SESSION['user_session']);
+            $courseprogramme = $db->getInstructorAssessmentCourse($academicYearID, $instructorID);
+        }
+        else {
+            $courseprogramme = $db->getAssessmentCourse($_SESSION['department_session'], $academicYearID);
+        }
+
         if (!empty($courseprogramme)) {
             ?>
             <div class="col-md-12">
@@ -153,7 +161,9 @@ $instructorID=$db->getData("instructor","instructorID","userID",$_SESSION['user_
                                     <td><?php echo $db->getData("programme_level", "programmeLevel", "programmeLevelID", $programmeLevelID); ?></td>
                                     <td><?php echo $db->getData("programmes", "programmeName", "programmeID", $programmeID); ?></td>
                                     <td><?php echo $studentNumber; ?></td>
-                                    <td><?php echo $staffID;?></td>
+                                    <td>
+                                        <?php echo $db->getData("instructor", "instructorName", "instructorID", $instructorID);?>
+                                    </td>
                                     <td><?php echo $viewButton; ?></td>
                                 </tr>
                             <?php } ?>

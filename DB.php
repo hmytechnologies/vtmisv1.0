@@ -1649,7 +1649,7 @@ public function getSemesterCourse($semesterID,$role,$depID)
 
     }
 
-    public function getAssessmentCourse($center,$academicYearID)
+    public function getAssessmentCourse($center,$roleID,$academicYearID)
     {
         try
         {
@@ -1659,8 +1659,8 @@ public function getSemesterCourse($semesterID,$role,$depID)
                 $query->execute(array(':sID' => $academicYearID));
             }
             else {
-                $query = $this->conn->prepare("SELECT DISTINCT centerProgrammeCourseID,c.courseID,courseCode,courseName,courseTypeID,programmeLevelID,programmeID,classNumber,staffID FROM center_programme_course cp,course c where c.courseID=cp.courseID and cp.centerID=:center and  academicYearID=:sID");
-                $query->execute(array(':center'=>$center,':sID' => $academicYearID));
+                    $query = $this->conn->prepare("SELECT DISTINCT centerProgrammeCourseID,c.courseID,courseCode,courseName,courseTypeID,programmeLevelID,programmeID,classNumber,staffID FROM center_programme_course cp,course c where c.courseID=cp.courseID and cp.centerID=:center and  academicYearID=:sID");
+                    $query->execute(array(':center'=>$center,':sID' => $academicYearID));
             }
 
             $data=array();
@@ -4352,6 +4352,27 @@ WHERE
             $data[]=$row;
         }
         return $data;
+    }
+
+
+    public function getInstructorAssessmentCourse($academicYearID,$instructorID)
+    {
+        try
+        {
+                $query = $this->conn->prepare("SELECT DISTINCT centerProgrammeCourseID,c.courseID,courseCode,courseName,courseTypeID,programmeLevelID,programmeID,classNumber,staffID FROM center_programme_course cp,course c where c.courseID=cp.courseID and staffID=:st and academicYearID=:sID");
+                $query->execute(array(':st'=>$instructorID,':sID' => $academicYearID));
+            $data=array();
+            while($row=$query->fetch(PDO::FETCH_ASSOC))
+            {
+                $data[]=$row;
+            }
+            return $data;
+        }
+        catch (PDOException $ex)
+        {
+            echo "Getting Data Error: ".$ex->getMessage();
+        }
+
     }
 
     /*public function getStudentProgrammeInfo($regNumber,$academicYearID)
