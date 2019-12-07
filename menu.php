@@ -8,7 +8,7 @@ $db=new DBHelper();
               </li>
               <?php
                   foreach($_SESSION['roleID'] as $role=>$user_role) {
-                  if ($user_role == 8) {
+                  if ($user_role == 8 || $user_role == 10) {
                   ?>
                   <li class="treeview">
                       <a href="#"><i class="glyphicon glyphicon-th-large"></i><span>Student Management</span> <i class="fa fa-angle-left pull-right"></i></a>
@@ -53,8 +53,9 @@ $db=new DBHelper();
                               }
                               if ($user_role == 10) {
                                   ?>
-                                  <li><a href="index3.php?sp=courselist">Term Subjects</a></li>
+                                  <!--<li><a href="index3.php?sp=courselist">Term Subjects</a></li>-->
                                   <li><a href="index3.php?sp=instructor_course_setting">Course Allocation</a></li>
+                                  <li><a href="index3.php?sp=transfer_student">Transfer Student</a></li>
                                   <li><a href="index3.php?sp=pcurricullum">Trade Curricullum</a></li>
                                   <?php
                               }
@@ -96,7 +97,7 @@ $db=new DBHelper();
                           <ul class="treeview-menu">
                               <?php
                               foreach($_SESSION['roleID'] as $role=>$user_role) {
-                                  if($user_role == 7 || $user_role == 4 || $user_role == 9)
+                                  if($user_role == 7 || $user_role == 4 || $user_role == 9 || $user_role == 10)
                                   {
                                       ?>
                                       <li><a href="index3.php?sp=addresult">Final Exam Management</a></li>

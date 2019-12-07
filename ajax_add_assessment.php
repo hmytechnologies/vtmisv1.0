@@ -157,6 +157,7 @@ if ($examDate == "")
                 <input type="hidden" name="number_student" value="<?php echo $count; ?>">
                 <input type="hidden" name="academicYearID" value="<?php echo $academicYearID; ?>">
                 <input type="hidden" name="examCategoryID" value="<?php echo $examCategoryID; ?>">
+                <input type="hidden" name="assessmentTypeID" value="<?php echo $assessmentTypeID;?>">
                 <input type="hidden" name="examDate" value="<?php echo $examDate; ?>">
                 <input type="submit" name="doSubmit" value="Save Records" class="btn btn-primary form-control"/>
             </div>

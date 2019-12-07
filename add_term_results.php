@@ -173,15 +173,15 @@ $db=new DBHelper();
     <div class="row">
         <div class="col-lg-3">
             <?php
-            if($_SESSION['role_session']==3)
+            if($_SESSION['main_role_session']==3)
             {
                 ?>
-                <a href="index3.php?sp=instructor_exam_results" class="btn btn-success form-control">Go Back</a>
+                <a href="index3.php?sp=term_marks" class="btn btn-success form-control">Go Back</a>
                 <?php
             }
             else {
                 ?>
-                <a href="index3.php?sp=addresult" class="btn btn-success form-control">Go Back</a>
+                <a href="index3.php?sp=term_marks" class="btn btn-success form-control">Go Back</a>
                 <?php
             }
             ?>

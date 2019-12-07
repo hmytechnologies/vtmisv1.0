@@ -1,8 +1,8 @@
 <?php
 session_start();
-ini_set ('display_errors', 1);
-error_reporting (E_ALL | E_STRICT);
-//try {
+/*ini_set ('display_errors', 1);
+error_reporting (E_ALL | E_STRICT);*/
+try {
 include 'DB.php';
 $db = new DBHelper();
 $tblName = 'assessment_result';
@@ -15,7 +15,6 @@ if (isset($_REQUEST['action_type']) && !empty($_REQUEST['action_type'])) {
         $academicYearID = $_POST['academicYearID'];
         $courseID = $_POST['courseID'];
         $examDate = $_POST['examDate'];
-        $levelID = $_POST['levelID'];
         $examCategoryID = $_POST['examCategoryID'];
         $assessmentTypeID=$_POST['assessmentTypeID'];
 
@@ -64,19 +63,19 @@ if (isset($_REQUEST['action_type']) && !empty($_REQUEST['action_type'])) {
 
         }
     }
-   // header("Location:index3.php?sp=add_term_marks&cid=" . $db->encrypt($courseID) . "&sid=" . $db->encrypt($semesterID) . "=&bid=" . $db->encrypt($batchID) . "");
+   header("Location:index3.php?sp=add_internal_marks&cid=" . $db->encrypt($courseID) . "&cid=" . $db->encrypt($semesterID));
 }
-/*}catch (PDOException $ex)
+}catch (PDOException $ex)
 {
     if ($_REQUEST['action_type'] == 'add_sup') {
-        header("Location:index3.php?sp=add_score_sup&cid=" . $db->encrypt($courseID) . "&sid=" . $db->encrypt($semesterID) . "=&bid=" . $db->encrypt($batchID) . "");
+        header("Location:index3.php?sp=add_internal_marks&cid=" . $db->encrypt($courseID) . "&sid=" . $db->encrypt($semesterID));
     }
     else if($_REQUEST['action_type'] == 'add_special')
     {
-        header("Location:index3.php?sp=add_score_special&cid=" . $db->encrypt($courseID) . "&sid=" . $db->encrypt($semesterID) . "=&bid=" . $db->encrypt($batchID) . "");
+        header("Location:index3.php?sp=add_internal_marks&cid=" . $db->encrypt($courseID) . "&sid=" . $db->encrypt($semesterID));
     }
     else
     {
-        header("Location:index3.php?sp=add_score&cid=" . $db->encrypt($courseID) . "&sid=" . $db->encrypt($semesterID) . "=&bid=" . $db->encrypt($batchID) . "");
+        header("Location:index3.php?sp=add_internal_marks&cid=" . $db->encrypt($courseID) . "&sid=" . $db->encrypt($semesterID));
     }
-}*/
+}
