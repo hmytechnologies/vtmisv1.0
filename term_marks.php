@@ -163,7 +163,7 @@ $instructorID=$db->getData("instructor","instructorID","userID",$_SESSION['user_
                                     <td><?php echo $db->getData("programmes", "programmeName", "programmeID", $programmeID); ?></td>
                                     <td><?php echo $studentNumber; ?></td>
                                     <td>
-                                        <?php echo $db->getData("instructor", "instructorName", "instructorID", $instructorID);?>
+                                        <?php echo $db->getData("instructor", "instructorName", "instructorID", $staffID);?>
                                     </td>
                                     <td><?php echo $viewButton; ?></td>
                                 </tr>
