@@ -145,18 +145,18 @@ if(isset($_REQUEST['action_type']) && !empty($_REQUEST['action_type'])) {
 
         if(!empty($_POST['centerID']))
         {
-            $departmentID=$_POST['centerID'];
+            $centterID=$_POST['centerID'];
         }
         else
         {
-            $departmentID=0;
+            $centterID=0;
         }
             $editUserData = array(
                 'firstName' => $fname,
                 'lastName' => $lname,
                 'email' => $email,
                 'phoneNumber' => $phoneNumber,
-                'departmentID' =>$departmentID,
+                'departmentID' =>$centterID,
                 'login'=>1
             );
         $userID=$_POST['userID'];

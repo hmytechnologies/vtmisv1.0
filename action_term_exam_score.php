@@ -1,8 +1,8 @@
 <?php
 session_start();
-ini_set ('display_errors', 1);
-error_reporting (E_ALL | E_STRICT);
-//try {
+/*ini_set ('display_errors', 1);
+error_reporting (E_ALL | E_STRICT);*/
+try {
 include 'DB.php';
 $db = new DBHelper();
 $tblName = 'exam_result';
@@ -15,7 +15,7 @@ if (isset($_REQUEST['action_type']) && !empty($_REQUEST['action_type'])) {
         $academicYearID = $_POST['academicYearID'];
         $courseID = $_POST['courseID'];
         $examDate = $_POST['examDate'];
-        $levelID = $_POST['levelID'];
+       /* $levelID = $_POST['levelID'];*/
         $examCategoryID = $_POST['examCategoryID'];
 
         foreach ($_POST['regNumber'] as $key => $regNumber) {
@@ -64,7 +64,7 @@ if (isset($_REQUEST['action_type']) && !empty($_REQUEST['action_type'])) {
     }
     header("Location:index3.php?sp=add_term_marks&cid=" . $db->encrypt($courseID) . "&sid=" . $db->encrypt($semesterID) . "=&bid=" . $db->encrypt($batchID) . "");
 }
-/*}catch (PDOException $ex)
+}catch (PDOException $ex)
 {
     if ($_REQUEST['action_type'] == 'add_sup') {
         header("Location:index3.php?sp=add_score_sup&cid=" . $db->encrypt($courseID) . "&sid=" . $db->encrypt($semesterID) . "=&bid=" . $db->encrypt($batchID) . "");
@@ -77,4 +77,4 @@ if (isset($_REQUEST['action_type']) && !empty($_REQUEST['action_type'])) {
     {
         header("Location:index3.php?sp=add_score&cid=" . $db->encrypt($courseID) . "&sid=" . $db->encrypt($semesterID) . "=&bid=" . $db->encrypt($batchID) . "");
     }
-}*/
+}

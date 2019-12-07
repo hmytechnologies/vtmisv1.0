@@ -186,7 +186,7 @@ if(!empty($userData)) {
                                                     foreach ($center as $cent) {
                                                         $count++;
                                                         $centerName = $cent['centerName'];
-                                                        $centerID = $cent['centerRegistationID'];
+                                                        $centerID = $cent['centerRegistrationID'];
                                                         ?>
                                                         <option value="<?php echo $centerID; ?>"><?php echo $centerName; ?></option>
                                                     <?php }
