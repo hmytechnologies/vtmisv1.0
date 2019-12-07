@@ -89,9 +89,9 @@ $instructorID=$db->getData("instructor","instructorID","userID",$_SESSION['user_
     if(isset($_POST['doFind'])=="View Records") {
         $academicYearID = $_POST['academicYearID'];
         //$courseprogramme = $db->getAssessmentCourse($_SESSION['department_session'],$roleID,$academicYearID);
-        if($_SESSION['role_session']==3)
+        if($_SESSION['main_role_session']==3)
         {
-            $role=$_SESSION['role_session'];
+            $role=$_SESSION['main_role_session'];
         }
         else
         {
