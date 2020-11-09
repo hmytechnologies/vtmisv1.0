@@ -1067,7 +1067,7 @@ WHERE
     $gradeID=$this->getMarksID($regNumber,$cwk,$sfe,$sup,$spc,$prj,$pt);
     if(!empty($sup))
     {
-        $passMark=$this->getExamCategoryMark(3,$regNumber);
+        $passMark=$this->getExamCategoryMark(3,$regNumber,$studyYear);
          if($tmarks>=$passMark)
              $grade="C";
          else
@@ -1075,7 +1075,7 @@ WHERE
     }
     else if(!empty($pt))
     {
-        $passMark=$this->getExamCategoryMark(6,$regNumber);
+        $passMark=$this->getExamCategoryMark(6,$regNumber,$studyYear);
         if($tmarks>=$passMark)
             $grade=$this->getData("grades","gradeCode","gradeID",$gradeID);
         else
@@ -1083,7 +1083,7 @@ WHERE
     }
     else if(!empty($prj))
     {
-        $passMark=$this->getExamCategoryMark(5,$regNumber);
+        $passMark=$this->getExamCategoryMark(5,$regNumber,$studyYear);
         if($tmarks>=$passMark)
             $grade=$this->getData("grades","gradeCode","gradeID",$gradeID);
         else
@@ -1104,8 +1104,8 @@ WHERE
     }
     else
     {
-        $passCourseMark=$this->getExamCategoryMark(1,$regNumber);
-        $passFinalMark=$this->getExamCategoryMark(2,$regNumber);
+        $passCourseMark=$this->getExamCategoryMark(1,$regNumber,$studyYear);
+        $passFinalMark=$this->getExamCategoryMark(2,$regNumber,$studyYear);
         if($cwk<$passCourseMark)
             $grade="I"; //Incomplete CourseWork-Course Repeat
         else if($sfe<$passFinalMark) {
@@ -1124,7 +1124,7 @@ WHERE
         $gradeID=$this->getMarksOutputID($regNumber,$cwk,$sfe,$spc,$prj,$pt);
         if(!empty($pt))
         {
-            $passMark=$this->getExamCategoryMark(6,$regNumber);
+            $passMark=$this->getExamCategoryMark(6,$regNumber,$studyYear);
             if($tmarks>=$passMark)
                 $grade=$this->getData("grades","gradeCode","gradeID",$gradeID);
             else
@@ -1132,7 +1132,7 @@ WHERE
         }
         else if(!empty($prj))
         {
-            $passMark=$this->getExamCategoryMark(5,$regNumber);
+            $passMark=$this->getExamCategoryMark(5,$regNumber,$studyYear);
             if($tmarks>=$passMark)
                 $grade=$this->getData("grades","gradeCode","gradeID",$gradeID);
             else
@@ -1153,8 +1153,8 @@ WHERE
         }
         else
         {
-            $passCourseMark=$this->getExamCategoryMark(1,$regNumber);
-            $passFinalMark=$this->getExamCategoryMark(2,$regNumber);
+            $passCourseMark=$this->getExamCategoryMark(1,$regNumber,$studyYear);
+            $passFinalMark=$this->getExamCategoryMark(2,$regNumber,$studyYear);
             if($cwk<$passCourseMark)
                 $grade="I"; //Incomplete CourseWork-Course Repeat
             else if($sfe<$passFinalMark) {

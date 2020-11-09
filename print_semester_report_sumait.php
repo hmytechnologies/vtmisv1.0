@@ -191,12 +191,12 @@ if($_REQUEST['action']=="getPDF")
                         $prj = $db->decrypt($db->getGrade($semesterID, $courseID, $regNumber, 5));
                         $pt = $db->decrypt($db->getGrade($semesterID, $courseID, $regNumber, 6));
 
-                        $passCourseMark=$db->getExamCategoryMark(1,$regNumber);
-                        $passFinalMark=$db->getExamCategoryMark(2,$regNumber);
+                        $passCourseMark=$db->getExamCategoryMark(1,$regNumber,$studyYear);
+                        $passFinalMark=$db->getExamCategoryMark(2,$regNumber,$studyYear);
                         $tmarks=$db->calculateTotalResults($cwk,$sfe,$spc,$prj,$pt);
                         if(!empty($sup))
                         {
-                            $passMark=$db->getExamCategoryMark(3,$regNumber);
+                            $passMark=$db->getExamCategoryMark(3,$regNumber,$studyYear);
                             if($tmarks>=$passMark)
                                 $grade="C";
                             else
@@ -206,7 +206,7 @@ if($_REQUEST['action']=="getPDF")
                         }
                         else if(!empty($pt))
                         {
-                            $passMark=$db->getExamCategoryMark(6,$regNumber);
+                            $passMark=$db->getExamCategoryMark(6,$regNumber,$studyYear);
                             $gradeID = $db->getMarksOutputID($regNumber, $cwk, $sfe, $spc, $prj, $pt);
                             if($tmarks>=$passMark)
                                 $grade=$db->getData("grades","gradeCode","gradeID",$gradeID);
@@ -216,7 +216,7 @@ if($_REQUEST['action']=="getPDF")
                         }
                         else if(!empty($prj))
                         {
-                            $passMark=$db->getExamCategoryMark(5,$regNumber);
+                            $passMark=$db->getExamCategoryMark(5,$regNumber,$studyYear);
                             $gradeID = $db->getMarksOutputID($regNumber, $cwk, $sfe, $spc, $prj, $pt);
                             if($tmarks>=$passMark)
                                 $grade=$db->getData("grades","gradeCode","gradeID",$gradeID);

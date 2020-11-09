@@ -279,7 +279,7 @@ if(!empty($_REQUEST['msg']))
                                      <div class="col-lg-12">
                                          <div class="form-group">
                                              <label for="LastName">Center Name</label>
-                                             <select name="centerID" class="form-control" required>
+                                             <select name="centerID" class="form-control">
                                                  <?php
                                                  $center = $db->getRows('center_registration',array('order_by'=>'centerName ASC'));
                                                  if(!empty($center)){
@@ -301,7 +301,7 @@ if(!empty($_REQUEST['msg']))
                                      <div class="col-lg-12">
                                          <div class="form-group">
                                              <label for="LastName">Department Name</label>
-                                             <select name="departmentID" class="form-control" required>
+                                             <select name="departmentID" class="form-control">
                                                  <?php
                                                  $department = $db->getRows('departments',array('order_by'=>'departmentName ASC'));
                                                  if(!empty($department)){
