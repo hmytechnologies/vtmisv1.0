@@ -230,7 +230,7 @@ $db=new DBHelper();
 
               <?php
               foreach($_SESSION['roleID'] as $role=>$user_role) {
-                  if ($user_role == 6) {
+                  if ($user_role == 6 || $user_role== 1) {
                       ?>
                       <li class="treeview">
                           <a href="#"><i class="glyphicon glyphicon-th-large"></i> <span>Staff  Management</span> <i

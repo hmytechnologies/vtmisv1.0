@@ -370,7 +370,7 @@ class DBHelper{
     public function filterTrade($ID)
     {
         $query = $this->conn->prepare("SELECT * from programmes where status=:st AND programmeID NOT IN (SELECT programmeID from center_programme where centerRegistrationID=:centerID order by programmeID ASC)");
-        $query->execute(array(':centerID'=>$ID,'st'=>1));
+        $query->execute(array('st'=>1,':centerID'=>$ID));
         $data = array();
         while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
             $data[] = $row;
