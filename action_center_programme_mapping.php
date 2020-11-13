@@ -18,13 +18,12 @@ if(isset($_REQUEST['action_type']) && !empty($_REQUEST['action_type'])){
         }
         $statusMsg = true;
         header("Location:index3.php?sp=center_programmes&msg=succ&action=getRecords&centerID=".$db->my_simple_crypt($centerRegID,'e'));
-    }elseif($_REQUEST['action_type'] == 'delete'){
-        $centerRegID=$_GET['centerRegID'];
-        if(!empty($_GET['id'])){
-            $condition = array('centerProgrammeID' => $_GET['id']);
+    }else if($_REQUEST['action_type'] == 'delete'){
+        if(!empty($_GET['pid'])){
+            $condition = array('programmeID' => $db->my_simple_crypt($_GET['pid'],'d'),'centerRegistrationID'=>$db->my_simple_crypt($_GET['centerID'],'d'));
             $delete = $db->delete($tblName,$condition);
             $statusMsg = true;
-            header("Location:index3.php?sp=center_programmes&msg=deleted&action=getRecords&centerID=".$db->my_simple_crypt($centerRegID,'e'));
+            header("Location:index3.php?sp=center_programmes&msg=deleted&action=getRecords&centerID=".$_GET['centerID']);
         }
     }
 }
