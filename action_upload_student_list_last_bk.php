@@ -31,10 +31,10 @@ try {
                     $firstName = $filesop[1];
                     $middleName = $filesop[2];
                     $lastName = $filesop[3];
-                   /*  $gender = $filesop[4];
-                    $dob = $filesop[5]; 
+                    $gender = $filesop[4];
+                    $dob = $filesop[5];
                     $academicYearID = $filesop[6];
-                    $level = $filesop[7];*/
+                    $level = $filesop[7];
 
 
                     $username = strtoupper($regNumber);
@@ -46,10 +46,9 @@ try {
                         $fname = $firstName;
                         $mname = $middleName;
                         $lname = $lastName;
-                       /*  $gender = $gender;
-                        $dob=$dob; */
+                        $gender = $gender;
+                        $dob=$dob;
                         $programmeID = $_POST['programmeID'];
-                        $academicYearID=$_POST['admissionYearID'];
 
 
                         //add users first
@@ -78,8 +77,8 @@ try {
                                 'middleName' => ucfirst($mname),
                                 'lastName' => ucfirst($lname),
                                 'registrationNumber' => strtoupper($regNumber),
-                                /* 'gender' => $gender,
-                                'dateOfBirth' => $dob, */
+                                'gender' => $gender,
+                                'dateOfBirth' => $dob,
                                 'academicYearID' => $academicYearID,
                                 'statusID' => 1,
                                 'userID' => $userID
@@ -114,18 +113,18 @@ try {
                 }
             }
             
-           if($boolStatus)
+            if($boolStatus)
             {
                 header("Location:index3.php?sp=upload_file&msg=succ");
             }
             else
             {
                 header("Location:index3.php?sp=upload_file&msg=unsucc");
-            } 
+            }
             
         }
     }
     
 } catch (PDOException $ex) {
     header("Location:index3.php?sp=upload_file&msg=error");
-} 
+}
