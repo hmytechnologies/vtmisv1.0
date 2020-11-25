@@ -67,6 +67,9 @@ if($_REQUEST['action']=="getPDF") {
         }
     }
 
+    $centerName= $db->getData("center_registration", "centerName", "centerRegistrationID", $centerID);
+    $levelName= $db->getData("programme_level", "programmeLevel", "programmeLevelID", $programmeLevelID);
+    $academicYear= $db->getData("academic_year", "academicYear", "academicYearID", $academicYearID);
     $pdf = new PDF();
     $pdf->AliasNbPages();
  
@@ -128,6 +131,6 @@ if($_REQUEST['action']=="getPDF") {
         }
 }
 
-    $pdf->Output();
+    $pdf->Output($centerName."_".$levelName."_".$academicYear, "D");
 }
 ?>
