@@ -103,7 +103,7 @@ if($_REQUEST['action']=="getPDF") {
             $programmeID = $pg['programmeID'];
             $programmeName=$pg['programmeName'];
             $pdf->SetFont('Arial', '', 11);
-            $pdf->Cell(180, 6, "Programme Name:" . $programmeName, 0, 0, 'L');
+            $pdf->Cell(180, 6, "Trade Name:" . $programmeName, 0, 0, 'L');
             $pdf->Ln(6);
             $student = $db->printCenterStudentExamNumber($centerID,$programmeLevelID, $programmeID, $academicYearID);
             if (!empty($student)) {
@@ -131,6 +131,6 @@ if($_REQUEST['action']=="getPDF") {
         }
 }
 
-    $pdf->Output($centerName."_".$levelName."_".$academicYear, "D");
+    $pdf->Output($centerName."_".$levelName."_".$academicYear.".pdf", "D");
 }
 ?>
