@@ -102,7 +102,7 @@ if($_REQUEST['action']=="getPDF") {
             $pdf->SetFont('Arial', '', 11);
             $pdf->Cell(180, 6, "Programme Name:" . $programmeName, 0, 0, 'L');
             $pdf->Ln(6);
-            $student = $db->printCenterStudentExamNumber($centerID, $programmeID, $academicYearID);
+            $student = $db->printCenterStudentExamNumber($centerID,$programmeLevelID, $programmeID, $academicYearID);
             if (!empty($student)) {
                 $pdf->SetFont('Arial', 'B', 11);
                 $pdf->BasicTable($header);
