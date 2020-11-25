@@ -112,7 +112,7 @@ $db=new DBHelper();
                                       <li><a href="index3.php?sp=student_academic_reports">Academic Reports</a></li>
                                       <li><a href="index3.php?sp=graduate_report">Graduate Reports</a></li>
                                       <li><a href="index3.php?sp=register_exam">Exam Roster</a></li>
-                                      <li><a href="index3.php?sp=register_exam">Examination Statistics</a></li>
+                                      <li><a href="index3.php?sp=exam_list">Examination Statistics</a></li>
 
                                       </li>
                                       <?php

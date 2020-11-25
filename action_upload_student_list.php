@@ -37,7 +37,7 @@ try {
                     $level = $filesop[7];*/
 
 
-                    $username = strtoupper($regNumber);
+                    $username = strtoupper(trim($regNumber));
                     $password = $db->PwdHash(strtoupper(trim($lastName)));
                     if ($db->isFieldExist($tblName, 'userName', $username)) {
                         $boolStatus = false;
@@ -77,7 +77,7 @@ try {
                                 'firstName' => ucfirst($fname),
                                 'middleName' => ucfirst($mname),
                                 'lastName' => ucfirst($lname),
-                                'registrationNumber' => strtoupper($regNumber),
+                                'registrationNumber' => strtoupper(trim($regNumber)),
                                 /* 'gender' => $gender,
                                 'dateOfBirth' => $dob, */
                                 'academicYearID' => $academicYearID,
@@ -91,12 +91,12 @@ try {
                                 //academic_information
                                 $centerID=$_POST['centerID'];
                                 $academicData=array(
-                                    'regNumber'=>$regNumber,
+                                    'regNumber'=> strtoupper(trim($regNumber)),
                                     'centerID'=>$centerID,
                                     'programmeLevelID'=>$_POST['programmeLevelID'],
                                     'programmeID'=>$programmeID,
                                     'academicYearID'=>$academicYearID,
-                                    'statusID'=>1
+                                    'currentStatus'=>1
                                 );
                                 $insertacademic=$db->insert("student_programme",$academicData);
 
@@ -114,7 +114,7 @@ try {
                 }
             }
             
-           if($boolStatus)
+          if($boolStatus)
             {
                 header("Location:index3.php?sp=upload_file&msg=succ");
             }

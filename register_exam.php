@@ -102,7 +102,7 @@
                             <select name="academicYearID" id="academicYearID"  class="form-control" required>
                                 <?php
                                 /*$academicYear = $db->getRows('academic_year',array('where'=>array('status'=>1),'order_by'=>'academicYear ASC'));*/
-                                $academicYear = $db->getRows('academic_year',array('order_by'=>'academicYear ASC'));
+                                $academicYear = $db->getRows('academic_year',array('order_by'=>'academicYear DESC'));
                                 if(!empty($academicYear)){
                                     $count = 0;
                                     foreach($academicYear as $yr){ $count++;

@@ -3492,6 +3492,62 @@ public function getGPARemarks($regNumber,$gpa)
     }
 
 
+    public function getCenterTrade($centerID,$programmeLevelID, $academicYearID)
+    {
+        try {
+            $query = $this->conn->prepare("SELECT DISTINCT(p.programmeID),programmeName
+            from programmes p, center_registration cr,student_programme sp,exam_number e
+            where
+            p.programmeID=sp.programmeID and cr.centerRegistrationID=sp.centerID and p.programmeID=e.programmeID and sp.centerID=:centerID and sp.programmeLevelID=:levelID and sp.academicYearID=:acadID");
+            $query->execute(array(':centerID'=>$centerID,':levelID' => $programmeLevelID,':acadID' => $academicYearID));
+            $data = array();
+            while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
+                $data[] = $row;
+            }
+            return $data;
+        } catch (PDOException $ex) {
+            echo "Getting Data Error: " . $ex->getMessage();
+        }
+    }
+
+    public function getCenterStudentExamNumber($centerID,$programmeLevelID, $academicYearID)
+    {
+        try {
+            $query = $this->conn->prepare("SELECT studentID,registrationNumber,firstName,middleName,lastName,gender,statusID,examNumber,sp.programmeID
+            from student s,student_programme sp,exam_number e
+            where
+            s.registrationNumber = sp.regNumber and sp.programmeLevelID=:levelID and sp.centerID=:centerID and sp.academicYearID = :acadID  and s.registrationNumber=e.regNumber");
+            $query->execute(array(':levelID' => $programmeLevelID, ':centerID' => $centerID, ':acadID' => $academicYearID));
+            $data = array();
+            while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
+                $data[] = $row;
+            }
+            return $data;
+        } catch (PDOException $ex) {
+            echo "Getting Data Error: " . $ex->getMessage();
+        }
+    }
+
+    public function printCenterStudentExamNumber($centerID, $programmeID, $academicYearID)
+    {
+        try {
+            $query = $this->conn->prepare("SELECT studentID,registrationNumber,firstName,middleName,lastName,examNumber
+            from student s,student_programme sp,exam_number e
+            where
+            s.registrationNumber = sp.regNumber and sp.programmeID=:progID and sp.centerID=:centerID and sp.academicYearID = :acadID  and s.registrationNumber=e.regNumber
+            ORDER BY firstName");
+            $query->execute(array(':progID' => $programmeID, ':centerID' => $centerID, ':acadID' => $academicYearID));
+            $data = array();
+            while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
+                $data[] = $row;
+            }
+            return $data;
+        } catch (PDOException $ex) {
+            echo "Getting Data Error: " . $ex->getMessage();
+        }
+    }
+
+
 
     //getpassmark
     public function getPassMark($courseID,$semesterSettingID,$batchID)

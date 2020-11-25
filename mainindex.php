@@ -414,6 +414,11 @@ $roleID=$_SESSION['roleID'];
             include('register_exam.php');
             break;
 
+    case 'exam_list':
+        include('exam_list.php');
+        break;
+
+
         case 'exam_number':
             include('exam_number_list.php');
             break;

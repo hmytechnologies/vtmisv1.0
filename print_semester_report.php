@@ -45,6 +45,17 @@ if($_REQUEST['action']=="getPDF")
         $sYear="Fourth Year";
     class PDF extends FPDF
     {
+
+        function Banner($organizationName, $image)
+        {
+            $today = date('M d,Y');
+            //Logo . 
+            $this->setFont('Arial', 'B', 13);
+            $this->Text(70, 30, $organizationName);
+            $this->Image($image, 15, 10, 40.98, 35.22);
+            $this->setFont('Arial', 'B', 14);
+            $this->Text(75, 40, 'Admission Letter');
+        }
         function SetCol($col)
         {
             // Set position at a given column
@@ -93,7 +104,8 @@ if($_REQUEST['action']=="getPDF")
     $today=date('M d,Y');
     //Logo .
     $pdf->setFont('Arial', 'B',20);
-    $pdf->Text(10,10,strtoupper($organizationName));
+    
+    //$pdf->Text(10,10,strtoupper($organizationName));
     //Arial bold 15
     $pdf->setFont('Arial', 'B', 14);
     //get cwork and final exam marks per programme
