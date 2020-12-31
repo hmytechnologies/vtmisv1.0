@@ -14,8 +14,8 @@ if(isset($_REQUEST['action_type']) && !empty($_REQUEST['action_type'])){
         $examCategoryID=$_POST['examCategoryID'];
         $examDate=$_POST['examDate'];
         $courseID=$_POST['courseID'];
-        $semesterID=$_POST['semesterID'];
-        $batchID=$_POST['batchID'];
+        $academicYearID=$_POST['academicYearID'];
+        $levelID=$_POST['levelID'];
         $boolStatus=false;
         $file = $_FILES['csv_file']['tmp_name'];
         $handle = fopen($file, "r");
@@ -28,30 +28,29 @@ if(isset($_REQUEST['action_type']) && !empty($_REQUEST['action_type'])){
             fgetcsv($handle);
             while(($filesop = fgetcsv($handle, 1000, ",")) !== false)
             {
-                if($examCategoryID==2)
-                {
+                //if($examCategoryID==2)
+                //{
                     $examNumber=$filesop[0];
                     $examScore=$filesop[1];
                     $present=$filesop[2];
 
-                    $regNumber=$examNumber;
-                    if($db->isFieldExist("student","registrationNumber",$regNumber)) {
-                        if ($examScore < $db->getExamCategoryMark(2, $regNumber))
+                    //$regNumber=$examNumber;
+                    //if($db->isFieldExist("student","registrationNumber",$regNumber)) {
+                        /*if ($examScore < $db->getExamCategoryMark(2, $regNumber))
                             $supStatus = 1;
                         else
                             $supStatus = 0;
-
+                        
                         $max_sfe_mark = $db->getExamCategoryMaxMark(2, $regNumber);
-                        if ($examScore > $max_sfe_mark) {
-                            //$err[] = "Sorry-Final Exam Marks must be less than " . $max_sfe_mark . ", Review your Marks before you submit to the system";
+                         if ($examScore > $max_sfe_mark) {
                             $boolStatus = false;
-                        }
+                        } */
 
                         $finalData = array(
                             'courseID' => $courseID,
                             'examNumber' => $examNumber,
-                            'semesterSettingID' => $semesterID,
-                            'batchID' => $batchID,
+                            'academicYearID' => $academicYearID,
+                            'programmeLevelID' => $levelID,
                             'examCategoryID' => $examCategoryID,
                             'examDate' => $examDate,
                             'examSitting' => 1,
@@ -59,15 +58,14 @@ if(isset($_REQUEST['action_type']) && !empty($_REQUEST['action_type'])){
                             'status' => 0,
                             'checked' => 0,
                             'present' => $present,
-                            'exam_remark' => $supStatus,
                             'comments' => 0
                         );
 
-                        if ($db->isExamNumberExist($examNumber, $semesterID)) {
+                        if ($db->isExamNumberExist($examNumber, $academicYearID)) {
                             if (!empty($examScore)) {
-                                $score = $db->getRows('final_result', array('where' => array('examCategoryID' => $examCategoryID, 'examNumber' => $examNumber, 'courseID' => $courseID, 'semesterSettingID' => $semesterID), ' order_by' => 'examNumber ASC'));
+                                $score = $db->getRows('final_result', array('where' => array('examCategoryID' => $examCategoryID, 'examNumber' => $examNumber, 'courseID' => $courseID, 'academicYearID' => $academicYearID), ' order_by' => 'examNumber ASC'));
                                 if (!empty($score)) {
-                                    $condition = array('examNumber' => $examNumber, 'semesterSettingID' => $semesterID, 'courseID' => $courseID, 'examCategoryID' => $examCategoryID);
+                                    $condition = array('examNumber' => $examNumber, 'academicYearID' => $academicYearID, 'courseID' => $courseID, 'examCategoryID' => $examCategoryID);
                                     $update = $db->update($tblFinal, $finalData, $condition);
                                     $boolStatus = true;
                                 } else {
@@ -76,9 +74,9 @@ if(isset($_REQUEST['action_type']) && !empty($_REQUEST['action_type'])){
                                 }
                             }
                         }
-                    }
-                }
-                else 
+                    //}
+                //}
+                /*else 
                 {  
                     $regNumber=$filesop[0];
                     $examScore=$filesop[1];
@@ -130,7 +128,7 @@ if(isset($_REQUEST['action_type']) && !empty($_REQUEST['action_type'])){
                             }
                         }
                     }
-                }
+                }*/
             }
                      
                 //$boolStatus=true;

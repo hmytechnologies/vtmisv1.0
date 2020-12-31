@@ -5,8 +5,8 @@ $db=new DBHelper();
 <h3><span class="text-primary">Upload Result for 
 <?php 
 $courseID=$db->decrypt($_REQUEST['cid']);
-$semesterSettingID=$db->decrypt($_REQUEST['sid']);
-$batchID=$db->decrypt($_REQUEST['bid']);
+$academicYearID=$db->decrypt($_REQUEST['acadID']);
+$levelID=$db->decrypt($_REQUEST['lvlID']);
 
 $course = $db->getRows('course',array('where'=>array('courseID'=>$courseID),'order_by'=>'courseID ASC'));
 if(!empty($course))
@@ -18,9 +18,9 @@ if(!empty($course))
         $courseTypeID=$c['courseTypeID'];
     }
 }
-echo $courseCode."-".$courseName."-".$db->getData("semester_setting","semesterName","semesterSettingID",$db->decrypt($_REQUEST['sid']));
+echo $courseCode."-".$courseName."-".$db->getData("academic_year","academicYear","academicYearID",$db->decrypt($_REQUEST['acadID']));
 ?>
--<?php echo $db->getData("batch","batchName","batchID",$batchID);?></span></h3>
+-<?php echo $db->getData("programme_level","programmeLevel","programmeLevelID",$levelID);?></span></h3>
 
 <h5 class="text-danger">NB:Your file must have this format(RegNumber/Exam Number,Exam Score,Status(1-Present,0-Absent)) Download Sample <a href="uploaded_file/exam_sheet.csv" class="glyphicon glyphicon-download-alt" target="_blank"></a> </h5>
 <hr>
@@ -85,12 +85,6 @@ if(!empty($_REQUEST['msg']))
 <div class="col-lg-3">
 <label for="MiddleName">Exam Date</label>
     <input type="text" name="examDate" class="form-control" id="exam_date">
-
-    <!--<div class="input-group date form_date col-md-12" data-date="" data-date-format="yyyy MM dd"
-    data-link-field="dtp_input2" data-link-format="yyyy-mm-dd">
-    <input class="form-control" size="16" type="text" name="examDate" value="" id="pickyDate">
-    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
-    </div>-->
 </div>
 
 <div class="col-lg-3">
@@ -98,7 +92,7 @@ if(!empty($_REQUEST['msg']))
 <label for="email">Exam Category</label>
 <select name="examCategoryID" class="form-control" id="examCategoryID">
 <?php
-$exam_category=$db->getExamCategory($courseTypeID);
+$exam_category=$db->getFinalExamCategory();
 if(!empty($exam_category)){ 
   echo"<option value=''>Please Select Here</option>";
   foreach($exam_category as $prg)
@@ -123,8 +117,8 @@ if(!empty($exam_category)){
                       <label for=""></label>
                       <input type="hidden" name="action_type" value="add"/>
                       <input type="hidden" name="courseID" value="<?php echo $courseID;?>">
-                      <input type="hidden" name="semesterID" value="<?php echo $semesterSettingID;?>">
-                      <input type="hidden" name="batchID" value="<?php echo $batchID;?>">
+                      <input type="hidden" name="academicYearID" value="<?php echo $academicYearID;?>">
+                      <input type="hidden" name="levelID" value="<?php echo $levelID;?>">
                       <input type="submit" name="doFind" value="Upload File" class="btn btn-primary form-control" /></div>
                       </div>
                    </form>

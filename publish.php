@@ -37,7 +37,6 @@
           <div class="col-lg-12">
             <div class="row">
             <div class="col-lg-3">
-                         
                          <label for="MiddleName">Trade Name</label>
                             <select name="programmeID" class="form-control" required>
                               <?php

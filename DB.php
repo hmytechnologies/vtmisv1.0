@@ -1976,7 +1976,7 @@ public function getExamCategory($courseTypeID)
     {
         if($courseTypeID==2 || $courseTypeID==6 || $courseTypeID==7)
         {
-            $query=$this->conn->prepare("SELECT examCategoryID,examCategory from exam_category where examCategoryID=5 or examCategoryID=6");
+            $query=$this->conn->prepare("SELECT examCategoryID,examCategory from exam_category where examCategoryID=3 or examCategoryID=4 or examCategoryID=5");
             $query->execute();
         }
         else 
@@ -1996,6 +1996,26 @@ public function getExamCategory($courseTypeID)
         echo "Getting Data Error: ".$ex->getMessage();
     }
 }
+
+    /* public function getExamCategory($courseTypeID)
+    {
+        try {
+            if ($courseTypeID == 2 || $courseTypeID == 6 || $courseTypeID == 7) {
+                $query = $this->conn->prepare("SELECT examCategoryID,examCategory from exam_category where examCategoryID=3 or examCategoryID=4 or examCategoryID=5");
+                $query->execute();
+            } else {
+                $query = $this->conn->prepare("SELECT examCategoryID,examCategory from exam_category where examCategoryID=1 or examCategoryID=2");
+                $query->execute();
+            }
+            $data = array();
+            while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
+                $data[] = $row;
+            }
+            return $data;
+        } catch (PDOException $ex) {
+            echo "Getting Data Error: " . $ex->getMessage();
+        }
+    } */
 
 
     public function getFinalExamCategory()
@@ -4281,6 +4301,19 @@ WHERE
         }
 
     }
+
+    /* public function getStudentExamList($academicYearID, $programmeLevelID)
+    {
+        try {
+            $query = $this->conn->prepare("SELECT COUNT(regNumber) as studentNumber FROM student_programme  where academicYearID=:acadID and programmeLevelID=:levelID and currentStatus=:st");
+            $query->execute(array(':acadID' => $academicYearID, ':levelID' => $programmeLevelID, ':st' => 1));
+            $row = $query->fetch(PDO::FETCH_ASSOC);
+            $number = $row['studentNumber'];
+            return $number;
+        } catch (PDOException $ex) {
+            echo "Getting Data Error: " . $ex->getMessage();
+        }
+    } */
 
 
     public function getIndividualStudentExamResult($courseID,$academicYearID,$levelID)
