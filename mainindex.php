@@ -777,6 +777,11 @@ $roleID=$_SESSION['roleID'];
     case 'import_term_score':
         include('import_term_results.php');
         break;
+
+        
+    case 'view_term_score':
+        include('view_term_score.php');
+        break;
         //admission officer
 
 

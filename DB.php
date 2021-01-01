@@ -4340,7 +4340,7 @@ WHERE
     }
 
 
-    public function getCenterMappingCourseList($depID,$acadID,$proID)
+    public function getCenterMappingCourseList($depID,$acadID,$proID,$lvlID)
     {
         try
         {
@@ -4359,10 +4359,11 @@ WHERE
     c.courseID = p.courseID
     AND p.programmeID=cp.programmeID
     AND cp.programmeID=:progID
+    AND cp.programmeLevelID=:levelID
     AND cp.centerRegistrationID=:centerID
-    AND c.courseID NOT IN (SELECT courseID FROM center_programme_course WHERE academicYearID =:acadID AND centerID =:center and programmeID=:pid)
+    AND c.courseID NOT IN (SELECT courseID FROM center_programme_course WHERE academicYearID =:acadID AND centerID =:center and programmeID=:pid and programmeLevelID=:lvlID)
     ");
-            $query->execute(array(':progID'=>$proID,':centerID'=>$depID,':acadID'=>$acadID,':center'=>$depID,':pid'=>$proID));
+            $query->execute(array(':progID'=>$proID,':levelID'=>$lvlID,':centerID'=>$depID,':acadID'=>$acadID,':center'=>$depID,':pid'=>$proID,':lvlID'=>$lvlID));
             $data=array();
             while($row=$query->fetch(PDO::FETCH_ASSOC))
             {

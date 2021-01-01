@@ -68,22 +68,22 @@ $db = new DBHelper(); ?>
                             </select>
                         </div>
 
-               <!-- <div class="col-lg-3">
+              <div class="col-lg-3">
                     <label for="Physical Address">Trade Level</label>
                     <select name="programmeLevelID" id="programmeLevelID"  class="form-control" required>
                             <option value="">Select Here</option>
                             <?php
-/*                        $level = $db->getRows('programme_level',array('order_by'=>'programmeLevelCode ASC'));
+                      $level = $db->getRows('programme_level',array('order_by'=>'programmeLevelCode ASC'));
                         if(!empty($level)){
 
                             $count = 0; foreach($level as $lvl){ $count++;
                                 $programmeLevelID=$lvl['programmeLevelID'];
                                 $programmeLevel=$lvl['programmeLevel'];
-                                */?>
-                                <option value="<?php /*echo $programmeLevelID;*/?>"><?php /*echo $programmeLevel;*/?></option>
-                            <?php /*}}*/?>
+                                ?>
+                                <option value="<?php echo $programmeLevelID;?>"><?php echo $programmeLevel;?></option>
+                            <?php }}?>
                     </select>
-                </div>-->
+                </div>
                 <div class="col-lg-3">
                     <label for="Physical Address">Trade Name</label>
                     <select name="programmeID" class="form-control" required="">
@@ -147,6 +147,7 @@ if(!empty($_REQUEST['msg']))
                 {
                     $academicYearID=$_POST['academicYearID'];
                     $programmeID=$_POST['programmeID'];
+                    $programmeLevelID=$_POST['programmeLevelID'];
                 }
                 else if($_REQUEST['action']=='getRecords')
                 {
@@ -154,7 +155,7 @@ if(!empty($_REQUEST['msg']))
                 }
 
 
-                $courseData = $db->getCenterMappingCourseList($_SESSION['department_session'],$academicYearID,$programmeID);
+                $courseData = $db->getCenterMappingCourseList($_SESSION['department_session'],$academicYearID,$programmeID,$programmeLevelID);
                 if(!empty($courseData))
                 {
                     ?>
@@ -262,7 +263,7 @@ if(!empty($_REQUEST['msg']))
             <div class="row">
                 <div class="col-md-12">
                         <?php
-                            $data = $db->getCourseInstructor($_SESSION['department_session'], $academicYearID);
+                        $data = $db->getCourseInstructor($_SESSION['department_session'], $academicYearID);
                        if(!empty($data))
                        {
                        ?>

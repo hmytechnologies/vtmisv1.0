@@ -115,7 +115,7 @@ $instructorID = $db->getData("instructor", "instructorID", "userID", $_SESSION['
         } else {
             $role = 'all';
         }
-        echo $_SESSION['main_role_session'];
+
         if ($_SESSION['main_role_session'] == 7) {
             $courseprogramme = $db->getAssessmentCourse($_POST['centerID'], $academicYearID);
         } else if ($role == 3) {
@@ -134,7 +134,7 @@ $instructorID = $db->getData("instructor", "instructorID", "userID", $_SESSION['
                     </div>
                     <!-- /.box-header -->
                     <div class="box-body">
-                        <table id="" class="table table-striped table-bordered table-condensed">
+                        <table id="example" class="table table-striped table-bordered table-condensed">
                             <thead>
                                 <tr>
                                     <th>No.</th>
@@ -148,6 +148,7 @@ $instructorID = $db->getData("instructor", "instructorID", "userID", $_SESSION['
                                     <th>Instructor</th>
                                     <th>Post</th>
                                     <th>Bulk</th>
+                                    <th>View</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -167,15 +168,21 @@ $instructorID = $db->getData("instructor", "instructorID", "userID", $_SESSION['
 
                                     $studentNumber = $db->getStudentCourseSum($_SESSION['department_session'], $academicYearID, $programmeLevelID, $programmeID);
 
-                                    $viewButton = '
+                                    $addButton = '
                                 <div class="btn-group">
-                                        <a href="index3.php?sp=add_term_marks&cid=' . $db->encrypt($cpcourseID) . '"class="fa fa-tasks"></a>
+                                        <a href="index3.php?sp=add_term_marks&cid=' . $db->encrypt($cpcourseID) . '"class="fa fa-plus"></a>
                                 </div>';
 
                                     $excelButton = '
                                     <div class="btn-group">
-                                        <a href="index3.php?sp=import_term_score&cid=' . $db->encrypt($cpcourseID).'" class="glyphicon glyphicon-plus"></a>
+                                        <a href="index3.php?sp=import_term_score&cid=' . $db->encrypt($cpcourseID) . '" class="glyphicon glyphicon-upload"></a>
                                     </div>';
+
+                                    $viewButton = '
+                                    <div class="btn-group">
+                                        <a href="index3.php?sp=view_term_score&cid=' . $db->encrypt($cpcourseID).'" class="glyphicon glyphicon-eye-open"></a>
+                                </div>';
+
                                 ?>
                                     <tr>
                                         <td><?php echo $count; ?></td>
@@ -189,8 +196,9 @@ $instructorID = $db->getData("instructor", "instructorID", "userID", $_SESSION['
                                         <td>
                                             <?php echo $db->getData("instructor", "instructorName", "instructorID", $staffID); ?>
                                         </td>
+                                        <td><?php echo $addButton; ?></td>
+                                        <td><?php echo $excelButton; ?></td>
                                         <td><?php echo $viewButton; ?></td>
-                                        <td><?php echo $excelButton;?></td>
                                     </tr>
                                 <?php } ?>
                             </tbody>

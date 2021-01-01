@@ -63,9 +63,7 @@ if($_POST['examCategoryID'])
                 $studentDetails = $db->getRows('student', array('where' => array('registrationNumber' => $regNumber), ' order_by' => ' registrationNumber ASC'));
                 if (!empty($studentDetails))
                 {
-                foreach ($studentDetails
-
-                as $std)
+                foreach ($studentDetails as $std)
                 {
                 ?>
                     <tr>
