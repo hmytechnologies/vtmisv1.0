@@ -90,6 +90,25 @@ $instructorID = $db->getData("instructor", "instructorID", "userID", $_SESSION['
                     </select>
                 </div>
 
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label for="email">Choose Term</label>
+                        <select name="examCategoryID" class="form-control" id="examCategoryID">
+                            <?php
+                            $term = $db->getRows("exam_category", array('where' => array('responsible' => 1), 'order by examCategoryID ASC'));
+                            if (!empty($term)) {
+                                echo "<option value=''>Please Select Here</option>";
+                                foreach ($term as $trm) {
+                                    $examCategory = $trm['examCategory'];
+                                    $examCategoryID = $trm['examCategoryID'];
+                                    echo "<option value='$examCategoryID'>$examCategory</option>";
+                                }
+                            }
+                            ?>
+                        </select>
+                    </div>
+                </div>
+
 
 
             </div>
@@ -109,6 +128,7 @@ $instructorID = $db->getData("instructor", "instructorID", "userID", $_SESSION['
     <?php
     if (isset($_POST['doFind']) == "View Records") {
         $academicYearID = $_POST['academicYearID'];
+        $examCategoryID=$_POST['examCategoryID'];
         //$courseprogramme = $db->getAssessmentCourse($_SESSION['department_session'],$roleID,$academicYearID);
         if ($_SESSION['main_role_session'] == 3) {
             $role = $_SESSION['main_role_session'];
@@ -180,7 +200,7 @@ $instructorID = $db->getData("instructor", "instructorID", "userID", $_SESSION['
 
                                     $viewButton = '
                                     <div class="btn-group">
-                                        <a href="index3.php?sp=view_term_score&cid=' . $db->encrypt($cpcourseID).'" class="glyphicon glyphicon-eye-open"></a>
+                                        <a href="index3.php?sp=view_term_score&cid='.$db->encrypt($cpcourseID).'&termID='.$db->encrypt($examCategoryID).'&centerID='.$db->encrypt($centerID).'" class="glyphicon glyphicon-eye-open"></a>
                                 </div>';
 
                                 ?>

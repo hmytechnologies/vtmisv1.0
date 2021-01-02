@@ -71,13 +71,13 @@ if(!empty($student))
                       <thead>
                       <tr>
                         <th>No.</th>
-                        <th>Name</th>
+                        <!-- <th>Name</th>
                         <th>Gender</th>
-                        <th>Reg.Number</th>
+                        <th>Reg.Number</th> -->
                           <th>Exam Number</th>
-                        <th>CW</th>
+                        <!-- <th>CW</th> -->
                         <th>SFE</th>
-                        <th>TTL</th>
+                        <!-- <th>TTL</th> -->
                         <th>GRD</th>
                         <th>RMK</th>
                           <!--<th>Edit</th>-->
@@ -100,18 +100,30 @@ if(!empty($student))
                                 $name="$fname $mname $lname";
                                 $gender=$std['gender'];
                                 //$regNumber=$std['registrationNumber'];
-                                echo "<tr><td>$count</td><td>$name</td><td>$gender</td><td>$regNumber</td><td>$examNumber</td>";
-                              
-                                //include("grade.php");
-                                
-                                $cwk=$db->decrypt($db->getGrade($semesterSettingID,$courseID,$regNumber,1));
-                                $sfe=$db->decrypt($db->getFinalGrade($academicYearID,$courseID,$regNumber,3));
-                                $sup=$db->decrypt($db->getGrade($semesterSettingID,$courseID,$regNumber,3));
-                                $spc=$db->decrypt($db->getFinalGrade($semesterSettingID,$courseID,$regNumber,4));
-                                $prj=$db->decrypt($db->getGrade($semesterSettingID,$courseID,$regNumber,5));
-                                $pt=$db->decrypt($db->getGrade($semesterSettingID,$courseID,$regNumber,6));
+                                echo "<tr><td>$count</td>";
+                                /*echo"<td>$name</td><td>$gender</td><td>$regNumber</td> */
+                                echo "<td>$examNumber</td>";
 
-                                if(!empty($sup)) {
+                        //include("grade.php");
+
+                        $final_result = $db->decrypt($db->getFinalTermGrade($academicYearID, $courseID, $examNumber, 3));
+
+
+                        /* $exam_category_marks = $db->getTermCategorySetting();
+                        if (!empty($exam_category_marks)) {
+                            foreach ($exam_category_marks as $gd) {
+                                $mMark = $gd['mMark'];
+                                $pMark = $gd['passMark'];
+                                $wMark = $gd['wMark'];
+                            }
+                        }
+
+                        $term1m = ($term1 / $mMark) * $wMark;
+                        $term2m = ($term2 / $mMark) * $wMark; */
+                                
+                               
+
+                               /*  if(!empty($sup)) {
                                     $sfe = $sup;
                                     $cwk="NAN";
                                 }
@@ -126,13 +138,13 @@ if(!empty($student))
                                     $cwk="NAN";
                                 }
                                 else
-                                    $sfe=$sfe;
+                                    $sfe=$sfe; */
 
-/*                                echo "<td>".$cwk."</td><td>".$sfe."</td><td>".$sup."</td><td>".$spc."</td><td>".$pro."</td><td>".$pt."</td>";*/
+                               echo "<td>". $final_result."</td>";
                                 //$gradeID=$db->getMarksID($regNumber,$cwk,$sfe,$sup,$spc,$prj,$pt);
 
 
-                                    $present=$db->getStudentExamStatus($regNumber,$courseID,$semesterSettingID,2);
+                                   /*  $present=$db->getStudentExamStatus($regNumber,$courseID,$semesterSettingID,2);
                                 echo "<td>".$cwk."</td><td>".$sfe."</td>";
                                 echo "<td>".$db->calculateTotal($cwk, $sfe, $sup, $spc, $prj, $pt)."</td>";
                                 if($present==1)
@@ -151,7 +163,7 @@ if(!empty($student))
                                     $grade="A1";
                                     echo "<td>A1</td>";
                                     echo "<td>SPECIAL EXAM</td>";
-                                }
+                                } */
 
                                     $editButton = '
     	   <div class="btn-group">

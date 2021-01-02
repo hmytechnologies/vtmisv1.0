@@ -1415,7 +1415,7 @@ WHERE
     public function getCourseInstructor($deptID,$semID)
     {
         $query = $this->conn->prepare("SELECT DISTINCT
-    cp.courseID,courseCode,courseName,programmeLevelID,classNumber,centerProgrammeCourseID,staffID
+    cp.courseID,courseCode,courseName,programmeLevelID,classNumber,centerProgrammeCourseID,staffID,programmeID
 FROM
     course c,
     center_programme_course cp    
@@ -2481,6 +2481,24 @@ public function getStudentFinalResult($courseID,$semesterID,$batchID)
         echo "Getting Data Error: ".$ex->getMessage();
     }
 }
+
+    public function getFinalTermGrade($academicYearID, $courseID, $regNumber, $examCategoryID)
+    {
+        $examScore = "";
+
+        $query = $this->conn->prepare("SELECT examScore from exam_number en,final_result fr
+            WHERE 
+            en.examNumber=fr.examNumber
+            AND en.regNumber=:rNumber
+            AND fr.courseID=:cid
+            AND fr.academicYearID=:sid
+            AND fr.examCategoryID=:exam");
+        $query->execute(array('rNumber' => $regNumber, ':cid' => $courseID, ':sid' => $academicYearID, ':exam' => $examCategoryID));
+        while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
+            $examScore = $row['examScore'];
+        }
+        return $examScore;
+    }
 
 public function getFinalGrade($academicYearID,$courseID,$regNumber,$examCategoryID)
 {
