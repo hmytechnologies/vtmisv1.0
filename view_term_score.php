@@ -106,10 +106,14 @@ $db = new DBHelper();
                                         <th>Name</th>
                                         <th>Gender</th>
                                         <th>Reg.Number</th>
-                                        <th>TTL</th>
+                                        <th>Term I</th>
                                         <th>GRD</th>
-                                        <th>RMK</th>
-                                        <th>Edit</th>
+                                        <th>Term II</th>
+                                        <th>GRD</th>
+                                        <th>Total</th>
+                                        <!-- <th>GRD</th>
+                                        <th>RMK</th> -->
+                                        <!-- <th>Edit</th> -->
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -126,41 +130,43 @@ $db = new DBHelper();
                                             $lname = $std['lastName'];
                                             $name = "$fname $mname $lname";
                                             $gender = $std['gender'];
-                                            //$regNumber=$std['registrationNumber'];
-                                            echo "<tr><td>$count</td><td>$name</td><td>$gender</td><td>$regNumber</td><td>$examNumber</td>";
-
-                                            //include("grade.php");
-
-                                            $cwk = $db->decrypt($db->getGrade($semesterSettingID, $courseID, $regNumber, 1));
-                                            $sfe = $db->decrypt($db->getFinalGrade($academicYearID, $courseID, $regNumber, 3));
-                                            $sup = $db->decrypt($db->getGrade($semesterSettingID, $courseID, $regNumber, 3));
-                                            $spc = $db->decrypt($db->getFinalGrade($semesterSettingID, $courseID, $regNumber, 4));
-                                            $prj = $db->decrypt($db->getGrade($semesterSettingID, $courseID, $regNumber, 5));
-                                            $pt = $db->decrypt($db->getGrade($semesterSettingID, $courseID, $regNumber, 6));
-
-                                            if (!empty($sup)) {
-                                                $sfe = $sup;
-                                                $cwk = "NAN";
-                                            } else if (!empty($spc))
-                                                $sfe = $spc;
-                                            else if (!empty($prj)) {
-                                                $cwk = "NAN";
-                                                $sfe = $prj;
-                                            } else if (!empty($pt)) {
-                                                $sfe = $pt;
-                                                $cwk = "NAN";
-                                            } else
-                                                $sfe = $sfe;
-
-                                            /*                                echo "<td>".$cwk."</td><td>".$sfe."</td><td>".$sup."</td><td>".$spc."</td><td>".$pro."</td><td>".$pt."</td>";*/
-                                            //$gradeID=$db->getMarksID($regNumber,$cwk,$sfe,$sup,$spc,$prj,$pt);
+                                            echo "<tr><td>$count</td><td>$name</td><td>$gender</td><td>$regNumber</td>";
 
 
-                                            $present = $db->getStudentExamStatus($regNumber, $courseID, $semesterSettingID, 2);
-                                            echo "<td>" . $cwk . "</td><td>" . $sfe . "</td>";
-                                            echo "<td>" . $db->calculateTotal($cwk, $sfe, $sup, $spc, $prj, $pt) . "</td>";
-                                            if ($present == 1) {
-                                                echo "<td>" . $db->calculateGrade($regNumber, $cwk, $sfe, $sup, $spc, $prj, $pt) . "</td>";
+                                            $term1 = $db->decrypt($db->getTermGrade($academicYearID, $courseID, $regNumber, 1));
+                                            $term2 = $db->decrypt($db->getTermGrade($academicYearID, $courseID, $regNumber, 2));
+
+
+                                        /* $term1Setting=$db->getTermCategorySetting(1);
+                                            foreach ($term1Setting as $sett) {
+                                                $mMark=$sett['mMark'];
+                                                $pMark = $sett['passMark'];
+                                                $wMark = $sett['wMark'];
+                                            } */
+
+                                        $exam_category_marks = $db->getTermCategorySetting();
+                                        if (!empty($exam_category_marks)) {
+                                            foreach ($exam_category_marks as $gd) {
+                                                    $mMark = $gd['mMark'];
+                                                    $pMark = $gd['passMark'];
+                                                    $wMark = $gd['wMark'];
+                                            }
+                                        }
+
+                                            $term1m=($term1/$mMark)*$wMark;
+                                            $term2m = ($term2 / $mMark) * $wMark;
+
+
+
+                                            
+                                            echo "<td>" . $term1 . "</td>";
+                                            echo "<td>". $db->calculateTermGrade($term1)."</td>";
+                                            echo "<td>" . $term2 . "</td>";
+                                            echo "<td>". $db->calculateTermGrade($term2)."</td>";
+                                            echo "<td>" . $db->calculateTermTotal($term1m, $term2m) . "</td>";
+                                          
+                                           /* if ($present == 1) {
+                                                echo "<td>" . $db->calculateTermGrade($term1) . "</td>";
                                                 echo "<td>" . $db->courseRemarks($regNumber, $cwk, $sfe, $sup, $spc, $prj, $pt) . "</td>";
                                             } else if ($present == 0) {
                                                 $grade = "A0";
@@ -170,12 +176,12 @@ $db = new DBHelper();
                                                 $grade = "A1";
                                                 echo "<td>A1</td>";
                                                 echo "<td>SPECIAL EXAM</td>";
-                                            }
-
+                                            } */
+ 
                                             $editButton = '
-    	   <div class="btn-group">
-    	         <a href="index3.php?sp=edit_score&cid=' . $db->my_simple_crypt($courseID, 'e') . '&sid=' . $db->my_simple_crypt($semesterSettingID, 'e') . '&regno=' . $db->my_simple_crypt($regNumber, 'e') . '&bid=' . $db->my_simple_crypt($batchID, 'e') . '" class="glyphicon glyphicon-edit"></a>
-    	   </div>';
+                                    <div class="btn-group">
+                                            <a href="index3.php?sp=edit_score&cid=' . $db->my_simple_crypt($courseID, 'e') . '&sid=' . $db->my_simple_crypt($semesterSettingID, 'e') . '&regno=' . $db->my_simple_crypt($regNumber, 'e') . '&bid=' . $db->my_simple_crypt($batchID, 'e') . '" class="glyphicon glyphicon-edit"></a>
+                                    </div>';
                                     ?>
                                             <!--<td>
                                         <?php

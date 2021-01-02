@@ -779,6 +779,24 @@ WHERE
         return $examScore;
  }*/
 
+    public function getTermGrade($academicYearID, $courseID, $regNumber, $examCategoryID)
+    {
+
+        $query = $this->conn->prepare("SELECT examScore from exam_result where regNumber=:rNumber and academicYearID=:sem and courseID=:cid and examCategoryID=:ecatID");
+        $query->execute(array(':rNumber' => $regNumber, ':sem' => $academicYearID,':cid' => $courseID, ':ecatID' => $examCategoryID));
+        $row = $query->fetch(PDO::FETCH_ASSOC);
+        $score = $row['examScore'];
+        $examScore = "";
+        //$score=$this->getRows('exam_result',array('where'=>array('regNumber'=>$regNumber,'semesterSettingID'=>$semesterID,'courseID'=>$courseID,'examCategoryID'=>$examCategoryID),' order_by'=>'regNumber ASC'));
+
+        if (!empty($score)) {
+            $examScore = $score;
+        } else {
+            $examScore = "";
+        }
+        return $examScore;
+    }
+
     public function getGrade($semesterID,$courseID,$regNumber,$examCategoryID)
     {
 
@@ -857,6 +875,18 @@ WHERE
        return round($tmarks);
  }
 
+    public function calculateTermTotal($term1, $term2)
+    {
+            if (empty($term1)) {
+                $tmarks = $term2;
+            } else if (empty($term2)) {
+                $tmarks = $term1;
+            } else {
+                $tmarks = $term1 + $term2;
+            }
+        return round($tmarks);
+    }
+
     public function calculateTotalResults($cwk,$sfe,$spc,$prj,$pt)
     {
         if(!empty($spc))
@@ -909,6 +939,23 @@ WHERE
         return $gradeOutput;
     }
 
+
+    public function getTermCategorySetting()
+    {
+        $query = $this->conn->prepare("SELECT DISTINCT
+    *
+FROM
+    exam_category_setting
+WHERE
+        examCategoryID=:cat1 OR examCategoryID=:cat2");
+        $query->execute(array(':cat1' => 1, ':cat2' => 2));
+        $data = array();
+        while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
+            $data[] = $row;
+        }
+        return $data;
+    }
+
     public function getExamCategoryMaxMark($exam_category,$regNumber)
     {
         $programmeLevelID=$this->getProgrammeLevelID($regNumber);
@@ -930,7 +977,7 @@ WHERE
         return $gradeOutput;
     }
 
-/*
+    /*
     public function calculateGrade($cwk,$sfe,$sup,$spc,$prj,$pt)
     {
         $tmarks=$this->calculateTotal($cwk,$sfe,$sup,$spc,$prj,$pt);
@@ -1002,6 +1049,27 @@ WHERE
         }
         return $grade;
     }*/
+
+    public function getTermMarksID($tmarks)
+    {
+        $grade = $this->getRows("grades");
+        $gradeOutput = "";
+        if (!empty($grade)) {
+            foreach ($grade as $gd) {
+                $startMark = $gd['startMark'];
+                $endMark = $gd['endMark'];
+                $gradeID = $gd['gradeID'];
+
+                if ($tmarks >= $endMark &&  $tmarks <= $startMark) {
+                    $gradeOutput = $gradeID;
+                }
+            }
+        } else {
+            $gradeOutput = null;
+        }
+
+        return $gradeOutput;
+    }
 
     public function getMarksID($regNumber,$cwk,$sfe,$sup,$spc,$prj,$pt)
     {
@@ -1117,6 +1185,21 @@ WHERE
     }
     return $grade;
  }
+
+    public function calculateTermGrade($totalScore)
+    {
+        $gradeID = $this->getTermMarksID($totalScore);
+          /*   $passCourseMark = $this->getExamCategoryMark(1, $regNumber, $studyYear);
+            $passFinalMark = $this->getExamCategoryMark(2, $regNumber, $studyYear);
+            if ($cwk < $passCourseMark)
+                $grade = "I"; //Incomplete CourseWork-Course Repeat
+            else if ($sfe < $passFinalMark) {
+                $grade = "N1"; //Marks is not sufficient -Supplementary or Course Repeat is depend on university policy
+            } else { */
+                $grade = $this->getData("grades", "gradeCode", "gradeID", $gradeID);
+            //}
+        return $grade;
+    }
 
     public function calculateGradeFirstSit($regNumber,$cwk,$sfe,$spc,$prj,$pt)
     {
