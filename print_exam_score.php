@@ -18,13 +18,6 @@ if($_REQUEST['action']=="getPDF") {
     }
 
     require('fpdf.php');
-    $centerProgrammeCourseID = $_REQUEST['cid'];
-    $termID=$_REQUEST['termID'];
-
-    if($termID==1)
-        $termName="First Term";
-    else 
-        $termName="Second Term";
 
     class PDF extends FPDF
     {
@@ -63,7 +56,7 @@ if($_REQUEST['action']=="getPDF") {
 
         function BasicTable($header)
         {
-            $w = array(10, 30, 60, 20, 20, 25, 30);
+            $w = array(10, 60, 40, 40, 20, 25, 30);
             for ($i = 0; $i < count($header); $i++)
                 $this->Cell($w[$i], 6, $header[$i], 1, 0, 'C', 0);
             $this->Ln();
@@ -82,29 +75,25 @@ if($_REQUEST['action']=="getPDF") {
 
     $pdf = new PDF();
     $pdf->AliasNbPages();
-    $course = $db->getCourseInfo($centerProgrammeCourseID);
 
-    foreach ($course as $std) {
-        $count++;
-        $courseID = $std['courseID'];
-        $courseCode = $std['courseCode'];
-        $courseName = $std['courseName'];
-        $courseTypeID = $std['courseTypeID'];
-        $programmeLevelID = $std['programmeLevelID'];
-        $programmeID = $std['programmeID'];
-        $classNumber = $std['classNumber'];
-        $staffID = $std['staffID'];
-        $cpcourseID = $std['centerProgrammeCourseID'];
-        $academicYearID = $std['academicYearID'];
-        $centerID=$std['centerID'];
+    $courseID = $db->decrypt($_REQUEST['cid']);
+    $academicYearID = $db->decrypt($_REQUEST['aid']);
+    $programmeLevelID = $db->decrypt($_REQUEST['lid']);
+
+    $course = $db->getRows('course', array('where' => array('courseID' => $courseID), 'order_by' => 'courseID ASC'));
+    if (!empty($course)) {
+        foreach ($course as $c) {
+            $courseCode = $c['courseCode'];
+            $courseName = $c['courseName'];
+            $courseTypeID = $c['courseTypeID'];
+        }
     }
-    $pdf->AddPage(P);
+    $pdf->AddPage();
     $pdf->setFont('Arial', '', 8);
     $today = date('M d,Y');
     //Logo .
     $pdf->setFont('Arial', 'B', 20);
     //$pdf->Text(50, 10, strtoupper($organizationName));
-    $centerName = $db->getData("center_registration", "centerName", "centerRegistrationID", $centerID);
     $levelName = $db->getData("programme_level", "programmeLevel", "programmeLevelID", $programmeLevelID);
     $academicYear = $db->getData("academic_year", "academicYear", "academicYearID", $academicYearID);
     $programmeName = $db->getData("programmes", "programmeName", "programmeID", $programmeID); 
@@ -117,18 +106,15 @@ if($_REQUEST['action']=="getPDF") {
     //Logo .
     $pdf->setFont('Arial', 'B', 15);
     $pdf->Banner($organizationName, $image);
-    //$pdf->Text(50, 10, strtoupper($organizationName));
     $pdf->setFont('Arial', 'B', 13);
-    $pdf->Text(50, 45, strtoupper($db->getData("center_registration", "centerName", "centerRegistrationID", $centerID)));
-    //Arial bold 15
-    //Arial bold 15
+  
     $pdf->Ln(35);
     $pdf->setFont('Arial', 'B', 14);
-    $pdf->Text(10, 50, $termName.' Results-'. $academicYear);
+    $pdf->Text(10, 50,'Examination Results-'. $academicYear);
     $pdf->Line(10,52,205,52);
 
-    $header = array('No', 'Reg.Number', 'Name','Gender','Score','Grade', 'Remarks');
-    $courseHeader = array('Subject Name', 'Trade Name', 'Trade Level');
+    $header = array('No', 'Exam Number','Gender','Score','Grade', 'Remarks');
+    $courseHeader = array('Subject Name', 'Subject Type', 'Trade Level');
     $pdf->Ln(10);
 
     //course details
@@ -136,7 +122,7 @@ if($_REQUEST['action']=="getPDF") {
     $pdf->CourseTable($courseHeader);
     $pdf->SetFont('Arial', '', 11);
     $pdf->Cell(75, 6, $courseName, 1, 0);
-    $pdf->Cell(80, 6, $programmeName, 1, 0);
+    $pdf->Cell(80, 6, $db->getData('course_type','courseType','courseTypeID',$courseTypeID), 1, 0);
     $pdf->Cell(40, 6, $levelName, 1, 0);
 
     $pdf->SetFont('Arial', '', 10);
@@ -176,21 +162,22 @@ if($_REQUEST['action']=="getPDF") {
     $tmfail = 0;
     $tfpass = 0;
     $tffail = 0;
-    //programmes
-/*    $programmes = $db->getRows("courseprogramme", array('where' => array('courseID' => $courseID, 'semesterSettingID' => $semesterSettingID, 'batchID' => $batchID)));*/
-    //$programmes = $db->getCourseExamProgramme($courseID,$semesterSettingID);
-    //if (!empty($programmes)) {
-        //foreach ($programmes as $pg) {
-            //$programmeID = $pg['programmeID'];
-            //$programmeName = $db->getData("programmes", "programmeName", "programmeID", $programmeID);
-            //$pdf->Cell(180, 6, "Programme Name:" . $programmeName, 0, 0, 'L');
-            //$pdf->Ln(6);
-            $student = $db->getStudentTermList($_SESSION['department_session'], $academicYearID, $programmeLevelID, $programmeID);
+    //centerName
+    $centerProgramme = $db->getCenterExamProgramme($courseID,$academicYearID,$programmeLevelID);
+    if (!empty($centerProgramme)) {
+        foreach ($centerProgramme as $pg) {
+            $centerID = $pg['centerID'];
+            $pdf->SetFont('Arial', 'B', 12);
+            //$centerName = $db->getData("center_registration", "centerName", "centerRegitrationID", $centerID);
+            $pdf->Cell(180, 6, "Center Name:" . $db->getData('center_registration', 'centerName', 'centerRegistrationID', $centerID), 0, 0, 'L');
+            $pdf->Ln(6);
+            $student = $db->getCenterStudentExamList($centerID,$courseID, $academicYearID, $programmeLevelID);
             if (!empty($student)) {
                 $pdf->SetFont('Arial', 'B', 11);
                 $pdf->BasicTable($header);
                 foreach ($student as $st) {
                     $count++;
+                    $examNumber = $st['examNumber'];
                     $regNumber = $st['regNumber'];
                     $studentDetails = $db->getRows('student', array('where' => array('registrationNumber' => $regNumber), ' order_by' => 'registrationNumber ASC'));
                     foreach ($studentDetails as $std) {
@@ -201,35 +188,36 @@ if($_REQUEST['action']=="getPDF") {
                         $name = $fname . " " . $mname[0] . " " . $lname;
                         $gender=$std['gender'];
 
-                $termScore = $db->decrypt($db->getTermGrade($academicYearID, $courseID, $regNumber, $termID));
+                        $final_result = $db->decrypt($db->getFinalTermGrade($academicYearID, $courseID, $examNumber, 3));
             
-                $exam_category_marks = $db->getTermCategorySetting();
-                if (!empty($exam_category_marks)) {
-                    foreach ($exam_category_marks as $gd) {
-                        $mMark = $gd['mMark'];
-                        $pMark = $gd['passMark'];
-                        $wMark = $gd['wMark'];
-                    }
-                }
+                        $exam_category_marks = $db->getTermCategorySetting();
+                        if (!empty($exam_category_marks)) {
+                            foreach ($exam_category_marks as $gd) {
+                                $mMark = $gd['mMark'];
+                                $pMark = $gd['passMark'];
+                                $wMark = $gd['wMark'];
+                            }
+                        }
 
-                $grade=$db->calculateTermGrade($termScore);
+                        $grade=$db->calculateTermGrade($final_result);
 
-                    if ($grade == "A" || $grade == "B" || $grade == "C"|| $grade == "D") {
-                        $tpass++;
-                    } else {
-                        $tfail++;
-                    }
+                        if ($grade == "A" || $grade == "B" || $grade == "C"|| $grade == "D") {
+                            $tpass++;
+                        } else {
+                            $tfail++;
+                        }
 
-                if ($grade == "A")
-                    $gA++;
-                else if ($grade == "B")
-                    $gB++;
-                else if ($grade == "C")
-                    $gC++;
-                else if ($grade == "D")
-                    $gD++;
-                else
-                    $gF++;
+                        if ($grade == "A") {
+                            $gA++;
+                        } elseif ($grade == "B") {
+                            $gB++;
+                        } elseif ($grade == "C") {
+                            $gC++;
+                        } elseif ($grade == "D") {
+                            $gD++;
+                        } else {
+                            $gF++;
+                        }
 
                         if ($gender=='M') {
                             if ($grade == "A" || $grade == "B" || $grade == "C"|| $grade == "D") {
@@ -238,50 +226,51 @@ if($_REQUEST['action']=="getPDF") {
                                 $tmfail++;
                             }
 
-                            if($grade=="A")
+                            if ($grade=="A") {
                                 $gAm++;
-                            else if($grade=="B")
+                            } elseif ($grade=="B") {
                                 $gBm++;
-                            else if ($grade == "C")
+                            } elseif ($grade == "C") {
                                 $gCm++;
-                            else if ($grade == "D")
+                            } elseif ($grade == "D") {
                                 $gDm++;
-                            else
+                            } else {
                                 $gFm++;
-                        }
-                        else 
-                        {
+                            }
+                        } else {
                             if ($grade == "A" || $grade == "B" || $grade == "C" || $grade == "D") {
                                 $tfpass++;
                             } else {
                                 $tffail++;
                             }
 
-                            if ($grade == "A")
+                            if ($grade == "A") {
                                 $gAf++;
-                            else if ($grade == "B")
+                            } elseif ($grade == "B") {
                                 $gBf++;
-                            else if ($grade == "C")
+                            } elseif ($grade == "C") {
                                 $gCf++;
-                            else if ($grade == "D")
+                            } elseif ($grade == "D") {
                                 $gDf++;
-                            else
+                            } else {
                                 $gFm++;
+                            }
                         }
 
                         $pdf->setFont('Arial', '', 10);
                         $pdf->Cell(10, 6, $count, 1);
-                        $pdf->Cell(30, 6, $regNumber, 1, 0);
-                        $pdf->Cell(60, 6, $name, 1, 0);
-                        $pdf->Cell(20, 6, $gender, 1, 0, 'C');
-                        $pdf->Cell(20, 6, $termScore, 1, 0, 'C');
-                        $pdf->Cell(25, 6, $db->calculateTermGrade($termScore), 1, 0, 'C');
-                        $pdf->Cell(30, 6, $db->courseTermRemarks($termScore), 1, 0, 'C');
+                        $pdf->Cell(60, 6, $examNumber, 1, 0);
+                        $pdf->Cell(40, 6, $gender, 1, 0, 'C');
+                        $pdf->Cell(40, 6, $final_result, 1, 0, 'C');
+                        $pdf->Cell(20, 6, $db->calculateTermGrade($final_result), 1, 0, 'C');
+                        $pdf->Cell(25, 6, $db->courseTermRemarks($final_result), 1, 0, 'C');
                         $pdf->Ln();
                     }
                 }
             }
-        //}
+            $pdf->Ln(6);
+        }
+    }
 
     $avgcwk=$tcwk/$count;
     $avgsfe=$tsfe/$count;
@@ -442,15 +431,15 @@ if($_REQUEST['action']=="getPDF") {
     }
     $pdf->Cell(100,6,$instructorName);$pdf->Cell(100,6,"_____________________________");
     $pdf->Ln(6);
-    $pdf->Cell(100,6,"Instructor's Name");$pdf->Cell(100,6,"Signature");
+    $pdf->Cell(100,6,"Examination Officer's Name");$pdf->Cell(100,6,"Signature");
     $pdf->Ln(10);
     $pdf->Cell(100,6,"______________________________________");$pdf->Cell(100,6,"_____________________________");
-    $pdf->Ln(6);
-    $pdf->Cell(100,6,"Date approved by Head of Department");$pdf->Cell(100,6,"Signature");
-    $pdf->Ln(10);
-    $pdf->Cell(100,6,"______________________________________");$pdf->Cell(100,6,"______________________________");
-    $pdf->Ln(6);
-    $pdf->Cell(100,6,"Date Approved by Academic Master");$pdf->Cell(100,6,"Signature");
+    $pdf->Ln(8);
+    $pdf->Cell(100,6,"Date approved by Director of Training");$pdf->Cell(100,6,"Signature");
+    /* $pdf->Ln(10);
+    $pdf->Cell(100,6,"______________________________________");$pdf->Cell(100,6,"______________________________"); */
+    /* $pdf->Ln(6);
+    $pdf->Cell(100,6,"Date Approved by Academic Master");$pdf->Cell(100,6,"Signature"); */
 
 //}
 

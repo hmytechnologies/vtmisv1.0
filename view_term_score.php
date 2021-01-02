@@ -282,7 +282,7 @@ $db = new DBHelper();
             </button>-->
         <!--  <button class="btn btn-primary pull-right form-control" style="margin-right: 5px;" data-toggle="modal" data-target="#add_new_atype_modal"><i class="fa fa-download"></i>Print Report</button> -->
         <div class="col-lg-3">
-            <a href='print_term_score_report.php?action=getPDF&cid=<?php echo $courseID; ?>&levelID=<?php echo $programmeLevelID; ?>&aid=<?php echo $academicYearID; ?>&centerID=<?php echo $centerID; ?>&termID=<?php echo $termID;?>' target='_blank'> <button type="button" class="btn btn-primary pull-right form-control" style="margin-right: 5px;">
+            <a href='print_term_score_report.php?action=getPDF&cid=<?php echo $centerProgrammeCourseID; ?>&termID=<?php echo $termID;?>' target='_blank'> <button type="button" class="btn btn-primary pull-right form-control" style="margin-right: 5px;">
                     <i class="fa fa-download"></i>Print Report
                 </button></a>
         </div>

@@ -110,7 +110,7 @@ if(!empty($student))
                         
                           <div class="col-lg-6">
                             <label for="Geder">Gender</label>
-                            <select name="gender" class="form-control">
+                            <select name="gender" class="form-control" required>
                             <?php 
                             if($gender=="")
                             {
@@ -145,7 +145,7 @@ if(!empty($student))
                              ?>
                             <div class="row">
                              <div class="col-lg-4 no-padding-right">
-                              <select name="date" class="form-control" required>
+                              <select name="date" class="form-control">
                               <?php 
                               if(!empty($dob))
                               {
@@ -164,7 +164,7 @@ if(!empty($student))
                                         ?>
                                     </select>
                              </div><div class="col-lg-4 no-padding-right no-padding-left">
-                             <select name="month" class="form-control" required>
+                             <select name="month" class="form-control">
                              <?php 
                              $arrmonth=array();
                              $arrmonth[]="00";
@@ -204,7 +204,7 @@ if(!empty($student))
                                     ?>
                                     </select>
                              </div><div class="col-lg-4 no-padding-left">
-                             <select name="year" class="form-control" required>
+                             <select name="year" class="form-control">
                                <?php 
                               if(!empty($dob))
                               {
