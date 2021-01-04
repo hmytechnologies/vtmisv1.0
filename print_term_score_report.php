@@ -63,7 +63,7 @@ if($_REQUEST['action']=="getPDF") {
 
         function BasicTable($header)
         {
-            $w = array(10, 30, 60, 20, 20, 25, 30);
+            $w = array(10, 50, 60, 20, 20, 15, 20);
             for ($i = 0; $i < count($header); $i++)
                 $this->Cell($w[$i], 6, $header[$i], 1, 0, 'C', 0);
             $this->Ln();
@@ -271,12 +271,12 @@ if($_REQUEST['action']=="getPDF") {
 
                         $pdf->setFont('Arial', '', 10);
                         $pdf->Cell(10, 6, $count, 1);
-                        $pdf->Cell(30, 6, $regNumber, 1, 0);
+                        $pdf->Cell(50, 6, $regNumber, 1, 0);
                         $pdf->Cell(60, 6, $name, 1, 0);
                         $pdf->Cell(20, 6, $gender, 1, 0, 'C');
                         $pdf->Cell(20, 6, $termScore, 1, 0, 'C');
-                        $pdf->Cell(25, 6, $db->calculateTermGrade($termScore), 1, 0, 'C');
-                        $pdf->Cell(30, 6, $db->courseTermRemarks($termScore), 1, 0, 'C');
+                        $pdf->Cell(15, 6, $db->calculateTermGrade($termScore), 1, 0, 'C');
+                        $pdf->Cell(20, 6, $db->courseTermRemarks($termScore), 1, 0, 'C');
                         $pdf->Ln();
                     }
                 }
