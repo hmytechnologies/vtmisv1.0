@@ -98,7 +98,7 @@ $db = new DBHelper();
             <hr>
             <div class="row">
                 <?php
-                $student = $db->getStudentTermList($_SESSION['department_session'], $academicYearID, $programmeLevelID, $programmeID);
+                $student = $db->getStudentTermList($centerID, $academicYearID, $programmeLevelID, $programmeID);
                 if (!empty($student)) {
                 ?>
                     <table id="view_score" class="display nowrap">

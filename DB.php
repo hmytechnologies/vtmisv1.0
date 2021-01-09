@@ -535,7 +535,22 @@ class DBHelper{
         return $data;
     }*/
 
-    public function getCourseCredit($progID,$semesterID,$studyID,$acadeID)
+    public function getCourseCredit($levelID,$progID)
+    {
+        $query = $this->conn->prepare("SELECT DISTINCT(cp.courseID),courseName,courseCode,units,courseTypeID from programmemaping cp,course c
+        where c.courseID=cp.courseID
+        AND cp.programmeID=:progID 
+        AND cp.programmeLevelID=:levelID
+        AND courseStatus=:st");
+        $query->execute(array('progID'=>$progID,':levelID'=>$levelID,':st'=>1));
+        $data = array();
+        while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
+            $data[] = $row;
+        }
+        return $data;
+    }
+
+    /* public function getCourseCredit($progID, $semesterID, $studyID, $acadeID)
     {
 
         $query = $this->conn->prepare("SELECT DISTINCT(e.courseID),courseName,courseCode,units,courseTypeID from student s,courseprogramme cp,course c,exam_result e,student_study_year sy
@@ -548,14 +563,14 @@ class DBHelper{
         AND e.semesterSettingID=:semID
         AND sy.studyYear=:study
         AND sy.academicYearID=:acadID");
-        $query->execute(array('progID'=>$progID,':semID'=>$semesterID,':study'=>$studyID,':acadID'=>$acadeID));
+        $query->execute(array('progID' => $progID, ':semID' => $semesterID, ':study' => $studyID, ':acadID' => $acadeID));
         $data = array();
         while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
             $data[] = $row;
         }
         return $data;
     }
-
+ */
    /* public function getCourseCredit($progID,$semesterID)
     {
 
@@ -2084,6 +2099,7 @@ public function my_simple_crypt($string, $action = 'e' )
     }
     
     return $output;
+
 }
 
 public function getExamCategory($courseTypeID)
