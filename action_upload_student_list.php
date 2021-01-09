@@ -31,8 +31,8 @@ try {
                     $firstName = $filesop[1];
                     $middleName = $filesop[2];
                     $lastName = $filesop[3];
-                   /*  $gender = $filesop[4];
-                    $dob = $filesop[5]; 
+                    $gender = $filesop[4];
+                    /*  $dob = $filesop[5]; 
                     $academicYearID = $filesop[6];
                     $level = $filesop[7];*/
 
@@ -78,8 +78,8 @@ try {
                                 'middleName' => ucfirst($mname),
                                 'lastName' => ucfirst($lname),
                                 'registrationNumber' => strtoupper(trim($regNumber)),
-                                /* 'gender' => $gender,
-                                'dateOfBirth' => $dob, */
+                                'gender' => $gender,
+                                /*'dateOfBirth' => $dob, */
                                 'academicYearID' => $academicYearID,
                                 'statusID' => 1,
                                 'userID' => $userID

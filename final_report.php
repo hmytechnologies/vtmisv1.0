@@ -94,7 +94,7 @@
 ?>
 <div class="container">
     <div class="content">
-        <h1>Term Report</h1>
+        <h1>Final Report</h1>
         <hr>
 
         <div class="tab-content">
@@ -165,24 +165,6 @@
                         </select>
                     </div>
 
-
-                    <div class="col-lg-2">
-                        <label for="FirstName">Term Name</label>
-                        <select name="examCategoryID" class="form-control" id="examCategoryID">
-                            <?php
-                            $term = $db->getRows("exam_category", array('order by examCategoryID ASC'));
-                            if (!empty($term)) {
-                                echo "<option value=''>Please Select Here</option>";
-                                foreach ($term as $trm) {
-                                    $examCategory = $trm['examCategory'];
-                                    $examCategoryID = $trm['examCategoryID'];
-                                    echo "<option value='$examCategoryID'>$examCategory</option>";
-                                }
-                            }
-                            ?>
-                        </select>
-                    </div>
-
                     <div class="col-lg-2">
                         <label for="FirstName">Academic Year</label>
                         <select name="academicYearID" id="academicYearID" class="form-control" required>
@@ -244,14 +226,13 @@
             $levelID = $_POST["programmeLevelID"];
             $academicYearID = $_POST["academicYearID"];
             $centerID = $_POST["centerID"];
-            $examCategoryID = $_POST["examCategoryID"];
 
             $student = $db->getStudentTermList($centerID, $academicYearID, $programmeLevelID, $programmeID);
             if (!empty($student)) {
             ?>
                 <div class="box box-solid box-primary">
                     <div class="box-header with-border text-center">
-                        <h3 class="box-title">Term Report for
+                        <h3 class="box-title">Final Report for
                             <?php echo $sYear;
                             echo " ";
                             echo $db->getData("programmes", "programmeName", "programmeID", $programmeID); ?>
@@ -309,81 +290,26 @@
                                         $countsupp = 0;
                                         foreach ($course as $cs) {
                                             $courseID = $cs['courseID'];
-                                            $termScore = $db->decrypt($db->getTermGrade($academicYearID, $courseID, $regNumber, $examCategoryID));
+                                            $term1Score = $db->decrypt($db->getTermGrade($academicYearID, $courseID, $regNumber, 1));
+                                            $term2Score = $db->decrypt($db->getTermGrade($academicYearID, $courseID, $regNumber, 2));
+                                            $finalScore = $db->decrypt($db->getFinalTermGrade($academicYearID, $courseID, $regNumber, 3));
 
 
-                                           /*  $passCourseMark = $db->getExamCategoryMark(1, $regNumber, $studyYear);
-                                            $passFinalMark = $db->getExamCategoryMark(2, $regNumber, $studyYear);
-                                            $tmarks = $db->calculateTotal($cwk, $sfe, $sup, $spc, $prj, $pt);
-                                            if (!empty($sup)) {
-                                                $passMark = $db->getExamCategoryMark(3, $regNumber, $studyYear);
-                                                if ($tmarks >= $passMark)
-                                                    $grade = "C";
-                                                else
-                                                    $grade = "D";
-                                                $gradeID = $db->getMarksID($regNumber, $studyYear, $cwk, $sfe, $sup, $spc, $prj, $pt);
-                                                $gradePoint = $db->getData("grades", "gradePoints", "gradeID", $gradeID);
-                                            } else if (!empty($pt)) {
-                                                $passMark = $db->getExamCategoryMark(6, $regNumber, $studyYear);
-                                                $gradeID = $db->getMarksID($regNumber, $studyYear, $cwk, $sfe, $sup, $spc, $prj, $pt);
-                                                if ($tmarks >= $passMark)
-                                                    $grade = $db->getData("grades", "gradeCode", "gradeID", $gradeID);
-                                                else
-                                                    $grade = "D";
-                                                $gradePoint = $db->getData("grades", "gradePoints", "gradeID", $gradeID);
-                                            } else if (!empty($prj)) {
-                                                $passMark = $db->getExamCategoryMark(5, $regNumber, $studyYear);
-                                                $gradeID = $db->getMarksID($regNumber, $studyYear, $cwk, $sfe, $sup, $spc, $prj, $pt);
-                                                if ($tmarks >= $passMark)
-                                                    $grade = $db->getData("grades", "gradeCode", "gradeID", $gradeID);
-                                                else
-                                                    $grade = "D";
-                                                $gradePoint = $db->getData("grades", "gradePoints", "gradeID", $gradeID);
-                                            } else if (empty($cwk) || empty($sfe)) {
-                                                $grade = "I";
-                                                $gradePoint = 0;
-                                            } else if ($cwk < $passCourseMark) {
-                                                $grade = "I";
-                                                $gradePoint = 0;
-                                            } else if ($sfe < $passFinalMark) {
-                                                $grade = "E";
-                                                $gradePoint = 0;
-                                            } else {
-                                                $gradeID = $db->getMarksID($regNumber, $studyYear, $cwk, $sfe, $sup, $spc, $prj, $pt);
-                                                $gradePoint = $db->getData("grades", "gradePoints", "gradeID", $gradeID);
-                                                $grade = $db->calculateGrade($regNumber, $studyYear, $cwk, $sfe, $sup, $spc, $prj, $pt);
-                                            }
-                                            $points = $gradePoint * $units;
-                                            $tpoints += $points;
-                                            $tunits += $units;
-                                            $gpa = $db->getGPA($tpoints, $tunits);
 
-
-                                            if (($grade == "D") or ($grade == "F") or ($grade == "E") or ($grade == "I")) {
-                                                $countsupp = $countsupp + 1;
-                                            } else {
-                                                $countpass = $countpass + 1;
+                                            $exam_category_marks = $db->getTermCategorySetting();
+                                            if (!empty($exam_category_marks)) {
+                                                foreach ($exam_category_marks as $gd) {
+                                                    $mMark = $gd['mMark'];
+                                                    $pMark = $gd['passMark'];
+                                                    $wMark = $gd['wMark'];
+                                                }
                                             }
 
-                                            if ($gpa < 2)
-                                                $gparemarks = "Fail";
-                                            else if ($countsupp > 0)
-                                                $gparemarks = "Supp";
-                                            else
-                                                $gparemarks = "Pass"; */
-                                            //}
-                                            /*else
-                            {
-                                $cwk="-";
-                                $sfe="-";
-                                $totalMarks="-";
-                                $grade="-";
-                                $units="-";
-                                $points="-";
+                                            $term1m = ($term1Score / $mMark) * $wMark;
+                                            $term2m = ($term2Score / $mMark) * $wMark;
+                                            $finalm = ($finalScore / $mMark) * $wMark;
 
-                            }*/
-
-                                            echo "<td>$termScore</td>";
+                                            echo "<td>$finalm</td>";
                                         }
 
 

@@ -131,6 +131,10 @@ $roleID=$_SESSION['roleID'];
             include('semester_setting.php');
             break;
 
+    case 'final_report':
+        include('final_report.php');
+        break;
+
         case 'semester_date_setting':
             include('semester_date_setting.php');
             break;
