@@ -26,7 +26,7 @@
 <div class="container">
     <h3>Batch Registration</h3>
 
-    <h5 class="text-danger">NB:Your file must have this format(FirstName,MiddleName,LastName,Gender(M/F),RegNumber,DOB(YYYY-MM-DD))</h5>
+    <h5 class="text-danger">NB:Your file must have this format(Registration,FirstName,MiddleName,LastName,Gender(M/F))</h5>
     <hr>
     <form name="" method="post" action="action_upload_student_list.php" enctype="multipart/form-data">
         <div class="row">
