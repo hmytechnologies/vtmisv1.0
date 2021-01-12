@@ -537,7 +537,7 @@ class DBHelper{
 
     public function getCourseCredit($levelID,$progID)
     {
-        $query = $this->conn->prepare("SELECT DISTINCT(cp.courseID),courseName,courseCode,units,courseTypeID from programmemaping cp,course c
+        $query = $this->conn->prepare("SELECT DISTINCT(cp.courseID),courseName,courseCode,units,courseTypeID,courseCategoryID from programmemaping cp,course c
         where c.courseID=cp.courseID
         AND cp.programmeID=:progID 
         AND cp.programmeLevelID=:levelID
@@ -2353,6 +2353,24 @@ public function getStudentScoreList($courseID, $academicYearID,$programmeLevelID
         }
     }
 
+
+    public function getExamNumber($regNumber, $academicYearID)
+    {
+        try {
+            $query = $this->conn->prepare("SELECT DISTINCT examNumber from student s,exam_number e
+            WHERE s.registrationNumber=e.regNumber
+            AND e.academicYearID=:acadID
+            AND e.regNumber=:regNo
+            ORDER BY e.examNumber ASC");
+            $query->execute(array(':acadID' => $academicYearID,':regNo'=>$regNumber));
+            $row = $query->fetch(PDO::FETCH_ASSOC);
+            $number = $row['examNumber'];
+            return $number;
+        } catch (PDOException $ex) {
+            echo "Getting Data Error: " . $ex->getMessage();
+        }
+    }
+
     public function getStudentSuppList($courseID,$semesterID,$batchID)
     {
         try
@@ -3874,7 +3892,8 @@ public function getGPARemarks($regNumber,$gpa)
             center_registration cs,
             student_programme sp
         where
-                cs.centerRegistrationID = sp.centerID
+                st.registrationNumber=sp.regNumber
+                AND cs.centerRegistrationID = sp.centerID
                 AND p.programmeID =  sp.programmeID
                 AND sp.centerID=:centerID
                 AND gender=:gnd");
@@ -4015,7 +4034,8 @@ public function getGPARemarks($regNumber,$gpa)
           FROM
           student s,student_programme sp,programme_level pl
           WHERE
-          pl.programmeLevelID=sp.programmeLevelID
+            s.registrationNumber=sp.regNumber 
+            AND pl.programmeLevelID=sp.programmeLevelID
           AND sp.programmeLevelID=:proID
           AND s.statusID=:st
           AND gender=:gnd");

@@ -2,22 +2,24 @@
 <script src="js/jquery-1.4.2.min.js"></script>
 <!-- <script src="js/script.js"></script> -->
 
-<script type="text/javascript" src="plugins/jQuery/jQuery-2.1.4.min.js"></script>
 <script type="text/javascript">
     $(document).ready(function() {
-        $("#programID").change(function() {
-            var id = $(this).val();
-            var dataString = 'id=' + id;
+        $("#programmeLevelID").change(function() {
+            var programmeLevelID = $(this).val();
+            var centerID = $("#centerIDD").val();
+            var dataString = 'programmeLevelID=' + programmeLevelID + '&centerID=' + centerID;
             $.ajax({
                 type: "POST",
-                url: "ajax_studyear.php",
+                url: "ajax_programme.php",
                 data: dataString,
                 cache: false,
                 success: function(html) {
-                    $("#studyYear").html(html);
+                    $("#programmeID").html(html);
                 }
             });
+
         });
+
     });
 </script>
 
@@ -105,7 +107,7 @@
                 <div class="row">
                     <div class="col-lg-3">
                         <label for="MiddleName">Center Name</label>
-                        <select name="centerID" class="form-control chosen-select" required="">
+                        <select name="centerID" id="centerIDD" class="form-control chosen-select" required="">
                             <?php
                             $center = $db->getRows('center_registration', array('order_by' => 'centerName ASC'));
                             if (!empty($center)) {
@@ -148,20 +150,7 @@
                     <div class="col-lg-2">
                         <label for="MiddleName">Trade Name</label>
                         <select name="programmeID" id="programmeID" class="form-control" required>
-                            <?php
-                            $programmes = $db->getRows('programmes', array('order_by' => 'programmeName ASC'));
-                            if (!empty($programmes)) {
-                                echo "<option value=''>Please Select Here</option>";
-                                $count = 0;
-                                foreach ($programmes as $prog) {
-                                    $count++;
-                                    $programme_name = $prog['programmeName'];
-                                    $programmeID = $prog['programmeID'];
-                            ?>
-                                    <option value="<?php echo $programmeID; ?>"><?php echo $programme_name; ?></option>
-                            <?php }
-                            }
-                            ?>
+                            <option value="">Select Here</option>
                         </select>
                     </div>
 
@@ -215,150 +204,173 @@
 
         <div class="row">
             <?php
-        if(isset($_POST['doFind'])=="View Records")
-        {
+            if (isset($_POST['doFind']) == "View Records") {
 
-            //session_start();
-            //include('DB.php');
-            //$db = new DBHelper();
+                //session_start();
+                //include('DB.php');
+                //$db = new DBHelper();
 
-            $programmeID = $_POST["programmeID"];
-            $levelID = $_POST["programmeLevelID"];
-            $academicYearID = $_POST["academicYearID"];
-            $centerID = $_POST["centerID"];
+                $programmeID = $_POST["programmeID"];
+                $levelID = $_POST["programmeLevelID"];
+                $academicYearID = $_POST["academicYearID"];
+                $centerID = $_POST["centerID"];
 
-            $student = $db->getStudentTermList($centerID, $academicYearID, $programmeLevelID, $programmeID);
-            if (!empty($student)) {
+                $student = $db->getStudentTermList($centerID, $academicYearID, $programmeLevelID, $programmeID);
+                if (!empty($student)) {
             ?>
-                <div class="box box-solid box-primary">
-                    <div class="box-header with-border text-center">
-                        <h3 class="box-title">Final Report for
-                            <?php echo $sYear;
-                            echo " ";
-                            echo $db->getData("programmes", "programmeName", "programmeID", $programmeID); ?>
-                            <?php echo $db->getData("semester_setting", "semesterName", "semesterSettingID", $semesterID); ?>
-                            <?php echo $db->getData("batch", "batchName", "batchID", $batchID); ?></h3>
-                    </div>
-                    <!-- /.box-header -->
-                    <div class="box-body table-responsive no-padding">
+                    <div class="box box-solid box-primary">
+                        <div class="box-header with-border text-center">
+                            <h3 class="box-title">Final Report for
+                                <?php echo $sYear;
+                                echo " ";
+                                echo $db->getData("programmes", "programmeName", "programmeID", $programmeID); ?>
+                                <?php echo $db->getData("semester_setting", "semesterName", "semesterSettingID", $semesterID); ?>
+                                <?php echo $db->getData("batch", "batchName", "batchID", $batchID); ?></h3>
+                        </div>
+                        <!-- /.box-header -->
+                        <div class="box-body table-responsive no-padding">
 
-                        <div class="row">
-                            <div class="pull-right">
-                                <div class="col-lg-12">
-                                    <button class="btn btn-primary pull-right form-control" style="margin-right: 5px;" data-toggle="modal" data-target="#add_new_atype_modal"><i class="fa fa-download"></i>Print Report</button>
+                            <div class="row">
+                                <div class="pull-right">
+                                    <div class="col-lg-12">
+                                        <button class="btn btn-primary pull-right form-control" style="margin-right: 5px;" data-toggle="modal" data-target="#add_new_atype_modal"><i class="fa fa-download"></i>Print Report</button>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <!--End -->
-                        <table id="" class="table table-hover table-bordered" cellspacing="0" width="100%" rules="groups">
-                            <thead>
-                                <tr>
-                                    <th>No.</th>
-                                    <th>Name</th>
-                                    <th>Gender</th>
-                                    <th>Reg.Number</th>
+                            <!--End -->
+                            <table id="example" class="table table-hover table-bordered" cellspacing="0" width="100%" rules="groups">
+                                <thead>
+                                    <tr>
+                                        <th>No.</th>
+                                        <th>Name</th>
+                                        <th>Gender</th>
+                                        <th>Reg.Number</th>
+                                        <th>Exam Number</th>
+                                        <?php
+                                        $course = $db->getCourseCredit($levelID, $programmeID);
+                                        foreach ($course as $cs) {
+                                            echo "<th>" . $cs['courseCode'] . "</th>";
+                                        }
+                                        ?>
+                                        <th>CSAVG</th>
+                                        <th>GSAVG</th>
+                                        <th>Remarks</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
                                     <?php
-                                    $course = $db->getCourseCredit($levelID,$programmeID);
-                                    foreach ($course as $cs) {
-                                        echo "<th>".$cs['courseCode']."</th>";
+                                    $count = 0;
+                                    foreach ($student as $st) {
+                                        $count++;
+                                        $regNumber = $st['regNumber'];
+                                        $studentDetails = $db->getRows('student', array('where' => array('registrationNumber' => $regNumber), ' order_by' => 'firstName ASC'));
+                                        foreach ($studentDetails as $std) {
+                                            # code...
+                                            $fname = $std['firstName'];
+                                            $mname = $std['middleName'];
+                                            $lname = $std['lastName'];
+                                            $name = "$fname $mname $lname";
+                                            $gender = $std['gender'];
+                                            $dob = $std['dateOfBirth'];
+                                            $admissionYearID = $std['academicYearID'];
+                                            $examNumber = $db->getExamNumber($regNumber, $academicYearID);
+                                            echo "<tr><td>$count</td><td>$name</td><td>$gender</td><td>$regNumber</td><td>$examNumber</td>";
+
+                                            $course = $db->getCourseCredit($levelID, $programmeID);
+                                            $tunits = 0;
+                                            $tpoints = 0;
+                                            $countpass = 0;
+                                            $countsupp = 0;
+                                            $gstotal=0;$cstotal=0;$countgs=0;$countcs=0;
+                                            foreach ($course as $cs) {
+                                                $courseID = $cs['courseID'];
+                                                $courseCategoryID=$cs['courseCategoryID'];
+                                                $term1Score = $db->decrypt($db->getTermGrade($academicYearID, $courseID, $regNumber, 1));
+                                                $term2Score = $db->decrypt($db->getTermGrade($academicYearID, $courseID, $regNumber, 2));
+                                                $finalScore = $db->decrypt($db->getFinalTermGrade($academicYearID, $courseID, $examNumber, 3));
+
+
+
+                                                $exam_category_marks = $db->getTermCategorySetting();
+                                                if (!empty($exam_category_marks)) {
+                                                    foreach ($exam_category_marks as $gd) {
+                                                        $mMark = $gd['mMark'];
+                                                        $pMark = $gd['passMark'];
+                                                        $wMark = $gd['wMark'];
+                                                    }
+                                                }
+
+                                                $term1m = ($term1Score / $mMark) * $wMark;
+                                                $term2m = ($term2Score / $mMark) * $wMark;
+                                                $finalm = ($finalScore / $mMark) * $wMark;
+
+                                                $totalMarks = $term1m + $term2m + $finalm;
+
+                                                if ($courseCategoryID==1) {
+                                                    $cstotal+=$totalMarks;
+                                                    $countcs++;
+                                                }
+                                                else {
+                                                    $gstotal+=$totalMarks;
+                                                    $countgs++;
+                                                }
+
+                                                echo "<td>$totalMarks</td>";
+                                            }
+                                            $gsaverage=round(($gstotal/$countgs),2);
+                                            $csaverage = round(($cstotal / $countcs),2);
+
+                                            if($csaverage>=40)
+                                                $gparemarks="Pass";
+                                            else 
+                                                $gparemarks="Supp";
+                                                
+                                            echo "<td>$csaverage</td><td>$gsaverage</td><td>$gparemarks</td></tr>";
+                                    ?>
+
+                                    <?php
+                                        }
                                     }
                                     ?>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php
-                                $count = 0;
-                                foreach ($student as $st) {
-                                    $count++;
-                                    $regNumber = $st['regNumber'];
-                                    $studentDetails = $db->getRows('student', array('where' => array('registrationNumber' => $regNumber), ' order_by' => 'firstName ASC'));
-                                    foreach ($studentDetails as $std) {
-                                        # code...
-                                        $fname = $std['firstName'];
-                                        $mname = $std['middleName'];
-                                        $lname = $std['lastName'];
-                                        $name = "$fname $mname $lname";
-                                        $gender = $std['gender'];
-                                        $dob = $std['dateOfBirth'];
-                                        $admissionYearID = $std['academicYearID'];
-                                        echo "<tr><td>$count</td><td>$name</td><td>$gender</td><td>$regNumber</td>";
 
-                                        $course = $db->getCourseCredit($levelID,$programmeID);
-                                        $tunits = 0;
-                                        $tpoints = 0;
-                                        $countpass = 0;
-                                        $countsupp = 0;
-                                        foreach ($course as $cs) {
-                                            $courseID = $cs['courseID'];
-                                            $term1Score = $db->decrypt($db->getTermGrade($academicYearID, $courseID, $regNumber, 1));
-                                            $term2Score = $db->decrypt($db->getTermGrade($academicYearID, $courseID, $regNumber, 2));
-                                            $finalScore = $db->decrypt($db->getFinalTermGrade($academicYearID, $courseID, $regNumber, 3));
+                                </tbody>
+                            </table>
+                        </div>
 
-
-
-                                            $exam_category_marks = $db->getTermCategorySetting();
-                                            if (!empty($exam_category_marks)) {
-                                                foreach ($exam_category_marks as $gd) {
-                                                    $mMark = $gd['mMark'];
-                                                    $pMark = $gd['passMark'];
-                                                    $wMark = $gd['wMark'];
-                                                }
-                                            }
-
-                                            $term1m = ($term1Score / $mMark) * $wMark;
-                                            $term2m = ($term2Score / $mMark) * $wMark;
-                                            $finalm = ($finalScore / $mMark) * $wMark;
-
-                                            echo "<td>$finalm</td>";
-                                        }
-
-
-                                        echo "<td>$gpa</td><td>$gparemarks</td></tr>";
-                                ?>
-
-                                <?php
-                                    }
-                                }
-                                ?>
-
-                            </tbody>
-                        </table>
+                    <?php
+                } else {
+                    ?>
+                        <h4 class="text-danger">No Result(s) found......</h4>
+                <?php
+                }
+            }
+                ?>
                     </div>
+                    <div id="add_new_atype_modal" class="modal fade" role="dialog">
+                        <div class="modal-dialog modal-lg">
 
-                <?php
-            } else {
-                ?>
-                    <h4 class="text-danger">No Result(s) found......</h4>
-                <?php
-            }
-            }
-                ?>
-                </div>
-                <div id="add_new_atype_modal" class="modal fade" role="dialog">
-                    <div class="modal-dialog modal-lg">
-
-                        <!-- Modal content-->
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                <h4 class="modal-title">Preview Course Result</h4>
-                            </div>
-                            <div class="modal-body">
-
-                                <embed src="print_semester_report_sumait_overall.php?action=getPDF&prgID=<?php echo $programmeID; ?>&bid=<?php echo $batchID; ?>&sid=<?php echo $semesterID; ?>&syear=<?php echo $studyYear; ?>" frameborder="0" width="100%" height="600px">
-
-
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <!-- Modal content-->
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4 class="modal-title">Preview Course Result</h4>
                                 </div>
-                            </div>
+                                <div class="modal-body">
 
+                                    <embed src="print_semester_report_sumait_overall.php?action=getPDF&prgID=<?php echo $programmeID; ?>&bid=<?php echo $batchID; ?>&sid=<?php echo $semesterID; ?>&syear=<?php echo $studyYear; ?>" frameborder="0" width="100%" height="600px">
+
+
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
+
+                            </div>
                         </div>
                     </div>
-                </div>
 
 
-                <!--end-->
+                    <!--end-->
         </div>
     </div>
 
