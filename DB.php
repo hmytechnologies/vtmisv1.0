@@ -541,7 +541,7 @@ class DBHelper{
         where c.courseID=cp.courseID
         AND cp.programmeID=:progID 
         AND cp.programmeLevelID=:levelID
-        AND courseStatus=:st");
+        AND status=:st");
         $query->execute(array('progID'=>$progID,':levelID'=>$levelID,':st'=>1));
         $data = array();
         while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
