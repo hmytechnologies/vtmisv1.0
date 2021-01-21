@@ -8,6 +8,7 @@ $examCategoryID=$_POST['examCategoryID'];
 $courseID=$_POST['courseID'];
 $academicYearID=$_POST['academicYearID'];
 $levelID=$_POST['levelID'];
+$programmeID=$_POST['pID'];
 $examDate=$_POST['examDate'];
 if($examDate=="")
     $examDate=date("Y-m-d");
@@ -16,7 +17,7 @@ if($examDate=="")
     <form name="" method="post" action="action_exam_score.php">
     <?php
 
-        $student= $db->getStudentExamList($courseID,$academicYearID,$levelID);
+        $student= $db->getStudentExamList($courseID,$academicYearID,$levelID,$programmeID);
         if(!empty($student))
         {
         $count=0;

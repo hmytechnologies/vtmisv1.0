@@ -1763,7 +1763,7 @@ public function getSemesterCourse($semesterID,$role,$depID)
     {
         try
         {
-            $query=$this->conn->prepare("SELECT DISTINCT c.courseID,courseCode,courseName,courseTypeID,programmeLevelID FROM programmemaping p,course c
+            $query=$this->conn->prepare("SELECT DISTINCT c.courseID,courseCode,courseName,courseTypeID,programmeLevelID,programmeID FROM programmemaping p,course c
         where c.courseID=p.courseID");
             $query->execute();
 
@@ -2305,7 +2305,7 @@ public function getStudentScoreList($courseID, $academicYearID,$programmeLevelID
     }
 
 //adding result for final exam
-    public function getStudentExamList($courseID,$academicYearID,$levelID)
+    public function getStudentExamList($courseID,$academicYearID,$levelID,$progID)
     {
         try
         {
@@ -2313,11 +2313,13 @@ public function getStudentScoreList($courseID, $academicYearID,$programmeLevelID
             WHERE s.registrationNumber=e.regNumber
             AND e.regNumber=sp.regNumber
             AND sp.programmeLevelID=p.programmeLevelID
+            AND sp.programmeID=p.programmeID
+            AND sp.programmeID=:pID
             AND p.courseID=:cid
             AND sp.programmeLevelID=:lvlID
             AND e.academicYearID=:acadID
             ORDER BY e.examNumber ASC");
-            $query->execute(array(':cid'=>$courseID,':lvlID'=>$levelID,':acadID'=>$academicYearID));
+            $query->execute(array(':pID'=>$progID,':cid'=>$courseID,':lvlID'=>$levelID,':acadID'=>$academicYearID));
             $data=array();
             while($row=$query->fetch(PDO::FETCH_ASSOC))
             {
@@ -4491,12 +4493,12 @@ WHERE
     }
 
 
-    public function getStudentNumber($academicYearID,$programmeLevelID)
+    public function getStudentNumber($academicYearID,$programmeLevelID,$progID)
     {
         try
         {
-            $query=$this->conn->prepare("SELECT COUNT(regNumber) as studentNumber FROM student_programme  where academicYearID=:acadID and programmeLevelID=:levelID and currentStatus=:st");
-            $query->execute(array(':acadID'=>$academicYearID,':levelID'=>$programmeLevelID,':st'=>1));
+            $query=$this->conn->prepare("SELECT COUNT(regNumber) as studentNumber FROM student_programme  where academicYearID=:acadID and programmeLevelID=:levelID and programmeID=:pid and currentStatus=:st");
+            $query->execute(array(':acadID'=>$academicYearID,':levelID'=>$programmeLevelID,':pid'=>$progID,':st'=>1));
             $row=$query->fetch(PDO::FETCH_ASSOC);
             $number=$row['studentNumber'];
             return $number;

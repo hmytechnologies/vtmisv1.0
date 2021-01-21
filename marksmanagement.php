@@ -54,6 +54,7 @@ if(!empty($courseprogramme))
     <th>Subject Name</th>
     <th>Subject Code</th>
       <th>Level</th>
+      <th>Trade</th>
  <th>No.of Students</th>
       <th>Exam List</th>
     <th>Post Results</th>
@@ -87,7 +88,7 @@ if(!empty($course))
 
 //$studentNumber=$db->getStudentCourseSum($courseID,$academicYearID,$programmeID,$programmeLevelID);
 
-$studentNumber=$db->getStudentNumber($academicYearID,$programmeLevelID);
+$studentNumber=$db->getStudentNumber($academicYearID,$programmeLevelID,$programmeID);
 
 
 
@@ -143,19 +144,19 @@ else
     {
         $addButton = '
     	<div class="btn-group">
-    	     <a href="index3.php?sp=add_score&cid='.$db->encrypt($courseID).'&acadID='.$db->encrypt($academicYearID).'&lvlID='.$db->encrypt($programmeLevelID).'" class="glyphicon glyphicon-plus"></a>
+    	     <a href="index3.php?sp=add_score&cid='.$db->encrypt($courseID).'&acadID='.$db->encrypt($academicYearID).'&lvlID='.$db->encrypt($programmeLevelID).'&pid='.$db->encrypt($programmeID).'" class="glyphicon glyphicon-plus"></a>
     	</div>';
         
         $excelButton = '
     	<div class="btn-group">
-    	     <a href="index3.php?sp=import_score&cid='.$db->encrypt($courseID).'&acadID='.$db->encrypt($academicYearID).'&lvlID='.$db->encrypt($programmeLevelID).'" class="glyphicon glyphicon-plus"></a>
+    	     <a href="index3.php?sp=import_score&cid='.$db->encrypt($courseID).'&acadID='.$db->encrypt($academicYearID).'&lvlID='.$db->encrypt($programmeLevelID).'&pid='.$db->encrypt($programmeID).'"class="glyphicon glyphicon-plus"></a>
     	</div>';
         
        // if($boolExamStatus==true)
         //{
             $viewButton = '
     	    <div class="btn-group">
-    	         <a href="index3.php?sp=view_score&cid='.$db->encrypt($courseID).'&acadID='.$db->encrypt($academicYearID).'&lvlID='.$db->encrypt($programmeLevelID).'" class="glyphicon glyphicon-eye-open"></a>
+    	         <a href="index3.php?sp=view_score&cid='.$db->encrypt($courseID).'&acadID='.$db->encrypt($academicYearID).'&lvlID='.$db->encrypt($programmeLevelID) .'&pid=' . $db->encrypt($programmeID).'" class="glyphicon glyphicon-eye-open"></a>
     	   </div>';
        /* }
         else 
@@ -175,6 +176,7 @@ else
  <td><?php echo $courseName;?></td>
  <td><?php echo $courseCode;?></td>
       <td><?php echo $db->getData('programme_level','programmeLevel','programmeLevelID',$programmeLevelID);?></td>
+      <td><?php echo $db->getData('programmes', 'programmeName', 'programmeID', $programmeID); ?></td>
 <td><?php echo $studentNumber;?></td>
       <td>Exam List</td>
  <td><?php echo $addButton;?></td>

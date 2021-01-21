@@ -215,7 +215,7 @@
                 $academicYearID = $_POST["academicYearID"];
                 $centerID = $_POST["centerID"];
 
-                $student = $db->getStudentTermList($centerID, $academicYearID, $programmeLevelID, $programmeID);
+                $student = $db->getStudentTermList($centerID, $academicYearID, $levelID, $programmeID);
                 if (!empty($student)) {
             ?>
                     <div class="box box-solid box-primary">
