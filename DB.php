@@ -1764,8 +1764,8 @@ public function getSemesterCourse($semesterID,$role,$depID)
         try
         {
             $query=$this->conn->prepare("SELECT DISTINCT c.courseID,courseCode,courseName,courseTypeID,programmeLevelID,programmeID FROM programmemaping p,course c
-        where c.courseID=p.courseID");
-            $query->execute();
+        where c.courseID=p.courseID AND status=:st");
+            $query->execute(array(':st'=>1));
 
             $data=array();
             while($row=$query->fetch(PDO::FETCH_ASSOC))
@@ -3063,7 +3063,7 @@ public function checkExamResultStatus($courseID,$semesterID,$batchID)
     try
     {
         $query=$this->conn->prepare("SELECT examScore from exam_result where courseID=:cid and academicYearID=:sem");
-        $query->execute(array(':cid'=>$courseID,':sem'=>$semesterID,'bid'=>$batchID));
+        $query->execute(array(':cid'=>$courseID,':sem'=>$semesterID));
         while($row=$query->fetch(PDO::FETCH_ASSOC))
         {
             $exam_score=$row['examScore'];
@@ -3078,6 +3078,24 @@ public function checkExamResultStatus($courseID,$semesterID,$batchID)
         echo "Getting Data Error: ".$ex->getMessage();
     }
 }
+
+    public function checkFinalExamResultStatus($courseID, $semesterID, $programmeID, $programmeLevelID)
+    {
+        try {
+            $query = $this->conn->prepare("SELECT examScore from final_result f,student_programme sp,exam_number en where courseID=:cid and f.academicYearID=:sem and sp.regNumber=en.regNumber AND en.examNumber = f.examNumber and sp.programmeID=:pID and sp.programmeLevelID=:lvlID");
+            $query->execute(array(':cid' => $courseID, ':sem' => $semesterID, ':pID' => $programmeID, ':lvlID'=>$programmeLevelID));
+            while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
+                $exam_score = $row['examScore'];
+            }
+            if (!empty($exam_score))
+                return true;
+            else
+                return false;
+        } catch (PDOException $ex) {
+            echo "Getting Data Error: " . $ex->getMessage();
+        }
+    }    
+
     public function checkFinalResultStatus($courseID,$semesterID,$batchID)
     {
         try

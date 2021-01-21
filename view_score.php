@@ -43,6 +43,7 @@ $db = new DBHelper();
                 $courseID = $db->decrypt($_REQUEST['cid']);
                 $academicYearID = $db->decrypt($_REQUEST['acadID']);
                 $programmeLevelID = $db->decrypt($_REQUEST['lvlID']);
+                $programmeID=$db->decrypt($_REQUEST['pid']);
 
                 $course = $db->getRows('course', array('where' => array('courseID' => $courseID), 'order_by' => 'courseID ASC'));
                 if (!empty($course)) {
@@ -58,7 +59,7 @@ $db = new DBHelper();
         <hr>
         <div class="row">
             <?php
-            $student = $db->getStudentExamList($courseID, $academicYearID, $programmeLevelID);
+            $student = $db->getStudentExamList($courseID, $academicYearID, $programmeLevelID,$programmeID);
             if (!empty($student)) {
             ?>
                 <table id="view_score" class="display nowrap">
@@ -109,10 +110,10 @@ $db = new DBHelper();
                                 echo "<td>" . $db->calculateTermGrade($final_result) . "</td>";
                                 echo "<td>" . $db->courseTermRemarks($final_result) . "</td>";
 
-                                $editButton = '
+                              /*   $editButton = '
                                 <div class="btn-group">
                                         <a href="index3.php?sp=edit_score&cid=' . $db->my_simple_crypt($courseID, 'e') . '&sid=' . $db->my_simple_crypt($semesterSettingID, 'e') . '&regno=' . $db->my_simple_crypt($regNumber, 'e') . '&bid=' . $db->my_simple_crypt($batchID, 'e') . '" class="glyphicon glyphicon-edit"></a>
-                                </div>';
+                                </div>'; */
                         ?>
                                 <!--<td>
                                         <?php
@@ -224,7 +225,7 @@ $db = new DBHelper();
                 <h4 class="modal-title">Preview Course Result</h4>
             </div>
             <div class="modal-body">
-                <embed src="print_score_report.php?action=getPDF&cid=<?php echo $courseID; ?>&bid=<?php echo $batchID; ?>&sid=<?php echo $semesterSettingID; ?>"
+                <embed src="print_score_report.php?action=getPDF&cid=<?php //echo $courseID; ?>&bid=<?php //echo $batchID; ?>&sid=<?php //echo $semesterSettingID; ?>"
                        frameborder="0" width="100%" height="600px">
 
                 <div class="modal-footer">

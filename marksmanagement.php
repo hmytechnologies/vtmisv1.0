@@ -95,7 +95,7 @@ $studentNumber=$db->getStudentNumber($academicYearID,$programmeLevelID,$programm
 $checked=$db->checkStatus($courseID,$academicYearID,$programmeID,$programmeLevelID,'checked');
 $published=$db->checkStatus($courseID,$academicYearID,$programmeID,$programmeLevelID,'status');
 
-$boolExamStatus=$db->checkExamResultStatus($courseID,$academicYearID,$programmeID,$programmeLevelID);
+$boolExamStatus=$db->checkFinalExamResultStatus($courseID,$academicYearID,$programmeID,$programmeLevelID);
 
 
 
@@ -152,20 +152,20 @@ else
     	     <a href="index3.php?sp=import_score&cid='.$db->encrypt($courseID).'&acadID='.$db->encrypt($academicYearID).'&lvlID='.$db->encrypt($programmeLevelID).'&pid='.$db->encrypt($programmeID).'"class="glyphicon glyphicon-plus"></a>
     	</div>';
         
-       // if($boolExamStatus==true)
-        //{
+       if($boolExamStatus==true)
+        {
             $viewButton = '
     	    <div class="btn-group">
     	         <a href="index3.php?sp=view_score&cid='.$db->encrypt($courseID).'&acadID='.$db->encrypt($academicYearID).'&lvlID='.$db->encrypt($programmeLevelID) .'&pid=' . $db->encrypt($programmeID).'" class="glyphicon glyphicon-eye-open"></a>
     	   </div>';
-       /* }
+       }
         else 
         {
             $viewButton = '
         	<div class="btn-group">
                 <i class="fa fa-eye" aria-hidden="true"></i>
         	</div>';
-        }*/
+        }
         
     }
 }
