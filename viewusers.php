@@ -107,7 +107,7 @@ if(!empty($_REQUEST['msg']))
   <thead>
   <tr>
     <th>No.</th>
-    <th>Full Name</th>
+    <!-- <th>Full Name</th> -->
     <th>Username</th>
     <th>Phone Number</th>
     <th>Email</th>

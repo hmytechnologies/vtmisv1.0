@@ -75,7 +75,6 @@ $users = $db->getRows('users',array('order_by'=>'userID ASC'));
 
 	$output['data'][] = array(
 	    $count,
-		$name,
 	    $username,
 	    $phoneNumber,
 	    $email,
