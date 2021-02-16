@@ -99,7 +99,14 @@ class DBHelper{
             if (!empty($data) && is_array($data)) {
                 $columns = '';
                 $values = '';
+                $colvalSet='';
                 $i = 0;
+                // log file insert....
+                foreach ($data as $key => $val) {
+                    $pre = ($i > 0) ? ', ' : '';
+                    $colvalSet .= $pre . $key . "='" . $val . "'";
+                    $i++;
+                }
                 if (!array_key_exists('createdDate', $data)) {
                     $data['createdDate'] = date("Y-m-d H:i:s");
                 }
@@ -123,6 +130,11 @@ class DBHelper{
                     $query->bindValue(':' . $key, $val);
                 }
                 $insert = $query->execute();
+
+                if ($insert) {
+                    $str = $_SESSION['user_session'] . "; " . $_SERVER['REMOTE_ADDR'] . "; Insert: (" . $table . ") " . $colvalSet . "; " . date("D, d M Y H:i:s"); // retreive the information for audit....
+                    $this->system_logs($str);  // inserting into the log file... 
+                }
                 return $insert ? $this->conn->lastInsertId() : false;
             } else {
                 return false;
@@ -144,6 +156,7 @@ class DBHelper{
             if (!empty($data) && is_array($data)) {
                 $colvalSet = '';
                 $whereSql = '';
+                $lengths = sizeof($data);
                 $i = 0;
                 if (!array_key_exists('modifiedDate', $data)) {
                     $data['modifiedDate'] = date("Y-m-d H:i:s");
@@ -166,8 +179,39 @@ class DBHelper{
                     }
                 }
                 $sql = "UPDATE " . $table . " SET " . $colvalSet . $whereSql;
+
+                // code for prepering for system ( .log )... 
+                // get the old data....
+                $cond['where'] = $conditions;
+                $cond['return_type'] = "single";
+                $old = $this->getRows($table, $cond);
+
+                // old user information.... 
+                $cnd['userID'] = $old['createdBy'];
+                $cond['where'] = $cnd;
+                $cond['select'] = "username";
+                $user = $this->getRows("users", $cond);
+
+                // prepare data for audit file ....
+                $u = 0;
+                $aud = "";
+                foreach ($data as $key => $val) {
+                    $pre = ($u > 0) ? ', ' : '';
+                    if ($key != 'modifiedDate') $aud .= ($old[$key] != $val) ? $pre . $key . "= (" . $old[$key] . " to " . $val . ")" : "";
+                    $u++;
+                }
+
+                $indcation = "($table) Created: { " . $user['username'] . " in " . date("D, d M Y H:i:s", strtotime($old['modifiedDate'])) . " }, <br>";
+                $aud = "( Update ): $indcation Modified: " . $aud . " in condition(s) ";
+                $action = $lengths > 1 ? $aud . " first $u " : (array_key_exists("status", $data) ? (
+                    ($data['status'] == 1) ? "( Unblock ) $indcation on data " : "( Block ) $indcation on data ") :
+                    $aud . " last ");
+                $str = $_SESSION['user_session'] . "; " . $_SERVER['REMOTE_ADDR'] . "; $action $whereSql; " . date("D, d M Y H:i:s");
+                // end of audit
+
                 $query = $this->conn->prepare($sql);
                 $update = $query->execute();
+                if ($update) $this->system_logs($str);
                 return $update ? $query->rowCount() : false;
             } else {
                 return false;
@@ -195,7 +239,23 @@ class DBHelper{
             }
         }
         $sql = "DELETE FROM ".$table.$whereSql;
+        // code for prepering for system ( .log )... 
+        // get the old data....
+        $cond['where'] = $conditions;
+        $cond['return_type'] = "single";
+        $old = $this->getRows($table, $cond);
+
+        // old user information.... 
+        $cnd['userID'] = $old['createdBy'];
+        $cond['where'] = $cnd;
+        $cond['select'] = "username";
+        $user = $this->getRows("users", $cond);
+
+        $indcation = "($table) Created: { " . $user['username'] . " in " . date("D, d M Y H:i:s", strtotime($old['modifiedDate'])) . " }, <br>";
+        $str = $_SESSION['user_session'] . "; " . $_SERVER['REMOTE_ADDR'] . "; (Delete). $indcation in conditions, $whereSql; " . date("D, d M Y H:i:s");
+            // end of audit
         $delete = $this->conn->exec($sql);
+        if ($delete) $this->system_logs($str);
         return $delete?$delete:false;
     }
 
@@ -214,6 +274,9 @@ class DBHelper{
                     if ($userRow['password'] === $this->PwdHash($upass, substr($userRow['password'], 0, 9))) {
                         $_SESSION['user_session'] = $userRow['userID'];
                         $_SESSION['department_session']=$userRow['departmentID'];
+                        // system logs...... 
+                        $str = $_SESSION['user_session'] . "; " . $_SERVER['REMOTE_ADDR'] . "; (Loged in); " . date("D, d M Y H:i:s");
+                        $this->system_logs($str);
                         return true;
                     } else {
                         return false;
@@ -273,6 +336,8 @@ class DBHelper{
  
    public function doLogout()
    {
+        $str = $_SESSION['user_session'] . "; " . $_SERVER['REMOTE_ADDR'] . "; (Logout); " . date("D, d M Y H:i:s");
+        $this->system_logs($str); 
         session_destroy();
         unset($_SESSION['user_session']);
         return true;
@@ -4715,6 +4780,21 @@ WHERE
         return $d;
     }
 
+    private function system_logs($log_data)
+    {
+        $file = "logs";
+        // create directory/folder uploads. 
+        if (!file_exists($file)) mkdir($file, 0777, true);
 
+        // user existence
+       /*  $cnd['userCode'] = $_SESSION['user_session'];
+        $cond['where'] = $cnd;
+        $cond['select'] = "roleCode";
+        $cond['return_type'] = "single";
+        $user = $this->getRows("userroles", $cond)['roleCode']; */
+        // end of find...
+        $file .= "/userlog";
+        file_put_contents($file . '.log', $log_data . "\n", FILE_APPEND);
+    }
 }
 ?>

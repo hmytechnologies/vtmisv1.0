@@ -843,6 +843,14 @@ $roleID=$_SESSION['roleID'];
             }
             break;
 
+    case 'audit':
+        if (in_array(1, $roleID) == true) {
+            include('viewaudit.php');
+        } else {
+            include('unauthized.php');
+        }
+        break;
+
 
         case 'user_roles':
             if(in_array(1,$roleID)==true) {

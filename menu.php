@@ -262,7 +262,7 @@ foreach ($_SESSION['roleID'] as $role => $user_role) {
                 <li><a href="index3.php?sp=users&id=<?php echo $db->my_simple_crypt($_SESSION['user_session']); ?>&rtoken=<?php echo $db->my_simple_crypt($user_role); ?>"> <span>Manage User</span></a>
                 </li>
                 <li><a href="index3.php?sp=user_roles">User Roles</a></li>
-                <li><a href="#">Audit Control</a></li>
+                <li><a href="index3.php?sp=audit">Audit Control</a></li>
             </ul>
         </li>
 

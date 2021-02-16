@@ -126,7 +126,7 @@
                     </div>
 
 
-                    <div class="col-lg-2">
+                    <div class="col-lg-3">
                         <label for="Physical Address">Trade Level</label>
                         <select name="programmeLevelID" id="programmeLevelID" class="form-control" required>
                             <option value="">Select Here</option>
@@ -147,14 +147,14 @@
                     </div>
 
 
-                    <div class="col-lg-2">
+                    <div class="col-lg-3">
                         <label for="MiddleName">Trade Name</label>
                         <select name="programmeID" id="programmeID" class="form-control" required>
                             <option value="">Select Here</option>
                         </select>
                     </div>
 
-                    <div class="col-lg-2">
+                    <div class="col-lg-3">
                         <label for="FirstName">Academic Year</label>
                         <select name="academicYearID" id="academicYearID" class="form-control" required>
                             <?php
@@ -281,10 +281,13 @@
                                             $tpoints = 0;
                                             $countpass = 0;
                                             $countsupp = 0;
-                                            $gstotal=0;$cstotal=0;$countgs=0;$countcs=0;
+                                            $gstotal = 0;
+                                            $cstotal = 0;
+                                            $countgs = 0;
+                                            $countcs = 0;
                                             foreach ($course as $cs) {
                                                 $courseID = $cs['courseID'];
-                                                $courseCategoryID=$cs['courseCategoryID'];
+                                                $courseCategoryID = $cs['courseCategoryID'];
                                                 $term1Score = $db->decrypt($db->getTermGrade($academicYearID, $courseID, $regNumber, 1));
                                                 $term2Score = $db->decrypt($db->getTermGrade($academicYearID, $courseID, $regNumber, 2));
                                                 $finalScore = $db->decrypt($db->getFinalTermGrade($academicYearID, $courseID, $examNumber, 3));
@@ -306,25 +309,24 @@
 
                                                 $totalMarks = $term1m + $term2m + $finalm;
 
-                                                if ($courseCategoryID==1) {
-                                                    $cstotal+=$totalMarks;
+                                                if ($courseCategoryID == 1) {
+                                                    $cstotal += $totalMarks;
                                                     $countcs++;
-                                                }
-                                                else {
-                                                    $gstotal+=$totalMarks;
+                                                } else {
+                                                    $gstotal += $totalMarks;
                                                     $countgs++;
                                                 }
 
                                                 echo "<td>$totalMarks</td>";
                                             }
-                                            $gsaverage=round(($gstotal/$countgs),2);
-                                            $csaverage = round(($cstotal / $countcs),2);
+                                            $gsaverage = round(($gstotal / $countgs), 2);
+                                            $csaverage = round(($cstotal / $countcs), 2);
 
-                                            if($csaverage>=40)
-                                                $gparemarks="Pass";
-                                            else 
-                                                $gparemarks="Supp";
-                                                
+                                            if ($csaverage >= 40)
+                                                $gparemarks = "Pass";
+                                            else
+                                                $gparemarks = "Supp";
+
                                             echo "<td>$csaverage</td><td>$gsaverage</td><td>$gparemarks</td></tr>";
                                     ?>
 
@@ -335,6 +337,33 @@
 
                                 </tbody>
                             </table>
+
+                            <!--reports-->
+                            <div class="row">
+                                <div class="col-lg-3">
+                                    <a href='print_term_report_grade.php?action=getPDF&pid=<?php echo $programmeID; ?>&lid=<?php echo $levelID; ?>&aid=<?php echo $academicYearID; ?>&cid=<?php echo $centerID; ?>' target='_blank'> <button type="button" class="btn btn-primary pull-right form-control" style="margin-right: 5px;">
+                                            <i class="fa fa-download"></i>Print Grade Report
+                                        </button></a>
+                                </div>
+                                <div class="col-lg-3">
+                                    <!-- <button class="btn btn-primary pull-right form-control" style="margin-right: 5px;" data-toggle="modal" data-target="#add_new_atype_modal"><i class="fa fa-download"></i>Print Report in PDF</button> -->
+                                    <a href='print_term_report_pdf.php?action=getPDF&pid=<?php echo $programmeID; ?>&lid=<?php echo $levelID; ?>&aid=<?php echo $academicYearID; ?>&cid=<?php echo $centerID; ?>' target='_blank'> <button type="button" class="btn btn-primary pull-right form-control" style="margin-right: 5px;">
+                                            <i class="fa fa-download"></i>Print PDF Report
+                                        </button></a>
+                                </div>
+                                <!-- <div class="col-lg-3">
+                                    <a href='print_semester_report_extended_xls.php?action=getExcel&pid=<?php echo $programmeID; ?>&styear=<?php echo $studyYear; ?>&sid=<?php echo $semesterID; ?>&bid=<?php echo $batchID; ?>' target='_blank'> <button type="button" class="btn btn-primary pull-right form-control" style="margin-right: 5px;">
+                                            <i class="fa fa-download"></i>Print Excel(Extended) Report
+                                        </button></a>
+                                </div>
+                                <div class="col-lg-3">
+                                    <a href='print_semester_report_nacte_format_xls.php?action=getExcel&pid=<?php echo $programmeID; ?>&styear=<?php echo $studyYear; ?>&sid=<?php echo $semesterID; ?>&bid=<?php echo $batchID; ?>' target='_blank'> <button type="button" class="btn btn-primary pull-right form-control" style="margin-right: 5px;">
+                                            <i class="fa fa-download"></i>Print NACTE Format
+                                        </button></a>
+                                </div> -->
+                            </div>
+                            <!--end of reports-->
+
                         </div>
 
                     <?php
