@@ -317,10 +317,10 @@
                                                     $countgs++;
                                                 }
 
-                                                echo "<td>$totalMarks</td>";
+                                                echo "<td>".round($totalMarks)."</td>";
                                             }
-                                            $gsaverage = round(($gstotal / $countgs), 2);
-                                            $csaverage = round(($cstotal / $countcs), 2);
+                                            $gsaverage = round(($gstotal / $countgs));
+                                            $csaverage = round(($cstotal / $countcs));
 
                                             if ($csaverage >= 40)
                                                 $gparemarks = "Pass";

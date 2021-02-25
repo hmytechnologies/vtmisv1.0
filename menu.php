@@ -95,7 +95,7 @@ $db = new DBHelper();
         <ul class="treeview-menu">
             <?php
             foreach ($_SESSION['roleID'] as $role => $user_role) {
-                if ($user_role == 7 || $user_role == 4 || $user_role == 9 || $user_role == 10) {
+                if ($user_role == 7 || $user_role == 9) {
             ?>
                     <li><a href="index3.php?sp=addresult">Final Exam Management</a></li>
                     <li><a href="index3.php?sp=term_marks">Term Result Management</a></li>

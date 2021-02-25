@@ -28,10 +28,10 @@ if($_REQUEST['action']=="getPDF") {
         {
             $today = date('M d,Y');
             //Logo . 
-            $this->setFont('Arial', 'B', 13);
+            $this->setFont('Arial', 'B', 18);
             
             $this->Image($image, 135, 0, 40.98, 35.22);
-            $this->Text(115, 40, strtoupper($organizationName));
+            $this->Text(105, 40, strtoupper($organizationName));
             $this->setFont('Arial', 'B', 14);
         }
         function SetCol($col)
@@ -59,7 +59,7 @@ if($_REQUEST['action']=="getPDF") {
 
         function BasicTable($header)
         {
-            $w = array(10, 35, 45);
+            $w = array(10, 35, 60,10);
             for ($i = 0; $i < count($header); $i++)
                 $this->Cell($w[$i], 6, $header[$i], 1, 0, 'C', 0);
             //$this->Ln();
@@ -87,14 +87,14 @@ if($_REQUEST['action']=="getPDF") {
     $pdf->Banner($organizationName,$image);
     //$pdf->Text(50, 10, strtoupper($organizationName));
     $pdf->setFont('Arial', 'B', 13);
-    $pdf->Text(50, 45, strtoupper($db->getData("center_registration", "centerName", "centerRegistrationID", $centerID)));
+    $pdf->Text(10, 45, strtoupper($db->getData("center_registration", "centerName", "centerRegistrationID", $centerID)));
     //Arial bold 15
     $pdf->Ln(35);
     $pdf->setFont('Arial', '', 14);
-    $pdf->Text(10, 53, 'Exam Results - '.$db->getData("programme_level", "programmeLevel", "programmeLevelID", $levelID)." ". $db->getData("academic_year", "academicYear", "academicYearID", $academicYearID));
-    $pdf->Line(10,55,205,55);
+    $pdf->Text(10, 53, 'Exam Results - '. $db->getData("programmes", "programmeName", "programmeID", $programmeID)."-".$db->getData("programme_level", "programmeLevel", "programmeLevelID", $levelID)." ". $db->getData("academic_year", "academicYear", "academicYearID", $academicYearID));
+    $pdf->Line(10,55,280,55);
 
-    $header = array('No', 'Exam Number','Name');
+    $header = array('No', 'Exam Number','Name','Sex');
     $pdf->Ln(10);
 
     //course details
@@ -122,34 +122,36 @@ if($_REQUEST['action']=="getPDF") {
                 }
                 //$pdf->Ln();
                 $pdf->SetFont('Arial', 'B', 9);
-                $pdf->Cell(13, 6, "CSAVG", 1);
-                $pdf->Cell(13, 6, "GSAVG", 1);
+                /* $pdf->Cell(13, 6, "CSAVG", 1);
+                $pdf->Cell(13, 6, "GSAVG", 1); */
                 $pdf->Cell(15, 6, "RMK", 1);
                 $pdf->Ln();
-                $pdf->Cell(90, 6, "", 1);
+                $pdf->Cell(115, 6, "", 1);
                 $pdf->SetFont('Arial', '', 8);
                 foreach ($course as $cs) {
                     $pdf->Cell(10, 6, "Marks", 1);
                     $pdf->Cell(10, 6, "Grade", 1);
                 }
-                $pdf->Cell(41, 6, "", 1);
+                $pdf->Cell(15, 6, "", 1);
                 $pdf->Ln();
 
-                $count=0;
+                $count=0;$totalPass=0;$totalSupp=0;
                 foreach ($student as $st) {
                     $count++;
-                    $studentID = $st['studentID'];
+                    $studentID = $st['studentID'];  
                     $fname = $st['firstName'];
                     $mname = $st['middleName'];
                     $lname = $st['lastName'];
-                    $name = "$fname $lname";
+                    $name = "$fname $mname $lname";
                     $regNumber = $st['registrationNumber'];
                     $examNumber = $st['examNumber'];
+                    $gender=$st['gender'];
 
                     $pdf->setFont('Arial', '', 10);
                     $pdf->Cell(10, 6, $count, 1);
                     $pdf->Cell(35, 6, $examNumber, 1, 0, 'C');
-                    $pdf->Cell(45, 6, $name, 1, 0);
+                    $pdf->Cell(60, 6, $name, 1, 0);
+                    $pdf->Cell(10, 6, $gender, 1, 0);
                    
 
                     //course marks
@@ -162,13 +164,42 @@ if($_REQUEST['action']=="getPDF") {
                     $cstotal = 0;
                     $countgs = 0;
                     $countcs = 0;
+
+
+                    $gA = 0;
+                    $gB = 0;
+                    $gC = 0;
+                    $gD = 0;
+                    $gF = 0;
+                    $tpass = 0;
+                    $tfail = 0;
+
+                   // $count = 0;
+                    $gAm = 0;
+                    $gBm = 0;
+                    $gCm = 0;
+                    $gDm = 0;
+                    $gFm = 0;
+
+                    $gAf = 0;
+                    $gBf = 0;
+                    $gCf = 0;
+                    $gDf = 0;
+                    $gFf = 0;
+
+                    $tmpass = 0;
+                    $tmfail = 0;
+                    $tfpass = 0;
+                    $tffail = 0;
+
+                    $graderemarks=0;
+
                     foreach ($course as $cs) {
                         $courseID = $cs['courseID'];
                         $courseCategoryID = $cs['courseCategoryID'];
                         $term1Score = $db->decrypt($db->getTermGrade($academicYearID, $courseID, $regNumber, 1));
                         $term2Score = $db->decrypt($db->getTermGrade($academicYearID, $courseID, $regNumber, 2));
                         $finalScore = $db->decrypt($db->getFinalTermGrade($academicYearID, $courseID, $examNumber, 3));
-
 
 
                         $exam_category_marks = $db->getTermCategorySetting();
@@ -184,7 +215,7 @@ if($_REQUEST['action']=="getPDF") {
                         $term2m = ($term2Score / $mMark) * $wMark;
                         $finalm = ($finalScore / $mMark) * $wMark;
 
-                        $totalMarks = $term1m + $term2m + $finalm;
+                        $totalMarks = round($term1m + $term2m + $finalm);
 
                         $grade = $db->calculateTermGrade($totalMarks);
 
@@ -196,23 +227,97 @@ if($_REQUEST['action']=="getPDF") {
                             $countgs++;
                         }
 
-                        $pdf->Cell(10, 6, $totalMarks, 1);
-                        $pdf->Cell(10, 6, $grade, 1);
+                if ($courseCategoryID == 1 && $grade == "F") {
+                    $graderemarks++;
+                }
+
+/* 
+                if ($grade == "A" || $grade == "B" || $grade == "C" || $grade == "D") {
+                    $tpass++;
+                } else {
+                    $tfail++;
+                } */
+
+                if ($gender == 'M') {
+                    if ($grade == "A" || $grade == "B" || $grade == "C" || $grade == "D") {
+                        $tmpass++;
+                    } else {
+                        $tmfail++;
                     }
-            $gsaverage = round(($gstotal / $countgs), 2);
-            $csaverage = round(($cstotal / $countcs), 2);
-            if ($csaverage >= 40)
+                } else {
+                    if ($grade == "A" || $grade == "B" || $grade == "C" || $grade == "D") {
+                        $tfpass++;
+                    } else {
+                        $tffail++;
+                    }
+                }
+
+                /*
+                 if (($grade == "D") || ($grade == "F") || ($grade == "E") || $grade == "N" || $grade == "I" || $grade == "A0" || $grade == "A1" || $grade == "CC") {
+                        $pdf->SetFillColor(169,169,169);
+                        $pdf->Cell($wdth,6,$tmarks."-".$grade,1,0,'L',1);
+                    }
+                    else {
+                        $pdf->Cell($wdth,6,$tmarks."-".$grade,1);
+                    }
+                */
+
+                        $pdf->Cell(10, 6, round($totalMarks), 1);
+                        if ($grade=="F") {
+                            $pdf->SetFillColor(169, 169, 169);
+                            $pdf->Cell(10, 6, $grade, 1,0,'L',1);
+                        }else {
+                            $pdf->Cell(10, 6, $grade, 1);
+                        }
+                    }
+            $gsaverage = round(($gstotal / $countgs));
+            $csaverage = round(($cstotal / $countcs));
+
+            if ($csaverage >= 40 && $graderemarks <= 0)
                 $gparemarks = "Pass";
-            else
+            else if($csaverage >= 40 && $graderemarks > 0)
                 $gparemarks = "Supp";
+            else 
+                $gparemarks="Supp";
+
+                if($gparemarks=="Pass")
+                    $totalPass+=1;
+                else 
+                    $totalSupp+=1;
                     //$pdf->Ln();
 
-            $pdf->Cell(13, 6, $csaverage, 1);
-            $pdf->Cell(13, 6, $gsaverage, 1);
+            /* $pdf->Cell(13, 6, $csaverage, 1);
+            $pdf->Cell(13, 6, $gsaverage, 1); */
             $pdf->Cell(15, 6, $gparemarks, 1);
             $pdf->Ln();
                     }
                 }
+
+
+    //end report
+    $ppass = round(($totalPass / ($totalPass + $totalSupp)) * 100, 2);
+    $pfail = round(($totalSupp / ($totalPass + $totalSupp)) * 100, 2);
+
+    //end percent
+    $pdf->Ln(10);
+    $pdf->SetFont('Arial', 'B', 14);
+    $pdf->Cell(50, 6, "Overall Summary");
+
+    $pdf->Ln(6);
+    $pdf->SetFont('Arial', '', 12);
+    $pdf->Cell(25, 6, 'Grade', 1);
+    $pdf->Cell(24, 6, "Pass", 1, 0, 'C');
+    $pdf->Cell(24, 6, "Supp", 1, 0, 'C');
+    $pdf->Ln(6);
+    
+    $pdf->Cell(25, 6, "SubTotal", 1);
+    $pdf->Cell(24, 6, $totalPass, 1, 0, 'C');
+    $pdf->Cell(24, 6, $totalSupp, 1, 0, 'C');
+    $pdf->Ln(6);
+    $pdf->Cell(25, 6, "Percentage", 1);
+    $pdf->SetFont('Arial', '', 12);
+    $pdf->Cell(24, 6, $ppass."%", 1, 0, 'C');
+    $pdf->Cell(24, 6, $pfail."%", 1, 0, 'C');
                 
   //      }
 //}

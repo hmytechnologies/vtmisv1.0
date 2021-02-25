@@ -3828,7 +3828,7 @@ public function getGPARemarks($regNumber,$gpa)
     public function printCenterStudentExamNumber($centerID,$programmeLevelID, $programmeID, $academicYearID)
     {
         try {
-            $query = $this->conn->prepare("SELECT studentID,registrationNumber,firstName,middleName,lastName,examNumber
+            $query = $this->conn->prepare("SELECT studentID,registrationNumber,gender,firstName,middleName,lastName,examNumber
             from student s,student_programme sp,exam_number e
             where
             s.registrationNumber = sp.regNumber and sp.programmeLevelID=:levelID and sp.programmeID=:progID and sp.centerID=:centerID and sp.academicYearID = :acadID  and s.registrationNumber=e.regNumber
