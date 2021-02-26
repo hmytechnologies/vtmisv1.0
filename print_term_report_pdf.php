@@ -310,7 +310,7 @@ if($_REQUEST['action']=="getPDF") {
     $pdf->Cell(24, 6, "Supp", 1, 0, 'C');
     $pdf->Ln(6);
     
-    $pdf->Cell(25, 6, "SubTotal", 1);
+    $pdf->Cell(25, 6, "Total", 1);
     $pdf->Cell(24, 6, $totalPass, 1, 0, 'C');
     $pdf->Cell(24, 6, $totalSupp, 1, 0, 'C');
     $pdf->Ln(6);
