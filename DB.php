@@ -607,7 +607,7 @@ class DBHelper{
         AND cp.programmeID=:progID 
         AND cp.programmeLevelID=:levelID
         AND status=:st
-        ORDER BY courseCode ASC");
+        ORDER BY courseRank ASC");
         $query->execute(array('progID'=>$progID,':levelID'=>$levelID,':st'=>1));
         $data = array();
         while ($row = $query->fetch(PDO::FETCH_ASSOC)) {

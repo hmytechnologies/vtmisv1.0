@@ -194,6 +194,8 @@ if($_REQUEST['action']=="getPDF") {
 
                     $graderemarks=0;
 
+                    $finalScore=0;
+
                     foreach ($course as $cs) {
                         $courseID = $cs['courseID'];
                         $courseCategoryID = $cs['courseCategoryID'];
@@ -213,9 +215,29 @@ if($_REQUEST['action']=="getPDF") {
 
                         $term1m = ($term1Score / $mMark) * $wMark;
                         $term2m = ($term2Score / $mMark) * $wMark;
-                        $finalm = ($finalScore / $mMark) * $wMark;
 
-                        $totalMarks = round($term1m + $term2m + $finalm);
+                        $finalm1 = ($finalScore / 100) * 50;
+
+                        $tMarks = round($term1m + $term2m + $finalm1);
+
+
+                       // $totalMarks = round($term1m + $term2m + $finalm);
+
+                        if ($tMarks>=35 && $tMarks<40 ) {
+                            $addmarks=40-$tMarks;
+                        }
+                        else
+                        {
+                            $addmarks=0;
+                            /* $finalScore = $finalScore;
+                            $finalm2 = ($finalScore / $mMark) * $wMark;
+                            $totalMarks = round($term1m + $term2m + $finalm); */
+                        }
+
+                            $finalScore = $finalScore + $addmarks;
+                            //$finalm = ($finalScore / $mMark) * $wMark;
+                            $finalm=$finalm1+$addmarks;
+                            $totalMarks = round($term1m + $term2m + $finalm);
 
                         $grade = $db->calculateTermGrade($totalMarks);
 

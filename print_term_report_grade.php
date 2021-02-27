@@ -181,7 +181,7 @@ if($_REQUEST['action']=="getPDF") {
 
                         $term1m = ($term1Score / $mMark) * $wMark;
                         $term2m = ($term2Score / $mMark) * $wMark;
-                        $finalm = ($finalScore / $mMark) * $wMark;
+                        $finalm = ($finalScore / 100) * 50;
 
                         $totalMarks = $term1m + $term2m + $finalm;
 
