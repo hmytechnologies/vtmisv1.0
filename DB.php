@@ -3527,6 +3527,20 @@ public function getGPARemarks($regNumber,$gpa)
         }
     }
 
+
+    public function getStudentExamStatusProgramme($academicYearID,$eCatID,$status)
+    {
+        try {
+                $query = $this->conn->prepare("SELECT present from final_result where academicYearID=:sem and present=:st and examCategoryID=:ecatid");
+            $query->execute(array(':sem' => $academicYearID, ':ecatid' => $eCatID,':st'=>$status));
+            $row = $query->fetch(PDO::FETCH_ASSOC);
+            $value = $row['present'];
+            return $value;
+        } catch (PDOException $ex) {
+            echo "Getting Data Error: " . $ex->getMessage();
+        }
+    }
+
     public function getStudentStatus($sid,$status)
     {
         try
@@ -3548,6 +3562,8 @@ public function getGPARemarks($regNumber,$gpa)
             echo "Getting Data Error: ".$ex->getMessage();
         }
     }
+
+    
 
     public function generate_password($length = 20){
         $chars =  'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.
