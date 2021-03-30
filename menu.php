@@ -106,7 +106,7 @@ $db = new DBHelper();
                     <li><a href="index3.php?sp=print_result">Term Report</a></li>
                     <!--  <li><a href="index3.php?sp=annual_result">Anual Report</a></li> -->
                     <li><a href="index3.php?sp=final_report">Final Report</a></li>
-                    <li><a href="index3.php?sp=supp_report">Supp/Special Report</a></li>
+                    <li><a href="index3.php?sp=supp_report">Supp Report</a></li>
                     <li><a href="index3.php?sp=student_academic_reports">Academic Reports</a></li>
                     <li><a href="index3.php?sp=graduate_report">Graduate Reports</a></li>
                     <li><a href="index3.php?sp=register_exam">Exam Roster</a></li>

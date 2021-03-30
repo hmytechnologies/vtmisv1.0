@@ -291,6 +291,7 @@
                                                 $term1Score = $db->decrypt($db->getTermGrade($academicYearID, $courseID, $regNumber, 1));
                                                 $term2Score = $db->decrypt($db->getTermGrade($academicYearID, $courseID, $regNumber, 2));
                                                 $finalScore = $db->decrypt($db->getFinalTermGrade($academicYearID, $courseID, $examNumber, 3));
+                                                $suppScore = $db->decrypt($db->getFinalTermGrade($academicYearID, $courseID, $examNumber, 5));
 
 
 
@@ -305,9 +306,18 @@
 
                                                 $term1m = ($term1Score / $mMark) * $wMark;
                                                 $term2m = ($term2Score / $mMark) * $wMark;
-                                                $finalm = ($finalScore / 100) * 50;
+                                                if($suppScore>0)
+                                                {
+                                                    $finalm=$suppScore;
+                                                    $totalMarks=$suppScore;
+                                                }
+                                                else 
+                                                {
+                                                    $finalm = ($finalScore / 100) * 50;
+                                                    $totalMarks = $term1m + $term2m + $finalm;
+                                                }
 
-                                                $totalMarks = $term1m + $term2m + $finalm;
+                                                
 
                                                 if ($courseCategoryID == 1) {
                                                     $cstotal += $totalMarks;

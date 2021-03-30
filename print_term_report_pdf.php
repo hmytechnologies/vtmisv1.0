@@ -202,12 +202,18 @@ if($_REQUEST['action']=="getPDF") {
 
                     $finalScore=0;
 
+                    $present=0;
+                    $absent=0;
+                    $testpresent=0;
+                    $testabsent=0;
+
                     foreach ($course as $cs) {
                         $courseID = $cs['courseID'];
                         $courseCategoryID = $cs['courseCategoryID'];
                         $term1Score = $db->decrypt($db->getTermGrade($academicYearID, $courseID, $regNumber, 1));
                         $term2Score = $db->decrypt($db->getTermGrade($academicYearID, $courseID, $regNumber, 2));
                         $finalScore = $db->decrypt($db->getFinalTermGrade($academicYearID, $courseID, $examNumber, 3));
+                        $suppScore = $db->decrypt($db->getFinalTermGrade($academicYearID, $courseID, $examNumber, 5));
 
 
                         $exam_category_marks = $db->getTermCategorySetting();
@@ -221,8 +227,12 @@ if($_REQUEST['action']=="getPDF") {
 
                         $term1m = ($term1Score / $mMark) * $wMark;
                         $term2m = ($term2Score / $mMark) * $wMark;
-
-                        $finalm1 = ($finalScore / 100) * 50;
+                        if ($suppScore>=0) {
+                            $finalm1=$suppScore;
+                        }
+                        else{
+                            $finalm1 = ($finalScore / 100) * 50;
+                        }
 
                         $tMarks = round($term1m + $term2m + $finalm1);
 
@@ -243,9 +253,19 @@ if($_REQUEST['action']=="getPDF") {
                             $finalScore = $finalScore + $addmarks;
                             //$finalm = ($finalScore / $mMark) * $wMark;
                             $finalm=$finalm1+$addmarks;
-                            $totalMarks = round($term1m + $term2m + $finalm);
-
-                        $grade = $db->calculateTermGrade($totalMarks);
+                            if($suppScore>=40){
+                                $totalMarks=$suppScore;
+                            }
+                            else{
+                                $totalMarks = round($term1m + $term2m + $finalm);
+                            }
+                            if($suppScore>=40)
+                            {
+                                $grade="D";
+                            }
+                            else {
+                                $grade = $db->calculateTermGrade($totalMarks);
+                            }
 
                         if ($courseCategoryID == 1) {
                             $cstotal += $totalMarks;
