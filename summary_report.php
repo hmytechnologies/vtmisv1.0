@@ -96,7 +96,7 @@
 ?>
 <div class="container">
     <div class="content">
-        <h1>Final Report</h1>
+        <h1>Summary Report</h1>
         <hr>
 
         <div class="tab-content">
@@ -148,13 +148,6 @@
 
 
                     <div class="col-lg-3">
-                        <label for="MiddleName">Trade Name</label>
-                        <select name="programmeID" id="programmeID" class="form-control" required>
-                            <option value="">Select Here</option>
-                        </select>
-                    </div>
-
-                    <div class="col-lg-3">
                         <label for="FirstName">Academic Year</label>
                         <select name="academicYearID" id="academicYearID" class="form-control" required>
                             <?php
@@ -179,9 +172,7 @@
                 </div>
                 <div class="row">
                     <div class="col-lg-9"></div>
-                    <!-- <div class="col-lg-3">
-                            <label for=""></label>
-                            <input type="submit" name="doPreview" value="Preview PDF" class="btn btn-primary form-control" /></div>-->
+
                     <div class="col-lg-3">
                         <label for=""></label>
                         <input type="submit" name="doFind" value="View Records" class="btn btn-primary form-control" />
@@ -205,11 +196,6 @@
         <div class="row">
             <?php
             if (isset($_POST['doFind']) == "View Records") {
-
-                //session_start();
-                //include('DB.php');
-                //$db = new DBHelper();
-
                 $programmeID = $_POST["programmeID"];
                 $levelID = $_POST["programmeLevelID"];
                 $academicYearID = $_POST["academicYearID"];
@@ -220,25 +206,14 @@
             ?>
                     <div class="box box-solid box-primary">
                         <div class="box-header with-border text-center">
-                            <h3 class="box-title">Final Report for
-                                <?php echo $sYear;
-                                echo " ";
-                                echo $db->getData("programmes", "programmeName", "programmeID", $programmeID); ?>
-                                <?php echo $db->getData("semester_setting", "semesterName", "semesterSettingID", $semesterID); ?>
-                                <?php echo $db->getData("batch", "batchName", "batchID", $batchID); ?></h3>
+                            <h3 class="box-title">Summary Report 
+                               
                         </div>
                         <!-- /.box-header -->
                         <div class="box-body table-responsive no-padding">
 
-                            <div class="row">
-                                <div class="pull-right">
-                                    <div class="col-lg-12">
-                                        <button class="btn btn-primary pull-right form-control" style="margin-right: 5px;" data-toggle="modal" data-target="#add_new_atype_modal"><i class="fa fa-download"></i>Print Report</button>
-                                    </div>
-                                </div>
-                            </div>
                             <!--End -->
-                            <table id="example" class="table table-hover table-bordered" cellspacing="0" width="100%" rules="groups">
+                            <table id="example11" class="table table-hover table-bordered" cellspacing="0" width="100%" rules="groups">
                                 <thead>
                                     <tr>
                                         <th>No.</th>
@@ -306,10 +281,16 @@
 
                                                 $term1m = ($term1Score / $mMark) * $wMark;
                                                 $term2m = ($term2Score / $mMark) * $wMark;
-                                               
-                                                $finalm = ($finalScore / 100) * 50;
-                                                $totalMarks = $term1m + $term2m + $finalm;
-                                                
+                                                if($suppScore>0)
+                                                {
+                                                    $finalm=$suppScore;
+                                                    $totalMarks=$suppScore;
+                                                }
+                                                else 
+                                                {
+                                                    $finalm = ($finalScore / 100) * 50;
+                                                    $totalMarks = $term1m + $term2m + $finalm;
+                                                }
 
                                                 
 

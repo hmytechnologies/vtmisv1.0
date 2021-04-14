@@ -104,7 +104,7 @@ $db = new DBHelper();
                     <li><a href="index3.php?sp=publish">Publish Results</a></li>
                     <li><a href="index3.php?sp=approve_graduands">Approve Graduands</a></li>
                     <li><a href="index3.php?sp=print_result">Term Report</a></li>
-                    <!--  <li><a href="index3.php?sp=annual_result">Anual Report</a></li> -->
+                    <li><a href="index3.php?sp=summary_report">Summary Report</a></li>
                     <li><a href="index3.php?sp=final_report">Final Report</a></li>
                     <li><a href="index3.php?sp=supp_report">Supp Report</a></li>
                     <li><a href="index3.php?sp=student_academic_reports">Academic Reports</a></li>

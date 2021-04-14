@@ -229,14 +229,12 @@ if($_REQUEST['action']=="getPDF") {
                         $term2m = ($term2Score / $mMark) * $wMark;
                         if ($suppScore>=0) {
                             $finalm1=$suppScore;
+                            $tMarks = round($finalm1);
                         }
                         else{
                             $finalm1 = ($finalScore / 100) * 50;
+                            $tMarks = round($term1m + $term2m + $finalm1);
                         }
-
-                        $tMarks = round($term1m + $term2m + $finalm1);
-
-
                        // $totalMarks = round($term1m + $term2m + $finalm);
 
                         if ($tMarks>=35 && $tMarks<40 ) {

@@ -554,6 +554,10 @@ $roleID=$_SESSION['roleID'];
             include('supp_report.php');
             break;
 
+    case 'summary_report':
+        include('summary_report.php');
+        break;
+
         case 'special_report':
             include('special_report.php');
             break;
