@@ -311,8 +311,6 @@
                                                 $totalMarks = $term1m + $term2m + $finalm;
                                                 
 
-                                                
-
                                                 if ($courseCategoryID == 1) {
                                                     $cstotal += $totalMarks;
                                                     $countcs++;

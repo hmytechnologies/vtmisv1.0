@@ -227,14 +227,14 @@ if($_REQUEST['action']=="getPDF") {
 
                         $term1m = ($term1Score / $mMark) * $wMark;
                         $term2m = ($term2Score / $mMark) * $wMark;
-                        if ($suppScore>=0) {
+                        /* if ($suppScore>=0) {
                             $finalm1=$suppScore;
                             $tMarks = round($finalm1);
                         }
-                        else{
+                        else{ */
                             $finalm1 = ($finalScore / 100) * 50;
                             $tMarks = round($term1m + $term2m + $finalm1);
-                        }
+                        //}
                        // $totalMarks = round($term1m + $term2m + $finalm);
 
                         if ($tMarks>=35 && $tMarks<40 ) {
@@ -251,19 +251,19 @@ if($_REQUEST['action']=="getPDF") {
                             $finalScore = $finalScore + $addmarks;
                             //$finalm = ($finalScore / $mMark) * $wMark;
                             $finalm=$finalm1+$addmarks;
-                            if($suppScore>=40){
+                            /* if($suppScore>=40){
                                 $totalMarks=$suppScore;
                             }
-                            else{
+                            else{ */
                                 $totalMarks = round($term1m + $term2m + $finalm);
-                            }
-                            if($suppScore>=40)
+                            //}
+                           /*  if($suppScore>=40)
                             {
                                 $grade="D";
                             }
-                            else {
+                            else { */
                                 $grade = $db->calculateTermGrade($totalMarks);
-                            }
+                            //}
 
                         if ($courseCategoryID == 1) {
                             $cstotal += $totalMarks;
