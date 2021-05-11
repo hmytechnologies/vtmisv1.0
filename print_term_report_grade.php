@@ -168,6 +168,10 @@ if($_REQUEST['action']=="getPDF") {
                         $term2Score = $db->decrypt($db->getTermGrade($academicYearID, $courseID, $regNumber, 2));
                         $finalScore = $db->decrypt($db->getFinalTermGrade($academicYearID, $courseID, $examNumber, 3));
 
+                        $suppScore = $db->decrypt($db->getFinalTermGrade($academicYearID, $courseID, $examNumber, 5));
+
+
+
 
 
                         $exam_category_marks = $db->getTermCategorySetting();
@@ -197,17 +201,17 @@ if($_REQUEST['action']=="getPDF") {
 
                         $pdf->Cell(20, 6, $grade, 1);
                     }
-            $gsaverage = round(($gstotal / $countgs), 2);
-            $csaverage = round(($cstotal / $countcs), 2);
+                        $gsaverage = round(($gstotal / $countgs), 2);
+                        $csaverage = round(($cstotal / $countcs), 2);
 
 
-            $gradecs = $db->calculateTermGrade($csaverage);
-            $gradegs = $db->calculateTermGrade($gsaverage);
+                        $gradecs = $db->calculateTermGrade($csaverage);
+                        $gradegs = $db->calculateTermGrade($gsaverage);
 
-            if ($csaverage >= 40)
-                $gparemarks = "Pass";
-            else
-                $gparemarks = "Supp";
+                    if ($csaverage >= 40)
+                        $gparemarks = "Pass";
+                    else
+                        $gparemarks = "Supp";
                     //$pdf->Ln();
 
             $pdf->Cell(13, 6, $gradecs, 1);

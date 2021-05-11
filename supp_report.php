@@ -261,6 +261,7 @@
                                         $term1Score = $db->decrypt($db->getTermGrade($academicYearID, $courseID, $regNumber, 1));
                                         $term2Score = $db->decrypt($db->getTermGrade($academicYearID, $courseID, $regNumber, 2));
                                         $finalScore = $db->decrypt($db->getFinalTermGrade($academicYearID, $courseID, $examNumber, 3));
+
                                         $suppScore = $db->decrypt($db->getFinalTermGrade($academicYearID, $courseID, $examNumber, 5));
 
 
@@ -289,7 +290,16 @@
                                             $countgs++;
                                         }
 
-                                        echo "<td>" . round($totalMarks) . "</td>";
+                                        if(!empty($suppScore))
+                                        {
+                                            echo "<td style='background-color:#FF0000'>".round($suppScore)."</td>";
+                                        }
+                                        else 
+                                        {
+                                            echo "<td>".round($totalMarks)."</td>";
+                                        }
+
+                                        
                                     }
                                     $gsaverage = round(($gstotal / $countgs));
                                     $csaverage = round(($cstotal / $countcs));
