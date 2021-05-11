@@ -19,7 +19,6 @@
             });
 
         });
-
     });
 </script>
 
@@ -75,7 +74,6 @@
         <h1>Supplementary Report</h1>
         <hr>
         <div class="tab-content">
-            <!-- Current Semester -->
             <?php $db = new DBHelper(); ?>
             <form name="" method="post" action="">
                 <!--   <form name="" method="post" action="" onsubmit="return print_exam_result();"> -->
@@ -170,32 +168,204 @@
         </div>
     </div>
 
-    <div class="row">
+    <!--  <div class="row">
         <div class="col-md-12">
             <div id="result">
             </div>
         </div>
-    </div>
+    </div> -->
 </div>
 
-<div class="modal fade bs-example-modal-sm" id="myPleaseWait" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static">
-    <div class="modal-dialog modal-sm">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title">
-                    <span class="glyphicon glyphicon-time">
-                    </span>Please wait...page is loading
-                </h4>
+<div class="row">
+    <?php
+    if (isset($_POST['doFind']) == "View Records") {
+
+        $programmeID = $_POST["programmeID"];
+        $levelID = $_POST["programmeLevelID"];
+        $academicYearID = $_POST["academicYearID"];
+        $centerID = $_POST["centerID"];
+
+        $student = $db->getStudentTermList($centerID, $academicYearID, $levelID, $programmeID);
+        if (!empty($student)) {
+    ?>
+            <div class="box box-solid box-primary">
+                <div class="box-header with-border text-center">
+                    <h3 class="box-title">Final Report for
+                        <?php echo $sYear;
+                        echo " ";
+                        echo $db->getData("programmes", "programmeName", "programmeID", $programmeID); ?>
+                        <?php echo $db->getData("semester_setting", "semesterName", "semesterSettingID", $semesterID); ?>
+                        <?php echo $db->getData("batch", "batchName", "batchID", $batchID); ?></h3>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body table-responsive no-padding">
+
+                    <div class="row">
+                        <div class="pull-right">
+                            <div class="col-lg-12">
+                                <button class="btn btn-primary pull-right form-control" style="margin-right: 5px;" data-toggle="modal" data-target="#add_new_atype_modal"><i class="fa fa-download"></i>Print Report</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!--End -->
+                    <table id="example" class="table table-hover table-bordered" cellspacing="0" width="100%" rules="groups">
+                        <thead>
+                            <tr>
+                                <th>No.</th>
+                                <th>Name</th>
+                                <th>Gender</th>
+                                <th>Reg.Number</th>
+                                <th>Exam Number</th>
+                                <?php
+                                $course = $db->getCourseCredit($levelID, $programmeID);
+                                foreach ($course as $cs) {
+                                    echo "<th>" . $cs['courseCode'] . "</th>";
+                                }
+                                ?>
+                                <th>CSAVG</th>
+                                <th>GSAVG</th>
+                                <th>Remarks</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                            $count = 0;
+                            foreach ($student as $st) {
+                                $count++;
+                                $regNumber = $st['regNumber'];
+                                $studentDetails = $db->getRows('student', array('where' => array('registrationNumber' => $regNumber), ' order_by' => 'firstName ASC'));
+                                foreach ($studentDetails as $std) {
+                                    # code...
+                                    $fname = $std['firstName'];
+                                    $mname = $std['middleName'];
+                                    $lname = $std['lastName'];
+                                    $name = "$fname $mname $lname";
+                                    $gender = $std['gender'];
+                                    $dob = $std['dateOfBirth'];
+                                    $admissionYearID = $std['academicYearID'];
+                                    $examNumber = $db->getExamNumber($regNumber, $academicYearID);
+                                    echo "<tr><td>$count</td><td>$name</td><td>$gender</td><td>$regNumber</td><td>$examNumber</td>";
+
+                                    $course = $db->getCourseCredit($levelID, $programmeID);
+                                    $tunits = 0;
+                                    $tpoints = 0;
+                                    $countpass = 0;
+                                    $countsupp = 0;
+                                    $gstotal = 0;
+                                    $cstotal = 0;
+                                    $countgs = 0;
+                                    $countcs = 0;
+                                    foreach ($course as $cs) {
+                                        $courseID = $cs['courseID'];
+                                        $courseCategoryID = $cs['courseCategoryID'];
+                                        $term1Score = $db->decrypt($db->getTermGrade($academicYearID, $courseID, $regNumber, 1));
+                                        $term2Score = $db->decrypt($db->getTermGrade($academicYearID, $courseID, $regNumber, 2));
+                                        $finalScore = $db->decrypt($db->getFinalTermGrade($academicYearID, $courseID, $examNumber, 3));
+                                        $suppScore = $db->decrypt($db->getFinalTermGrade($academicYearID, $courseID, $examNumber, 5));
+
+
+
+                                        $exam_category_marks = $db->getTermCategorySetting();
+                                        if (!empty($exam_category_marks)) {
+                                            foreach ($exam_category_marks as $gd) {
+                                                $mMark = $gd['mMark'];
+                                                $pMark = $gd['passMark'];
+                                                $wMark = $gd['wMark'];
+                                            }
+                                        }
+
+                                        $term1m = ($term1Score / $mMark) * $wMark;
+                                        $term2m = ($term2Score / $mMark) * $wMark;
+
+                                        $finalm = ($finalScore / 100) * 50;
+                                        $totalMarks = $term1m + $term2m + $finalm;
+
+
+                                        if ($courseCategoryID == 1) {
+                                            $cstotal += $totalMarks;
+                                            $countcs++;
+                                        } else {
+                                            $gstotal += $totalMarks;
+                                            $countgs++;
+                                        }
+
+                                        echo "<td>" . round($totalMarks) . "</td>";
+                                    }
+                                    $gsaverage = round(($gstotal / $countgs));
+                                    $csaverage = round(($cstotal / $countcs));
+
+                                    if ($csaverage >= 40)
+                                        $gparemarks = "Pass";
+                                    else
+                                        $gparemarks = "Supp";
+
+                                    echo "<td>$csaverage</td><td>$gsaverage</td><td>$gparemarks</td></tr>";
+                            ?>
+
+                            <?php
+                                }
+                            }
+                            ?>
+
+                        </tbody>
+                    </table>
+
+                    <!--reports-->
+                    <div class="row">
+                        <div class="col-lg-3">
+                            <a href='print_term_report_grade.php?action=getPDF&pid=<?php echo $programmeID; ?>&lid=<?php echo $levelID; ?>&aid=<?php echo $academicYearID; ?>&cid=<?php echo $centerID; ?>' target='_blank'> <button type="button" class="btn btn-primary pull-right form-control" style="margin-right: 5px;">
+                                    <i class="fa fa-download"></i>Print Grade Report
+                                </button></a>
+                        </div>
+                        <div class="col-lg-3">
+                            <!-- <button class="btn btn-primary pull-right form-control" style="margin-right: 5px;" data-toggle="modal" data-target="#add_new_atype_modal"><i class="fa fa-download"></i>Print Report in PDF</button> -->
+                            <a href='print_term_report_pdf.php?action=getPDF&pid=<?php echo $programmeID; ?>&lid=<?php echo $levelID; ?>&aid=<?php echo $academicYearID; ?>&cid=<?php echo $centerID; ?>' target='_blank'> <button type="button" class="btn btn-primary pull-right form-control" style="margin-right: 5px;">
+                                    <i class="fa fa-download"></i>Print PDF Report
+                                </button></a>
+                        </div>
+                        <!-- <div class="col-lg-3">
+                                    <a href='print_semester_report_extended_xls.php?action=getExcel&pid=<?php echo $programmeID; ?>&styear=<?php echo $studyYear; ?>&sid=<?php echo $semesterID; ?>&bid=<?php echo $batchID; ?>' target='_blank'> <button type="button" class="btn btn-primary pull-right form-control" style="margin-right: 5px;">
+                                            <i class="fa fa-download"></i>Print Excel(Extended) Report
+                                        </button></a>
+                                </div>
+                                <div class="col-lg-3">
+                                    <a href='print_semester_report_nacte_format_xls.php?action=getExcel&pid=<?php echo $programmeID; ?>&styear=<?php echo $studyYear; ?>&sid=<?php echo $semesterID; ?>&bid=<?php echo $batchID; ?>' target='_blank'> <button type="button" class="btn btn-primary pull-right form-control" style="margin-right: 5px;">
+                                            <i class="fa fa-download"></i>Print NACTE Format
+                                        </button></a>
+                                </div> -->
+                    </div>
+                    <!--end of reports-->
+
+                </div>
+
+            <?php
+        } else {
+            ?>
+                <h4 class="text-danger">No Result(s) found......</h4>
+        <?php
+        }
+    }
+        ?>
             </div>
-            <div class="modal-body">
-                <div class="progress">
-                    <div class="progress-bar progress-bar-info progress-bar-striped active" style="width: 100%">
+
+            <div class="modal fade bs-example-modal-sm" id="myPleaseWait" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static">
+                <div class="modal-dialog modal-sm">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">
+                                <span class="glyphicon glyphicon-time">
+                                </span>Please wait...page is loading
+                            </h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="progress">
+                                <div class="progress-bar progress-bar-info progress-bar-striped active" style="width: 100%">
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-</div>
 
 
-<!-- End -->
+            <!-- End -->
