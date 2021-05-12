@@ -704,7 +704,7 @@ WHERE
     {
 
         $query = $this->conn->prepare("SELECT DISTINCT
-    (e.courseID),courseName,courseCode,units,e.semesterSettingID
+    (e.courseID),courseName,courseCode,units,e.academicYearID
 FROM
     student s,
     course c,
@@ -1137,8 +1137,8 @@ WHERE
         $gradeOutput = "";
         if (!empty($grade)) {
             foreach ($grade as $gd) {
-                $startMark = $gd['startMark'];
-                $endMark = $gd['endMark'];
+                $startMark = round($gd['startMark']);
+                $endMark = round($gd['endMark']);
                 $gradeID = $gd['gradeID'];
 
                 if ($tmarks >= $endMark &&  $tmarks <= $startMark) {
@@ -1267,18 +1267,12 @@ WHERE
     return $grade;
  }
 
+ 
+
     public function calculateTermGrade($totalScore)
     {
         $gradeID = $this->getTermMarksID($totalScore);
-          /*   $passCourseMark = $this->getExamCategoryMark(1, $regNumber, $studyYear);
-            $passFinalMark = $this->getExamCategoryMark(2, $regNumber, $studyYear);
-            if ($cwk < $passCourseMark)
-                $grade = "I"; //Incomplete CourseWork-Course Repeat
-            else if ($sfe < $passFinalMark) {
-                $grade = "N1"; //Marks is not sufficient -Supplementary or Course Repeat is depend on university policy
-            } else { */
-                $grade = $this->getData("grades", "gradeCode", "gradeID", $gradeID);
-            //}
+        $grade = $this->getData("grades", "gradeCode", "gradeID", $gradeID);
         return $grade;
     }
 

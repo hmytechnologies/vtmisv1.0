@@ -323,13 +323,13 @@
                     <!--reports-->
                     <div class="row">
                         <div class="col-lg-3">
-                            <a href='print_term_report_grade.php?action=getPDF&pid=<?php echo $programmeID; ?>&lid=<?php echo $levelID; ?>&aid=<?php echo $academicYearID; ?>&cid=<?php echo $centerID; ?>' target='_blank'> <button type="button" class="btn btn-primary pull-right form-control" style="margin-right: 5px;">
+                            <a href='print_term_report_grade_supp.php?action=getPDF&pid=<?php echo $programmeID; ?>&lid=<?php echo $levelID; ?>&aid=<?php echo $academicYearID; ?>&cid=<?php echo $centerID; ?>' target='_blank'> <button type="button" class="btn btn-primary pull-right form-control" style="margin-right: 5px;">
                                     <i class="fa fa-download"></i>Print Grade Report
                                 </button></a>
                         </div>
                         <div class="col-lg-3">
                             <!-- <button class="btn btn-primary pull-right form-control" style="margin-right: 5px;" data-toggle="modal" data-target="#add_new_atype_modal"><i class="fa fa-download"></i>Print Report in PDF</button> -->
-                            <a href='print_term_report_pdf.php?action=getPDF&pid=<?php echo $programmeID; ?>&lid=<?php echo $levelID; ?>&aid=<?php echo $academicYearID; ?>&cid=<?php echo $centerID; ?>' target='_blank'> <button type="button" class="btn btn-primary pull-right form-control" style="margin-right: 5px;">
+                            <a href='print_term_report_pdf_supp.php?action=getPDF&pid=<?php echo $programmeID; ?>&lid=<?php echo $levelID; ?>&aid=<?php echo $academicYearID; ?>&cid=<?php echo $centerID; ?>' target='_blank'> <button type="button" class="btn btn-primary pull-right form-control" style="margin-right: 5px;">
                                     <i class="fa fa-download"></i>Print PDF Report
                                 </button></a>
                         </div>
