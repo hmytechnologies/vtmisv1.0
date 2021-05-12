@@ -313,8 +313,21 @@ if($_REQUEST['action']=="getPDF") {
                         }
                         else 
                         {
-                            $pdf->Cell(10, 6, round($totalMarks), 1);
-                            $pdf->Cell(10, 6, $grade, 1);
+                            if ($courseCategoryID == 1) {
+                                if ($grade == "F") {
+                                    $pdf->SetFillColor(220, 50, 50);
+                                    $pdf->Cell(10, 6, round($totalMarks), 1,0,'L',1);
+                                    $pdf->Cell(10, 6, $grade, 1, 0, 'L', 1);
+                                } 
+                                else{
+                                    $pdf->Cell(10, 6, round($totalMarks), 1);
+                                    $pdf->Cell(10, 6, $grade, 1);
+                                }
+                            } else {
+                                $pdf->Cell(10, 6, round($totalMarks), 1);
+                                $pdf->Cell(10, 6, $grade, 1);
+                            }
+                            
                         }
 
                 if ($gender == 'M') {
@@ -356,7 +369,13 @@ if($_REQUEST['action']=="getPDF") {
 
             /* $pdf->Cell(13, 6, $csaverage, 1);
             $pdf->Cell(13, 6, $gsaverage, 1); */
-            $pdf->Cell(15, 6, $gparemarks, 1);
+            if ($gparemarks=="FAIL") {
+                $pdf->SetFillColor(220, 50, 50);
+                $pdf->Cell(15, 6, $gparemarks, 1,0,'L',1);
+            }
+            else {
+                $pdf->Cell(15, 6, $gparemarks, 1);
+            }
             $pdf->Ln();
 
             if($gender=="M")
