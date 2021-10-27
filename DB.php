@@ -3823,8 +3823,8 @@ public function getGPARemarks($regNumber,$gpa)
             $query = $this->conn->prepare("SELECT studentID,registrationNumber,firstName,middleName,lastName,gender,statusID,examNumber,sp.programmeID
             from student s,student_programme sp,exam_number e
             where
-            s.registrationNumber = sp.regNumber and sp.programmeLevelID=:levelID and sp.programmeID=e.programmeID and sp.centerID=:centerID and e.academicYearID = :acadID  and s.registrationNumber=e.regNumber");
-            $query->execute(array(':levelID' => $programmeLevelID, ':centerID' => $centerID, ':acadID' => $academicYearID));
+            s.registrationNumber = sp.regNumber and sp.programmeLevelID=:levelID and sp.programmeID=e.programmeID and sp.centerID=:centerID and e.academicYearID = :acadID and sp.academicYearID=:acadID2  and s.registrationNumber=e.regNumber");
+            $query->execute(array(':levelID' => $programmeLevelID, ':centerID' => $centerID, ':acadID' => $academicYearID,':acadID2'=>$academicYearID));
             $data = array();
             while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
                 $data[] = $row;
@@ -3841,9 +3841,9 @@ public function getGPARemarks($regNumber,$gpa)
             $query = $this->conn->prepare("SELECT studentID,registrationNumber,gender,firstName,middleName,lastName,examNumber
             from student s,student_programme sp,exam_number e
             where
-            s.registrationNumber = sp.regNumber and sp.programmeLevelID=:levelID and e.programmeID=:progID and sp.centerID=:centerID and e.academicYearID = :acadID  and s.registrationNumber=e.regNumber
+            s.registrationNumber = sp.regNumber and sp.programmeLevelID=:levelID and e.programmeID=:progID and sp.centerID=:centerID and e.academicYearID = :acadID and sp.academicYearID=:acadID2  and s.registrationNumber=e.regNumber
             ORDER BY firstName");
-            $query->execute(array(':levelID'=>$programmeLevelID,':progID' => $programmeID, ':centerID' => $centerID, ':acadID' => $academicYearID));
+            $query->execute(array(':levelID'=>$programmeLevelID,':progID' => $programmeID, ':centerID' => $centerID, ':acadID' => $academicYearID,':acadID2'=>$academicYearID));
             $data = array();
             while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
                 $data[] = $row;
