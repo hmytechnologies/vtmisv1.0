@@ -3823,7 +3823,7 @@ public function getGPARemarks($regNumber,$gpa)
             $query = $this->conn->prepare("SELECT studentID,registrationNumber,firstName,middleName,lastName,gender,statusID,examNumber,sp.programmeID
             from student s,student_programme sp,exam_number e
             where
-            s.registrationNumber = sp.regNumber and sp.programmeLevelID=:levelID and sp.centerID=:centerID and sp.academicYearID = :acadID  and s.registrationNumber=e.regNumber");
+            s.registrationNumber = sp.regNumber and sp.programmeLevelID=:levelID and sp.centerID=:centerID and e.academicYearID = :acadID  and s.registrationNumber=e.regNumber");
             $query->execute(array(':levelID' => $programmeLevelID, ':centerID' => $centerID, ':acadID' => $academicYearID));
             $data = array();
             while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
