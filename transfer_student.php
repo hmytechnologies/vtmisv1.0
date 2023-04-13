@@ -60,12 +60,12 @@
                 </script>
 
                <hr>
-        <ul class="nav nav-tabs" id="myTab">
+        <!-- <ul class="nav nav-tabs" id="myTab">
             <li class="active"><a data-toggle="tab" href="#internal_transfer"><span style="font-size: 16px"><strong>Internal Transfer</strong></span></a></li>
             <li><a data-toggle="tab" href="#external_transfer"><span style="font-size: 16px"><strong>External Transfer</strong></span></a></li>
         </ul>
 
-        <div class="tab-content">
+        <div class="tab-content"> -->
             <!-- Previous Semester -->
 
             <?php
@@ -163,12 +163,12 @@
                     if($_REQUEST['msg']=="succ")
                     {
                         echo "<div class='alert alert-success fade in'><a href='#' class='close' data-dismiss='alert'>&times;</a>
-                <strong>Semester Course data has been inserted successfully</strong>.
+                <strong>Transfer data has been inserted successfully</strong>.
             </div>";
                     }
                     else if($_REQUEST['msg']=="deleted") {
                         echo "<div class='alert alert-danger fade in'><a href='#' class='close' data-dismiss='alert'>&times;</a>
-                <strong>Semester Course Data has been delete successfully</strong>.
+                <strong>Transfer data has been deleted successfully</strong>.
             </div>";
                     }
                 }
@@ -341,7 +341,7 @@
                         }
                         ?>
                 </div>
-            </div>
+            <!-- </div> -->
 
 <!--            <div id="external_transfer" class="tab-pane">
                 <script type="text/javascript">

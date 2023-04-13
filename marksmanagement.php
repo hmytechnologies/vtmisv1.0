@@ -1,4 +1,6 @@
 <?php
+ini_set ('display_errors', 1);
+error_reporting (E_ALL | E_STRICT);
 ?>
 <script src="bootbox/bootbox.min.js" type="text/javascript"></script>
    <script type="text/javascript">
@@ -60,7 +62,7 @@ if(!empty($courseprogramme))
     <th>Post Results</th>
     <th>Bulk Post</th>
     <th>View Results</th>
-    <th>Published</th>
+    <!-- <th>Published</th> -->
      </tr>
   </thead>
   <tbody>    
@@ -92,17 +94,19 @@ $studentNumber=$db->getStudentNumber($academicYearID,$programmeLevelID,$programm
 
 
 
-$checked=$db->checkStatus($courseID,$academicYearID,$programmeID,$programmeLevelID,'checked');
-$published=$db->checkStatus($courseID,$academicYearID,$programmeID,$programmeLevelID,'status');
+//$checked=$db->checkStatus($courseID,$academicYearID,$programmeID,$programmeLevelID,'checked'); 
+
+//Commented from 23March,2022
+//$published=$db->checkStatus($courseID,$academicYearID,$programmeID,$programmeLevelID,'status');
 
 $boolExamStatus=$db->checkFinalExamResultStatus($courseID,$academicYearID,$programmeID,$programmeLevelID);
 
 
 
-if($published==1)
+/* if($published==1)
     $statusPublished="<span class='text-success'>Yes</span>";
 else
-    $statusPublished="<span class='text-danger'>No</span>";
+    $statusPublished="<span class='text-danger'>No</span>"; */
 
 if($studentNumber==0)
 {
@@ -123,7 +127,7 @@ if($studentNumber==0)
 }
 else
 {
-    if($published==1)
+    /* if($published==1)
     {
         $addButton = '
     	<div class="btn-group">
@@ -141,7 +145,7 @@ else
     	   </div>';
     }
     else
-    {
+    { */
         $addButton = '
     	<div class="btn-group">
     	     <a href="index3.php?sp=add_score&cid='.$db->encrypt($courseID).'&acadID='.$db->encrypt($academicYearID).'&lvlID='.$db->encrypt($programmeLevelID).'&pid='.$db->encrypt($programmeID).'" class="glyphicon glyphicon-plus"></a>
@@ -167,7 +171,7 @@ else
         	</div>';
         }
         
-    }
+    //}
 }
 ?>
 
@@ -182,7 +186,7 @@ else
  <td><?php echo $addButton;?></td>
 <td><?php echo $excelButton;?></td>
       <td><?php echo $viewButton;?></td>
- <td><?php echo $statusPublished;?></td>
+ <!-- <td><?php //echo $statusPublished;?></td> -->
  </tr>
  
  <?php 

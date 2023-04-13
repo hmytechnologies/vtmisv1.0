@@ -1,2 +1,9 @@
-/dbconfig.php
 logs/userlog.log
+dbconfig.php
+student_images/
+img/
+uploaded_file/
+course_outline/
+error_log
+.buildpath
+

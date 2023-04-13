@@ -3082,15 +3082,15 @@ public function checkStatus($courseID,$academicYearID,$programmeID,$programmeLev
 {
     try
     {
-        $query=$this->conn->prepare("SELECT $column as status from exam_result where courseID=:cid and academicYearID=:acadID and programmeLevelID=:levelID AND programmeID=:pID");
-        $query->execute(array(':cid'=>$courseID,':acadID'=>$academicYearID,':levelID'=>$programmeLevelID,':pID'=>$programmeID));
+        $query=$this->conn->prepare("SELECT $column as status from exam_result where courseID=:cid and academicYearID=:acadID");
+        $query->execute(array(':cid'=>$courseID,':acadID'=>$academicYearID));
         $row=$query->fetch(PDO::FETCH_ASSOC);
         $status=$row['status'];
         return $status;
     }
     catch (PDOException $ex)
     {
-        echo "Getting Data Error: ".$ex->getMessage();
+        echo "Getting Data Error for checkStatus: ".$ex->getMessage();
     }
 }
 
@@ -3134,7 +3134,7 @@ public function checkExamResultStatus($courseID,$semesterID,$batchID)
     }
     catch (PDOException $ex)
     {
-        echo "Getting Data Error: ".$ex->getMessage();
+        echo "Getting Data Error under checkExamResultStatus: ".$ex->getMessage();
     }
 }
 
@@ -4598,7 +4598,7 @@ WHERE
         }
         catch (PDOException $ex)
         {
-            echo "Getting Data Error: ".$ex->getMessage();
+            echo "Getting Data Error for getStudentNumber: ".$ex->getMessage();
         }
 
     }
