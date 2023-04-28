@@ -217,7 +217,10 @@ else
                 <label for="FirstName">Academic Year</label>
                 <select name="academicYearID" class="form-control" required>
                     <?php
-                    $adYear = $db->getRows('academic_year',array('where'=>array('status'=>1),'order_by'=>'academicYear DESC'));
+                    // $adYear = $db->getRows('academic_year',array('where'=>array('status'=>1),'order_by'=>'academicYear DESC'));
+
+
+                    $adYear = $db->getRows('academic_year',array('order_by'=>'academicYear DESC'));
                     if(!empty($adYear)){
                         echo"<option value=''>Please Select Here</option>";
                         $count = 0; foreach($adYear as $year){ $count++;
@@ -243,6 +246,7 @@ else
  if(isset($_POST['doFind'])=="Find Records")
  {
      $academicYearID=$_POST['academicYearID'];
+//echo $semesterSettingID = $db->getData("semester_setting","semesterSettingID","academicYearID",$academicYearID);
 
      $courseprogramme = $db->getSemesterCourse($semesterSettingID,$_SESSION['main_role_session'],$_SESSION['department_session']);
      if(!empty($courseprogramme))
