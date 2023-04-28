@@ -147,10 +147,25 @@
                     </div>
 
 
+                  
+
                     <div class="col-lg-3">
                         <label for="MiddleName">Trade Name</label>
                         <select name="programmeID" id="programmeID" class="form-control" required>
-                            <option value="">Select Here</option>
+                            <?php
+                            $programmes = $db->getRows('programmes', array('order_by' => 'programmeName ASC'));
+                            if (!empty($programmes)) {
+                                echo "<option value=''>Please Select Here</option>";
+                                $count = 0;
+                                foreach ($programmes as $prog) {
+                                    $count++;
+                                    $programme_name = $prog['programmeName'];
+                                    $programmeID = $prog['programmeID'];
+                            ?>
+                                    <option value="<?php echo $programmeID; ?>"><?php echo $programme_name; ?></option>
+                            <?php }
+                            }
+                            ?>
                         </select>
                     </div>
 
@@ -158,7 +173,9 @@
                         <label for="FirstName">Academic Year</label>
                         <select name="academicYearID" id="academicYearID" class="form-control" required>
                             <?php
-                            $academic_year = $db->getRows('academic_year', array('where' => array('status' => 1), 'order_by' => 'academicYear ASC'));
+                            // $academic_year = $db->getRows('academic_year', array('where' => array('status' => 1), 'order_by' => 'academicYear ASC'));
+
+                            $academic_year = $db->getRows('academic_year', array( 'order_by' => 'academicYear ASC'));
                             if (!empty($academic_year)) {
                                 echo "<option value=''>Please Select Here</option>";
                                 $count = 0;

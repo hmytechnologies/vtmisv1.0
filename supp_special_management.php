@@ -61,8 +61,7 @@
                 </div>
     </div></div>
 
-<div class="modal fade bs-example-modal-sm" id="myPleaseWait" tabindex="-1" role="dialog"
-     aria-hidden="true" data-backdrop="static">
+<div class="modal fade bs-example-modal-sm" id="myPleaseWait" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static">
     <div class="modal-dialog modal-sm">
         <div class="modal-content">
             <div class="modal-header">

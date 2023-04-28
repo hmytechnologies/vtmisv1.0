@@ -174,10 +174,10 @@ $db= new DBHelper();
                                                 <label>Marital Status<span class="text-danger">*</span></label>
                                                 <select name="maritalStatus" class="form-control" required>
                                                     <option value="">Select here...</option>
-                                                    <option>Single</option>
-                                                    <option>Married</option>
-                                                    <option>Divorced</option>
-                                                    <option>Widow</option>
+                                                    <option value="Single">Single</option>
+                                                    <option value="Married"> Married</option>
+                                                    <option value="Divorced">Divorced</option>
+                                                    <option value="Widow">Widow</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -189,7 +189,7 @@ $db= new DBHelper();
                                         <select name="nationality" class="form-control" required="required">
                                             <option value="">Select Here ...</option>
                                             <?php
-                                            $country=$db->getRows('xsms_country',array('order_by'=>'countryCode ASC'));
+                                            $country=$db->getRows('country',array('order_by'=>'countryCode ASC'));
                                             if($country){
                                                 foreach ($country as $country){
                                                     $count++;?>
@@ -254,7 +254,14 @@ $db= new DBHelper();
                                 <div class="form-group">
                                     <label for="m">District<span class="text-danger">*</span></label>
                                     <select name="districtId" class="form-control" required="required" onChange="showShehia(this);" id="output1">
-                                        <option value="">Select Here ...</option>
+                                    <option value="">Select Here ...</option>
+                                        <?php
+                                        $reg=$db->getRows('ddx_district',array('order_by'=>'districtCode ASC'));
+                                        if($reg){
+                                            foreach ($reg as $reg){
+                                                $count++;?>
+                                                <option value="<?php echo $reg['districtCode']?>"><?php echo $reg['districtName']?></option>
+                                            <?php } } ?>
                                     </select>
                                 </div>
                             </div>
@@ -262,7 +269,14 @@ $db= new DBHelper();
                                 <div class="form-group">
                                     <label for="m">Shehia<span class="text-danger">*</span></label>
                                     <select name="shehiaId" class="form-control" id="output2" required="required">
-                                        <option value="">Select Here ...</option>
+                                    <option value="">Select Here ...</option>
+                                        <?php
+                                        $reg=$db->getRows('ddx_shehia',array('order_by'=>'shehiaName ASC'));
+                                        if($reg){
+                                            foreach ($reg as $reg){
+                                                $count++;?>
+                                                <option value="<?php echo $reg['shehiaCode']?>"><?php echo $reg['shehiaName']?></option>
+                                            <?php } } ?>
                                     </select>
                                 </div>
                             </div>
@@ -288,7 +302,20 @@ $db= new DBHelper();
                                 <div class="form-group">
                                     <label for="m">Specialization</label>
                                     <select name="specialize_id" class="form-control" id="specializeOut" required="required">
-                                        <option value="">Select Here ...</option>
+                                    <option value="">Select Here ...</option>
+                                        <?php
+                                        $subjectRow=$db->getRows('xsms_specialization',array('order_by'=>'specializationCode ASC'));
+                                        if(!empty($subjectRow))
+                                        {
+                                            foreach ( $subjectRow as $subjectRow )
+                                            { ?>
+                                                <option value="<?php echo $subjectRow['specializationCode'];?>">
+                                                    <?php echo $subjectRow['specializationName'];?>
+                                                </option>
+                                                <?php
+                                            }
+                                        }
+                                        ?>
                                     </select>
                                 </div>
                             </div>

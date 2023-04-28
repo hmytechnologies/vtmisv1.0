@@ -6,6 +6,9 @@ include 'DB.php';
 $db = new DBHelper();
 $tblName = 'semester_setting';
 
+
+//echO $_POST['id'];
+
 if(isset($_REQUEST['action_type']) && !empty($_REQUEST['action_type'])){
     if($_REQUEST['action_type'] == 'add'){
         //Restrict Same Semister Inserted
@@ -75,36 +78,74 @@ if(isset($_REQUEST['action_type']) && !empty($_REQUEST['action_type'])){
     else
         header("Location:index3.php?sp=semester_date_setting&msg=".$msg);
     }elseif($_REQUEST['action_type'] == 'edit'){
-        if(!empty($_POST['id'])){
+
+        echo $_REQUEST['action_type'];
+
+       
+
+        
+        // if(!empty($_POST['id'])){
             $semesterStatus=$_POST['status'];
-            if($semesterStatus==1)
-            {
-                $semester=$db->getRows('semester_setting',array('where'=>array('semesterStatus'=>1),'order_by'=>'semesterSettingID ASC'));
-                foreach ($semester as $sm)
-                {
-                    $semesterSettingID=$sm['semesterSettingID'];
-                    $condition = array('semesterSettingID'=>$semesterSettingID);
-                    $userDataStatus = array('semesterStatus' =>0);
-                    $update = $db->update($tblName,$userDataStatus,$condition);
-                }
-            }
-            $semesterName=$db->getData("semister","semisterName","semisterID",$_POST['semisterID'])." ".$db->getData("academic_year","academicYear","academicYearID",$_POST['academicYearID'])."-".$db->getData("batch","batchCode","batchID",$_POST['batchID']);
+
+            echo $_POST['id'];
+             
+            // if($semesterStatus==1)
+            // {
+            //     $semester=$db->getRows('semester_setting',array('where'=>array('semesterStatus'=>1),'order_by'=>'semesterSettingID ASC'));
+            //     foreach ($semester as $sm)
+            //     {
+            //         $semesterSettingID=$sm['semesterSettingID'];
+            //         $condition = array('semesterSettingID'=>$semesterSettingID);
+            //         $userDataStatus = array('semesterStatus' =>0);
+            //         $update = $db->update($tblName,$userDataStatus,$condition);
+            //     }
+            // }
+            // $semesterName=$db->getData("semister","semisterName","semisterID",$_POST['semisterID'])." ".$db->getData("academic_year","academicYear","academicYearID",$_POST['academicYearID'])."-".$db->getData("batch","batchCode","batchID",$_POST['batchID']);
             $userData = array(
-                'semesterID' => $_POST['semisterID'],
-                'academicYearID'=>$_POST['academicYearID'],
-                'semesterName'=>$semesterName,
-                'startDate' => $_POST['startDate'],
-                'endDate'=>$_POST['endDate'],
+
+                'gradingYearID' => $_POST['gradingYearID'],
+                'academicYearID'=>$_POST['academicID'],
+                //'semesterName'=>$semesterName,
+                't1startDate'=>$_POST['t1startDate'],
+                't1endDate'=>$_POST['t1endDate'],
+                'vt1startDate'=>$_POST['vt1startDate'],
+                'vt1endDate'=>$_POST['vt1endDate'],
+                't2startDate'=>$_POST['t2startDate'],
+                't2endDate'=>$_POST['t2endDate'],
+                'vt2startDate'=>$_POST['vt2startDate'],
+                'vt2endDate'=>$_POST['vt2endDate'],
+                'examStartDate'=>$_POST['finalStartDate'],
+                'examEndDate'=>$_POST['finalEndDate'],
+                'vestartDate'=>$_POST['vfinalStartDate'],
+                'veendDate'=>$_POST['vfinalEndDate'],
                 'semesterStatus'=>$semesterStatus,
-                'endDateRegistration'=>$_POST['endDateRegistration'],
-                'examStartDate'=>$_POST['startExamDate'],
-                'examEndDate'=>$_POST['endExamDate'],
-                'endDateFinalExam'=>$_POST['endDateFinalExam']
+                
             );
             $condition = array('semesterSettingID' => $_POST['id']);
-            $update = $db->update($tblName,$userData,$condition);
+            $update = $db->update('semester_setting',$userData,$condition);
             $statusMsg = true;
             header("Location:index3.php?sp=semester_date_setting&msg=edited");
-        }
+        // }
+
+
+
+        // if(!empty($_POST['id'])){
+
+        //     echo
+        //     $userData = array(
+        //     'courseCode' => $courseCode,
+        //     'courseName'=>$courseName,
+        //     'capacity' => $_POST['capacity'],
+        //     'units'=>$_POST['units'],
+        //      'courseTypeID'=>$_POST['courseTypeID'],
+        //      'numberOfHours'=>$_POST['nhrs'],
+        //     'departmentID'=>$_POST['department_id'],
+        //     'status'=>$_POST['status']
+        // );
+        //     $condition = array('courseID' => $_POST['id']);
+        //     $update = $db->update($tblName,$userData,$condition);
+        //     $statusMsg = true;
+        //     header("Location:index3.php?sp=course&msg=edited");
+        // }
     }
 }
