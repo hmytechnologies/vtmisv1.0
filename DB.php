@@ -170,7 +170,7 @@ class DBHelper{
                     $i++;
                 }
                 if (!empty($conditions) && is_array($conditions)) {
-                    $whereSql .= 'WHERE ';
+                    $whereSql .= ' WHERE ';
                     $i = 0;
                     foreach ($conditions as $key => $value) {
                         $pre = ($i > 0) ? ' AND ' : '';
@@ -189,7 +189,7 @@ class DBHelper{
                 // old user information.... 
                 $cnd['userID'] = $old['createdBy'];
                 $cond['where'] = $cnd;
-                $cond['select'] = " username";
+                $cond['select'] = "username";
                 $user = $this->getRows("users", $cond);
 
                 // prepare data for audit file ....
@@ -999,7 +999,8 @@ WHERE
         return round($tmarks);
     }
 
-    public function getExamCategoryMark($exam_category,$regNumber){
+    public function getExamCategoryMark($exam_category,$regNumber)
+    {
         $programmeLevelID=$this->getProgrammeLevelID($regNumber);
         $exam_category_marks=$this->getRows("exam_category_setting",array('where'=>array('examCategoryID'=>$exam_category,'programmeLevelID'=>$programmeLevelID)));
         $gradeOutput="";
@@ -4578,7 +4579,7 @@ WHERE
                 $serialNumber = $row['serialNumber'];
             }
             return $serialNumber;
-            // 47964796
+
         } catch (PDOException $ex) {
             echo "Getting Data Error: " . $ex->getMessage();
         }
@@ -4781,7 +4782,7 @@ WHERE
     {
         if (is_array($d)) {
             foreach ($d as $k => $v) {
-                $d[$k] = $this->utf8ize($v);
+                $d[$k] = utf8ize($v);
             }
         } else if (is_string($d)) {
             return utf8_encode($d);

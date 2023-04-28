@@ -139,7 +139,7 @@
                             {
                                 foreach ($level as $lvl) {
                                     $programme_level_code=$lvl['programmeLevelCode'];
-                                    echo "<td>$programme_level_code</td>";
+                                    echo "$programme_level_code</td><td>";
                                 }
                             }
 
@@ -149,7 +149,7 @@
                                 foreach ($programme as $pro) {
                                     $programmeName=$pro['programmeName'];
                                     $programmeDuration=$pro['programmeDuration'];
-                                    echo "<td>$programmeName</td>";
+                                    echo "$programmeName</td><td>";
                                 }
                             }
 
@@ -171,7 +171,7 @@
                             {
                                 foreach ($status as $st) {
                                     $status_value=$st['statusValue'];
-                                    echo "<td>$status_value</td>";
+                                    echo "$status_value</td>";
                                 }
                             }
 
@@ -334,7 +334,7 @@
 		                {
 		                	foreach ($level as $lvl) {
 		                		$programme_level_code=$lvl['programmeLevelCode'];
-		                		echo "<td>$programme_level_code</td>";
+		                		echo "$programme_level_code</td><td>";
 		                	}
 		                }
 
@@ -344,7 +344,7 @@
 		                	foreach ($programme as $pro) {
 		                		$programmeName=$pro['programmeName'];
 		                		$programmeDuration=$pro['programmeDuration'];
-		                		echo "<td>$programmeName</td>";
+		                		echo "$programmeName</td>";
 		                	}
 		                }
 		                echo "<td>".$db->getData("batch","batchName","batchID",$batchID)."</td><td>Graduate</td>";

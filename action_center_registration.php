@@ -1,4 +1,4 @@
-academicYearID<?php
+<?php
 session_start();
 try {
 include 'DB.php';
@@ -69,9 +69,6 @@ if (isset($_REQUEST['action_type']) && !empty($_REQUEST['action_type'])) {
     elseif ($_REQUEST['action_type'] == 'edit') {
         if (!empty($_REQUEST['id'])) {
 
-
-
-
             $userData = array(
                 'centerName' => $_POST['name'],
                 'regNumber'=>$_POST['regNumber'],
@@ -85,7 +82,7 @@ if (isset($_REQUEST['action_type']) && !empty($_REQUEST['action_type'])) {
                 'centerPhoneNumber' => $_POST['phoneNumber'],
                 'centerEmail' => $_POST['email'],
                 'centerWebsite' => $_POST['website'],
-                //'establishedYear'=>$_POST['year'],
+                'establishedYear'=>$_POST['year'],
                 'contactPerson' => $_POST['cperson'],
                 'contactEmail'=>$_POST['cemail'],
                 'contactPhone'=>$_POST['cphoneNumber'],
@@ -131,7 +128,7 @@ if (isset($_REQUEST['action_type']) && !empty($_REQUEST['action_type'])) {
                 }
             }
             $statusMsg = true;
-            header("Location:index3.php?sp=center_reg&msg=edited");
+            header("Location:index3.php?sp=add_new_center&msg=succ");
         }
     }
 }

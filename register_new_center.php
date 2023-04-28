@@ -176,7 +176,7 @@ $db = new DBHelper();
 
                                 <div class="col-lg-3">
                                     <label for="Phone">Established Year</label>
-                                    <select name="year" class="form-control" id="year">
+                                    <select name="year" class="form-control">
                                         <option value="">Select Here</option>
                                         <?php
                                         $today=date('Y');
