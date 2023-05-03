@@ -2,18 +2,6 @@
 ini_set ('display_errors', 1);
 error_reporting (E_ALL | E_STRICT);
 ?>
-<script src="bootbox/bootbox.min.js" type="text/javascript"></script>
-   <script type="text/javascript">
-    $(document).ready(function () {
-        $('a[data-toggle="tab"]').on('show.bs.tab', function (e) {
-            localStorage.setItem('activeTab', $(e.target).attr('href'));
-        });
-        var activeTab = localStorage.getItem('activeTab');
-        if (activeTab) {
-            $('#myTab a[href="' + activeTab + '"]').tab('show');
-        }
-    });
-
    
 </script>
 <?php $db=new DBHelper();
@@ -23,13 +11,192 @@ error_reporting (E_ALL | E_STRICT);
       <h1>Results Management</h1>
       <hr>
       <h3>Manage results by course or by individual student</h3>
+      <ul class="nav nav-tabs" id="myTab">
+    
+        <!-- <li class="active"><a data-toggle="tab" href="#previous"><span style="font-size: 16px"><strong>Current Year</strong></span></a></li> -->
+        <li><a data-toggle="tab" href="#previous"><span style="font-size: 16px"><strong>Previous Year</strong></span></a></li>
+<!--        <li><a data-toggle="tab" href="#student_result"><span style="font-size: 16px"><strong>Student Results</strong></span></a></li>
+-->
+    </ul>
+
+<div class="tab-content">
+    <!-- Current Semester -->
+<div id="currentdata" class="tab-pane fade in active">
+ <?php 
+$today=date("Y-m-d");
+
+$academicYearID=$db->getCurrentAcademicYear();
+
+//$courseprogramme = $db->getSemesterCourse($academicYearID,$_SESSION['main_role_session'],$_SESSION['department_session']);
+$courseprogramme = $db->getMappingCourseList($academicYearID,$_SESSION['main_role_session'],$_SESSION['department_session']);
+if(!empty($courseprogramme))
+{
+?>
+<div class="row">
+
+            <h3 class="box-title">Marks Management for <?php echo $db->getData('academic_year','academicYear','academicYearID',$academicYearID);?></h3>
+    <hr>
+          <!-- /.box-header -->
+<table  id="exampleexample" class="table table-striped table-bordered table-condensed">
+  <thead>
+  <tr>
+    <th>No.</th>
+    <th>Subject Name</th>
+    <th>Subject Code</th>
+      <th>Level</th>
+      <th>Trade</th>
+ <th>No.of Students</th>
+      <th>Exam List</th>
+    <th>Post Results</th>
+    <th>Bulk Post</th>
+    <th>View Results</th>
+    <!-- <th>Published</th> -->
+     </tr>
+  </thead>
+  <tbody>    
+<?php
+$count = 0; foreach($courseprogramme as $std){ $count++;
+$courseID=$std['courseID'];
+$courseCode=$std['courseCode'];
+$courseName=$std['courseName'];
+$courseTypeID=$std['courseTypeID'];
+$programmeLevelID=$std['programmeLevelID'];
+$programmeID=$std['programmeID'];
+
+$course = $db->getRows('course',array('where'=>array('courseID'=>$courseID),'order_by'=>'courseID ASC'));
+if(!empty($course))
+{
+    foreach($course as $c)
+    {
+        $courseCode=$c['courseCode'];
+        $courseName=$c['courseName'];
+        $courseTypeID=$c['courseTypeID'];
+    }
+}
 
 
 
+//$studentNumber=$db->getStudentCourseSum($courseID,$academicYearID,$programmeID,$programmeLevelID);
 
+$studentNumber=$db->getStudentNumber($academicYearID,$programmeLevelID,$programmeID);
+
+
+
+//$checked=$db->checkStatus($courseID,$academicYearID,$programmeID,$programmeLevelID,'checked'); 
+
+//Commented from 23March,2022
+//$published=$db->checkStatus($courseID,$academicYearID,$programmeID,$programmeLevelID,'status');
+
+$boolExamStatus=$db->checkFinalExamResultStatus($courseID,$academicYearID,$programmeID,$programmeLevelID);
+
+
+
+/* if($published==1)
+    $statusPublished="<span class='text-success'>Yes</span>";
+else
+    $statusPublished="<span class='text-danger'>No</span>"; */
+
+if($studentNumber==0)
+{
+    $addButton = '
+	<div class="btn-group">
+	     <i class="fa fa-plus" aria-hidden="true"></i>
+	</div>';
+    
+    $excelButton = '
+	<div class="btn-group">
+        <i class="fa fa-file" aria-hidden="true"></i>
+	</div>';
+    
+    $viewButton = '
+	<div class="btn-group">
+        <i class="fa fa-eye" aria-hidden="true"></i>
+	</div>';
+}
+else
+{
+    /* if($published==1)
+    {
+        $addButton = '
+    	<div class="btn-group">
+    	     <i class="fa fa-plus" aria-hidden="true"></i>
+    	</div>';
+            
+            $excelButton = '
+    	<div class="btn-group">
+            <i class="fa fa-file" aria-hidden="true"></i>
+    	</div>';
+            
+            $viewButton = '
+    	   <div class="btn-group">
+    	         <a href="index3.php?sp=view_score&cid='.$db->encrypt($courseID).'&acadID='.$db->encrypt($academicYearID).'&lvlID='.$db->encrypt($programmeLevelID).'" class="glyphicon glyphicon-eye-open"></a>
+    	   </div>';
+    }
+    else
+    { */
+        $addButton = '
+    	<div class="btn-group">
+    	     <a href="index3.php?sp=add_score&cid='.$db->encrypt($courseID).'&acadID='.$db->encrypt($academicYearID).'&lvlID='.$db->encrypt($programmeLevelID).'&pid='.$db->encrypt($programmeID).'" class="glyphicon glyphicon-plus"></a>
+    	</div>';
+        
+        $excelButton = '
+    	<div class="btn-group">
+    	     <a href="index3.php?sp=import_score&cid='.$db->encrypt($courseID).'&acadID='.$db->encrypt($academicYearID).'&lvlID='.$db->encrypt($programmeLevelID).'&pid='.$db->encrypt($programmeID).'"class="glyphicon glyphicon-plus"></a>
+    	</div>';
+        
+       if($boolExamStatus==true)
+        {
+            $viewButton = '
+    	    <div class="btn-group">
+    	         <a href="index3.php?sp=view_score&cid='.$db->encrypt($courseID).'&acadID='.$db->encrypt($academicYearID).'&lvlID='.$db->encrypt($programmeLevelID) .'&pid=' . $db->encrypt($programmeID).'" class="glyphicon glyphicon-eye-open"></a>
+    	   </div>';
+       }
+        else 
+        {
+            $viewButton = '
+        	<div class="btn-group">
+                <i class="fa fa-eye" aria-hidden="true"></i>
+        	</div>';
+        }
+        
+    //}
+}
+?>
+
+  <tr>
+ <td><?php echo $count;?></td>
+ <td><?php echo $courseName;?></td>
+ <td><?php echo $courseCode;?></td>
+      <td><?php echo $db->getData('programme_level','programmeLevel','programmeLevelID',$programmeLevelID);?></td>
+      <td><?php echo $db->getData('programmes', 'programmeName', 'programmeID', $programmeID); ?></td>
+<td><?php echo $studentNumber;?></td>
+      <td>Exam List</td>
+ <td><?php echo $addButton;?></td>
+<td><?php echo $excelButton;?></td>
+      <td><?php echo $viewButton;?></td>
+ <!-- <td><?php //echo $statusPublished;?></td> -->
+ </tr>
+ 
+ <?php 
+}
+ ?>
+  </tbody>
+ </table></div>
+ <?php 
+}
+else 
+{
+    echo "<h4 class='text-danger'>No Course Found</h4>";
+}
+ ?>
+ </div>  
+
+
+<!-- End of Current Semester -->
 
  <!-- Previous Semester -->
-            
+        <div id="previous" class="tab-pane fade">
+            <h3>Previous Years</h3>
             <div class="row">
             <form name="" method="post" action="">
             <div class="col-md-12">
@@ -103,6 +270,7 @@ error_reporting (E_ALL | E_STRICT);
   {
             $count++;
             $courseID=$std['courseID'];
+            $batchID=$std['batchID'];
 
      $course = $db->getRows('course',array('where'=>array('courseID'=>$courseID),'order_by'=>'courseID ASC'));
      if(!empty($course))
@@ -115,7 +283,7 @@ error_reporting (E_ALL | E_STRICT);
          }
      }
 
-   /*   $instructor = $db->getRows('instructor_course',array('where'=>array('courseID'=>$courseID,'semesterSettingID'=>$semesterSettingID),'order_by'=>'courseID ASC'));
+     $instructor = $db->getRows('instructor_course',array('where'=>array('courseID'=>$courseID,'batchID'=>$batchID,'semesterSettingID'=>$semesterSettingID),'order_by'=>'courseID ASC'));
      if(!empty($instructor))
      {
          foreach($instructor as $i)
@@ -127,14 +295,14 @@ error_reporting (E_ALL | E_STRICT);
      else
      {
          $instructorName="Not assigned";
-     } */
+     }
 
      /*$studentNumber=$db->getStudentCourseSum($courseID,$semesterSettingID,$batchID);
 
      $checked=$db->checkStatus($courseID,$semesterSettingID,'checked',$batchID);
      $published=$db->checkStatus($courseID,$semesterSettingID,'status',$batchID);
 
-     $boolExamStatus=$db->checkExamResultStatus($courseID,$semesterSettingID,$batchID);
+     $boolExamStatus=$db->checkExamResultStatus($courseID,$semesterSettingID,$batchID);*/
 
 
      if($checked==1)
