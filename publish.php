@@ -87,16 +87,17 @@
         <?php
         if(isset($_POST['doFind'])=="View Records")
         {
-                $semesterSettingID=$_POST['semesterID'];
+                $academicYearID=$_POST['academicYearID'];
                 $programmeID=$_POST['programmeID'];
-                $batchID=$_POST['batchID'];
-                
-                $courseprogramme = $db->getSemesterProgrammeCourse($programmeID,$semesterSettingID,$batchID);
+                // $batchID=$_POST['batchID'];
+                $semesterSettingID=$_POST['semesterID'];
+                $courseprogramme = $db->getSemesterProgrammeCourse($programmeID,$academicYearID,);
                 if(!empty($courseprogramme))
                 {
                  ?>
-                    <h3 id="titleheader">Registered Course for <?php echo $db->getData("programmes","programmeName","programmeID",$programmeID);?>-<?php echo $db->getData("batch","batchName","batchID",$batchID);?>
-                        -<?php echo $db->getData("semester_setting","semesterName","semesterSettingID",$semesterSettingID);?></h3>
+                    <h3 id="titleheader">Registered Course for <?php echo $db->getData("programmes","programmeName","programmeID",$programmeID);?>-
+                    <?php echo $db->getData("academic_year","academicYear","academicYearID",$academicYearID);?>
+                      </h3>
                     <hr>
 
                     <form name="register" id="register" method="post" action="action_publish.php">
@@ -121,9 +122,12 @@
                  {
                      $count++;
                      $courseID=$cs['courseID'];
-                     $batchID=$cs['batchID'];
+                     $academicYearID=['academicYearID'];
+                     $programmeID=['programmeID'];
+                     $programmeLevelID=['programmeLevelID'];
                      $studyYear=$cs['studyYear'];
                      $course=$db->getRows("course",array('where'=>array('courseID'=>$courseID),' order_by'=>'courseName ASC'));
+
                      if(!empty($course))
                      {
                          $course = $db->getRows('course',array('where'=>array('courseID'=>$courseID),'order_by'=>'courseID ASC'));
@@ -136,13 +140,17 @@
                                  $courseTypeID=$c['courseTypeID'];
                              }
                          }
-
-                         $instructor = $db->getRows('instructor_course',array('where'=>array('courseID'=>$courseID,'batchID'=>$batchID,'semesterSettingID'=>$semesterSettingID),'order_by'=>'courseID ASC'));
+                         
+                         $instructor = $db->getRows('center_programme_course',array('where'=>array('courseID'=>$courseID,'programmeID'=>$programmeID,'academicYearID'=>$academicYearID,
+                         'programmeLevelID'=>$programmeLevelID),'order_by'=>'courseID ASC'));
+                        //  $instructor = $db->getRows('instructor_course',array('where'=>array('courseID'=>$courseID,'batchID'=>$batchID,'semesterSettingID'=>$semesterSettingID),'order_by'=>'courseID ASC'));
+                         
                          if(!empty($instructor))
                          {
                              foreach($instructor as $i)
                              {
-                                 $instructorID=$i['instructorID'];
+                                 $instructorID=$i['staffID'];
+                                 $centerID =$i['centerID'];
                                  $instructorName=$db->getData("instructor","instructorName","instructorID",$instructorID);
                              }
                          }
@@ -151,19 +159,19 @@
                              $instructorName="Not assigned";
                          }
                          
-                         $studentNumber=$db->getStudentCourseSum($courseID,$semesterSettingID,$batchID);
+                         $studentNumber=$db->getStudentCourseSum($centerID,$academicYearID,$programmeLevelID,$programmeID);
+                    //      getExamResult($courseID,)
+                    //      $checked=$db->exam_result($courseID,$semesterSettingID,'checked',$batchID);
+                    //      $published=$db->checkStatus($courseID,$semesterSettingID,'status',$batchID);
                          
-                         $checked=$db->checkStatus($courseID,$semesterSettingID,'checked',$batchID);
-                         $published=$db->checkStatus($courseID,$semesterSettingID,'status',$batchID);
+                    //      $boolExamStatus=$db->checkExamResultStatus($courseID,$semesterSettingID,$batchID);
                          
-                         $boolExamStatus=$db->checkExamResultStatus($courseID,$semesterSettingID,$batchID);
-                         
-                         if($published==1)
-                             $statusPublished="<span class='label label-success'>Yes</span>";
-                        else
-                             $statusPublished="<span class='label label-danger'>No</span>";
+                    //      if($published==1)
+                    //          $statusPublished="<span class='label label-success'>Yes</span>";
+                    //     else
+                    //          $statusPublished="<span class='label label-danger'>No</span>";
                         
-                       ?>
+                    //    ?>
                        <tr>
                          <td><?php echo $count;?></td>
                          <?php 

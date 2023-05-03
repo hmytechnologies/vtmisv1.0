@@ -516,7 +516,7 @@ class DBHelper{
     
     public function getStudentAnnualProgramme($programmeID,$academicYearID,$studyYear,$batchID)
     {
-        $query = $this->conn->prepare("SELECT DISTINCT(e.regNumber) FROM exam_result e,student s,student_study_year sy WHERE s.registrationNumber = e.regNumber AND s.registrationNumber = sy.regNumber AND sy.academicYearID=:acadID AND s.programmeID = :progID AND s.batchID = :bid AND sy.studyYear = :study");
+        $query = $this->conn->prepare("SELECT DISTINCT(e.regNumber) FROM exam_resultexam_resultexam_result e,student s,student_study_year sy WHERE s.registrationNumber = e.regNumber AND s.registrationNumber = sy.regNumber AND sy.academicYearID=:acadID AND s.programmeID = :progID AND s.batchID = :bid AND sy.studyYear = :study");
         $query->execute(array(':acadID'=>$academicYearID,':progID'=>$programmeID,':bid'=>$batchID,':study'=>$studyYear));
         $data = array();
         while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
@@ -1929,12 +1929,12 @@ public function getSemesterCourse($semesterID,$role,$depID)
 
     }
 
-public function getSemesterProgrammeCourse($programmeID,$semesterID)
+public function getSemesterProgrammeCourse($programmeID,$academicYearID)
 {
     try
     {
         $query=$this->conn->prepare("SELECT courseID,programmeLevelID,courseStatus FROM courseprogramme where programmeID=:pgID and academicYearID=:sID");
-        $query->execute(array('pgID'=>$programmeID,':sID'=>$semesterID));
+        $query->execute(array('pgID'=>$programmeID,':sID'=>$academicYearID));
         $data=array();
         while($row=$query->fetch(PDO::FETCH_ASSOC))
         {

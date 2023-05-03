@@ -246,7 +246,8 @@ else
  if(isset($_POST['doFind'])=="Find Records")
  {
      $academicYearID=$_POST['academicYearID'];
-//echo $semesterSettingID = $db->getData("semester_setting","semesterSettingID","academicYearID",$academicYearID);
+    // echo $semesterSettingID = $db->getData("semester_setting","semesterSettingID","academicYearID",$academicYearID);
+    $semesterSettingID = $db->getData("semester_setting","semesterSettingID","academicYearID",$academicYearID);
 
      $courseprogramme = $db->getSemesterCourse($semesterSettingID,$_SESSION['main_role_session'],$_SESSION['department_session']);
      if(!empty($courseprogramme))

@@ -42,7 +42,7 @@ if(isset($_REQUEST['action_type']) && (!empty($_REQUEST['action_type'])))
         $staffData = array(
             'teacherCode'=>$code,
         	'schoolCode'=>$id_school,
-            'pfNo' => $_POST['pfNo'],
+             'pfNo' => $_POST['pfNo'],
             'employmentNO' => $_POST['employmentNo'],
 			'firstName' => $_POST['fname'],
 			'middleName' => $_POST['mname'],
@@ -64,17 +64,12 @@ if(isset($_REQUEST['action_type']) && (!empty($_REQUEST['action_type'])))
         	'contractStartDate'=>$_POST['contractStartDate'],
         	'contractEndDate'=>$_POST['contractEndDate'],
 			'employmentStatusCode'=>0,
-        	'shehiaCode'=>$_POST['shehiaId'],
+        	'shehiaID'=>$_POST['shehiaId'],
 			'photo'=>$userpic,
         	'status'=>1
 		);
 		
-        if( $db->isFieldExistMult($table, array('schoolCode'=>$id_school,'staffEmail'=>$_POST['email'])) )
-		{
-			header("location:index3.php?sp=view_staffs&msg=exist");
-		}
-		else
-		{
+       
 			$staffCode=$db->getRows('xsms_staff_educational_background',array('order_by'=>'staffEducationBackgroundCode DESC','return_type'=>'single'));
 			$staffEducationBackgroundCode=$staffCode['staffEducationBackgroundCode']+1;
 			if (!empty($_POST['subjectCombId'])) 
@@ -97,10 +92,10 @@ if(isset($_REQUEST['action_type']) && (!empty($_REQUEST['action_type'])))
 				}
 			}
 			$insertStaff = $db->insert($table,$staffData);
-       		header("Location:index3.php?sp=view_staffs&msg=inserted");
+       		// header("Location:index3.php?sp=view_staffs&msg=inserted");
 		}
     }
-}
+
 
 // EDITTING ...
 if (isset($_POST['DoEdit'])){
@@ -152,7 +147,9 @@ if (isset($_POST['DoEdit'])){
         	'contractStartDate'=>$_POST['contractStartDate'],
         	'contractEndDate'=>$_POST['contractEndDate'],
 			'employmentStatusCode'=>0,
+
         	'shehiaCode'=>$_POST['shehiaId'],
+
 			'photo'=>$userpic,
         	'modifiedDate'=>$date
         );
