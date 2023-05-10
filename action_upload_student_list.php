@@ -12,8 +12,8 @@ try {
     if(isset($_REQUEST['action_type']) && !empty($_REQUEST['action_type'])){
         if($_REQUEST['action_type'] == 'add'){
             //upload file
-            $file = $_FILES['csv_file']['tmp_name'];
-            $handle = fopen($file, "r");
+         $file = $_FILES['csv_file']['tmp_name'];
+           $handle = fopen($file, "r");
             if ($file == NULL) 
             {
                 $boolStatus=false;
@@ -37,7 +37,7 @@ try {
                     $level = $filesop[7];*/
 
 
-                    $username = strtoupper(trim($regNumber));
+                     $username = strtoupper(trim($regNumber));
                     $password = $db->PwdHash(strtoupper(trim($lastName)));
                     if ($db->isFieldExist($tblName, 'userName', $username)) {
                         $boolStatus = false;
@@ -48,12 +48,13 @@ try {
                         $lname = $lastName;
                        /*  $gender = $gender;
                         $dob=$dob; */
+                       
                         $programmeID = $_POST['programmeID'];
                         $academicYearID=$_POST['admissionYearID'];
 
 
                         //add users first
-                        $userData = array(
+                        echo $userData = array(
                             'userName' => $username,
                             'password' => $password,
                             'firstName' => $fname,

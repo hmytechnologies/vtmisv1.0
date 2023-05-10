@@ -1,15 +1,17 @@
 <?php
 session_start();
+
+
 if($_REQUEST['action']=="getPDF") {
     include 'DB.php';
     $db = new DBHelper();
 
-    $organization = $db->getRows('organization', array('order_by' => 'organizationName DESC'));
+ $organization = $db->getRows('organization', array('order_by' => 'organizationName DESC'));
     if (!empty($organization)) {
         foreach ($organization as $org) {
             $organizationName = $org['organizationName'];
             $organizationCode = $org['organizationCode'];
-            $image = "img/" . $org['organizationPicture'];
+          $image = "img/" . $org['organizationPicture'];
         }
     } else {
         $organizationName = "Soft Dev Academy";
@@ -18,8 +20,8 @@ if($_REQUEST['action']=="getPDF") {
     }
 
     require('fpdf.php');
-    $centerID = $_REQUEST['cid'];
-    $programmeLevelID = $_REQUEST['lid'];
+     $centerID = $_REQUEST['cid'];
+      $programmeLevelID = $_REQUEST['lid'];
     $academicYearID = $_REQUEST['ay'];
 
     class PDF extends FPDF
@@ -31,7 +33,7 @@ if($_REQUEST['action']=="getPDF") {
             $this->setFont('Arial', 'B', 18);
             
             $this->Image($image, 135, 0, 40.98, 35.22);
-            $this->Text(105, 40, strtoupper($organizationName));
+             $this->Text(105, 40, strtoupper($organizationName));
             $this->setFont('Arial', 'B', 14);
         }
         function SetCol($col)

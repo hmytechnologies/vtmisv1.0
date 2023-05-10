@@ -80,12 +80,27 @@ if($_REQUEST['action']=="getPDF") {
         }
     }
 
+  
+
+
     $pdf = new PDF();
     $pdf->AliasNbPages();
+
+    $centerProgrammeCourseID = $_REQUEST['cid'];
+    $termID=$_REQUEST['termID'];
+    $programmeID = $_REQUEST["pid"];
+    $levelID = $_REQUEST["lid"];
+    $academicYearId = $_REQUEST["aid"];
+    $centerID = $_REQUEST["cid"];
+
+//     echo $centerName = $db->getData("center_registration", "centerName", "centerRegistrationID", $centerID);
+//    echo  $levelName = $db->getData("programme_level", "programmeLevel", "programmeLevelID",  $levelID);
+//    echo  $academicYear = $db->getData("academic_year", "academicYear", "academicYearID", $academicYearID);
+//    echo  $programmeName = $db->getData("programmes", "programmeName", "programmeID", $programmeID); 
     $course = $db->getCourseInfo($centerProgrammeCourseID);
 
     foreach ($course as $std) {
-        $count++;
+         $count++;
         $courseID = $std['courseID'];
         $courseCode = $std['courseCode'];
         $courseName = $std['courseName'];
@@ -98,20 +113,18 @@ if($_REQUEST['action']=="getPDF") {
         $academicYearID = $std['academicYearID'];
         $centerID=$std['centerID'];
     }
-    $pdf->AddPage(P);
+    $pdf->AddPage('L');
     $pdf->setFont('Arial', '', 8);
     $today = date('M d,Y');
     //Logo .
     $pdf->setFont('Arial', 'B', 20);
     //$pdf->Text(50, 10, strtoupper($organizationName));
-    $centerName = $db->getData("center_registration", "centerName", "centerRegistrationID", $centerID);
-    $levelName = $db->getData("programme_level", "programmeLevel", "programmeLevelID", $programmeLevelID);
-    $academicYear = $db->getData("academic_year", "academicYear", "academicYearID", $academicYearID);
-    $programmeName = $db->getData("programmes", "programmeName", "programmeID", $programmeID); 
+
+    
     $pdf = new PDF();
     $pdf->AliasNbPages();
 
-    $pdf->AddPage();
+    $pdf->AddPage('L');
     $pdf->setFont('Arial', '', 8);
     $today = date('M d,Y');
     //Logo .
@@ -185,7 +198,7 @@ if($_REQUEST['action']=="getPDF") {
             //$programmeName = $db->getData("programmes", "programmeName", "programmeID", $programmeID);
             //$pdf->Cell(180, 6, "Programme Name:" . $programmeName, 0, 0, 'L');
             //$pdf->Ln(6);
-            $student = $db->getStudentTermList($_SESSION['department_session'], $academicYearID, $programmeLevelID, $programmeID);
+           $student = $db->getStudentTermList($_SESSION['department_session'], $academicYearID, $programmeLevelID, $programmeID);
             if (!empty($student)) {
                 $pdf->SetFont('Arial', 'B', 11);
                 $pdf->BasicTable($header);
@@ -201,7 +214,7 @@ if($_REQUEST['action']=="getPDF") {
                         $name = $fname . " " . $mname[0] . " " . $lname;
                         $gender=$std['gender'];
 
-                $termScore = $db->decrypt($db->getTermGrade($academicYearID, $courseID, $regNumber, $termID));
+                echo $termScore = $db->getTermGrade($academicYearID, $courseID, $regNumber, $termID);
             
                 $exam_category_marks = $db->getTermCategorySetting();
                 if (!empty($exam_category_marks)) {
@@ -212,7 +225,7 @@ if($_REQUEST['action']=="getPDF") {
                     }
                 }
 
-                $grade=$db->calculateTermGrade($termScore);
+               echo  $grade=$db->calculateTermGrade($termScore);
 
                     if ($grade == "A" || $grade == "B" || $grade == "C"|| $grade == "D") {
                         $tpass++;
@@ -288,10 +301,10 @@ if($_REQUEST['action']=="getPDF") {
 
     $sdvcwk=$db->standDeviation($termScore);
     $sdvsfe=$db->standDeviation($sfearr);
-    $cwkpresent=$db->getExamStatus($courseID,$semesterSettingID,$batchID,1,1);
-    $cwkabsent=$db->getExamStatus($courseID,$semesterSettingID,$batchID,1,0);
-    $sfepresent=$db->getExamStatus($courseID,$semesterSettingID,$batchID,2,1);
-    $sfeabsent=$db->getExamStatus($courseID,$semesterSettingID,$batchID,2,0);
+    // $cwkpresent=$db->getExamStatus($courseID,$semesterSettingID,1,1);
+    // $cwkabsent=$db->getExamStatus($courseID,$semesterSettingID,1,0);
+    // $sfepresent=$db->getExamStatus($courseID,$semesterSettingID,2,1);
+    // $sfeabsent=$db->getExamStatus($courseID,$semesterSettingID,2,0);
     /* $pdf->Ln(10);
     $pdf->SetFont('Arial','B',14);
     $pdf->Cell(50,6,"Summary");

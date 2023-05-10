@@ -82,9 +82,9 @@ $db= new DBHelper();
 									<td><?php echo $teacher['sex'];?></td>
 									<td><?php echo $teacher['dateOfBirth'];?></td>
 									<td><?php echo $teacher['physicalAddress'];?></td>
-									<td><?php echo $db->getData('xsms_shehia','shehiaName','shehiaCode',$teacher['shehiaCode']);?></td>
+									<td><?php echo $db->getData('ddx_shehia','shehiaName','shehiaCode',$teacher['shehiaID']);?></td>
 									<td>
-										<a href="index3.php?sp=edit_Staff&id=<?php echo $db->my_simple_crypt($teacher['teacherCode'],'e'); ?>" class="btn btn-primary btn-sm">
+										<a href="index3.php?sp=edit_staff&id=<?php echo $db->my_simple_crypt($teacher['teacherCode'],'e'); ?>" class="btn btn-primary btn-sm">
 											<i class="fa fa-pencil" aria-hidden="true"></i>
 										</a>
 										<?php 
@@ -105,3 +105,6 @@ $db= new DBHelper();
 						</table>
 					</div>	
 				</div>	
+
+
+	

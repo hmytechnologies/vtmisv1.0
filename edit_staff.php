@@ -1,5 +1,14 @@
 <?php
+require_once 'DB.php';
 $db= new DBHelper();
+$staffID=$db->my_simple_crypt($_REQUEST['id'],'d');
+
+$userData = $db->getRows('xsms_teacher',array('where'=>array('teacherCode'=>$staffID),'return_type'=>'single'));
+
+
+// $userData = $db->getRows('users',array('where'=>array('userID'=>$userID)));
+
+
 ?>
 <script>
     function showContractinfo(sel)
@@ -116,6 +125,7 @@ $db= new DBHelper();
         }
     }
 </script>
+
 <div class="container-fluid">
 
     <!-- end row -->
@@ -137,32 +147,33 @@ $db= new DBHelper();
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label for="example2">First Name<span class="text-danger">*</span></label>
-                                            <input class="form-control" placeholder="First Name" name="fname" type="text" required>
+                                            <input class="form-control" placeholder="First Name" name="fname" type="text" value="<?php echo $userData['firstName'];?>"  required>
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label>Middle Name</label>
-                                            <input class="form-control" placeholder="Middle Name" name="mname" type="text" />
+                                            <input class="form-control" placeholder="Middle Name" name="mname" type="text" value="<?php echo $userData['middleName'];?>" />
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label>Last Name<span class="text-danger">*</span></label>
-                                            <input class="form-control" placeholder="Last Name" name="lname" type="text" required />
+                                            <input class="form-control" placeholder="Last Name" name="lname" type="text" required value="<?php echo $userData['lastName'];?>"  />
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-4">
                                         <label>Date of Birth<span class="text-danger">*</span></label>
-                                        <input class="form-control" name="dob" type="date" required />
+                                        <input class="form-control" name="dob" type="date" required  value="<?php echo $userData['dateOfBirth'];?>"/>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label for="example2">Gender<span class="text-danger">*</span></label>
                                             <select class="form-control" name="gender" required>
-                                                <option value="">Select Here ...</option>
+                                                <option value="<?php echo $userData['sex'];?>"><?php echo $userData['sex'];?></option>
+                                                <option value="">select marital status</option>
                                                 <option value="Male">Male</option>
                                                 <option value="Female">Female</option>
                                             </select>
@@ -173,7 +184,8 @@ $db= new DBHelper();
                                             <div class="form-group">
                                                 <label>Marital Status<span class="text-danger">*</span></label>
                                                 <select name="maritalStatus" class="form-control" required>
-                                                    <option value="">Select here...</option>
+                                                    <option value="<?php echo $userData['meritalStatus'];?>"><?php echo $userData['meritalStatus'];?></option>
+                                                    <option value="">select marital status</option>
                                                     <option value="Single">Single</option>
                                                     <option value="Married"> Married</option>
                                                     <option value="Divorced">Divorced</option>
@@ -186,13 +198,22 @@ $db= new DBHelper();
                                 <div class="row">
                                     <div class="col-md-4">
                                         <label>Nationality<span class="text-danger">*</span></label>
+
                                         <select name="nationality" class="form-control" required="required">
-                                            <option value="">Select Here ...</option>
+
+                                        <option value="<?php echo $userData['nationalityCode']; ?>">
+                                       
+                                            <?php echo $db->getData("country","countryName","countryID",$userData['nationalityCode']);?>
+
+                                        </option>
+
+                                        <option value="">Select Here ...</option>
                                             <?php
                                             $country=$db->getRows('country',array('order_by'=>'countryCode ASC'));
                                             if($country){
                                                 foreach ($country as $country){
                                                     $count++;?>
+                                                    
                                                     <option value="<?php echo $country['countryID']?>"><?php echo $country['countryName']?></option>
                                                 <?php } } ?>
                                         </select>
@@ -200,13 +221,13 @@ $db= new DBHelper();
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label>Phone Number</label>
-                                            <input class="form-control" placeholder="eg 0677905299" name="phone" type="text" required="required" />
+                                            <input class="form-control" placeholder="eg 0677905299" name="phone" type="text" value="<?php echo $userData['phoneNumber'];?>" required="required" />
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label>Email</label>
-                                            <input class="form-control" placeholder="eg someone@hmytechnologies.com" name="email" type="email" />
+                                            <input class="form-control" placeholder="eg someone@hmytechnologies.com" name="email" value="<?php echo $userData['staffEmail'];?>" type="email" />
                                         </div>
                                     </div>
                                 </div>
@@ -217,7 +238,7 @@ $db= new DBHelper();
                                     <label for="Picture">Staff Picture</label>
                                     <img src="#" height="150px" width="150px;" id="image"/>
                                     <br/><br/>
-                                    <input type="file" name="photo" onchange="readURL(this);"/>
+                                    <input type="file" name="photo" onchange="readURL(this);" value="<?php echo $userData['photo'];?>"/>
                                 </div>
                             </div>
                         </div>
@@ -232,13 +253,14 @@ $db= new DBHelper();
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label>Physical Address<span class="text-danger">*</span></label>
-                                    <input class="form-control" placeholder="Physical Address" name="address" type="text" required="required" />
+                                    <input class="form-control" placeholder="Physical Address" name="address" type="text" value="<?php echo $userData['physicalAddress'];?>" required="required" />
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="m">Region<span class="text-danger">*</span></label>
-                                    <select name="regionId" class="form-control" id="m" onChange="showDistrict(this);" required="required">
+                                    <select name="regionId" class="form-control" id="m" onChange="showDistrict(this);"  required="required">
+                                        
                                         <option value="">Select Here ...</option>
                                         <?php
                                         $reg=$db->getRows('ddx_region',array('order_by'=>'regionCode ASC'));
@@ -254,6 +276,7 @@ $db= new DBHelper();
                                 <div class="form-group">
                                     <label for="m">District<span class="text-danger">*</span></label>
                                     <select name="districtId" class="form-control" required="required" onChange="showShehia(this);" id="output1">
+                                    
                                     <option value="">Select Here ...</option>
                                         <?php
                                         $reg=$db->getRows('ddx_district',array('order_by'=>'districtCode ASC'));
@@ -268,7 +291,12 @@ $db= new DBHelper();
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="m">Shehia<span class="text-danger">*</span></label>
-                                    <select name="shehiaId" class="form-control" id="output2" required="required">
+                                    <select name="shehiaId" class="form-control" id="output2" required="required" value="<?php echo $userData['firstName'];?>">
+                                    <option value="<?php echo $userData['shehiaID']; ?>">
+                                       
+                                       <?php echo $db->getData("ddx_shehia","shehiaName","shehiaCode",$userData['shehiaID']);?>
+
+                                   </option>
                                     <option value="">Select Here ...</option>
                                         <?php
                                         $reg=$db->getRows('ddx_shehia',array('order_by'=>'shehiaName ASC'));
@@ -292,6 +320,7 @@ $db= new DBHelper();
                                 <div class="form-group">
                                     <label for="m">Type of Staff<span class="text-danger">*</span></label>
                                     <select name="staffTypeId" class="form-control" id="staffType" required="required" onChange="showSpecialization(this);">
+                                        
                                         <option value="">Select Here ...</option>
                                         <option value="1">Teaching</option>
                                         <option value="2">Administration</option>
@@ -302,6 +331,8 @@ $db= new DBHelper();
                                 <div class="form-group">
                                     <label for="m">Specialization</label>
                                     <select name="specialize_id" class="form-control" id="specializeOut" required="required">
+
+                                   
                                     <option value="">Select Here ...</option>
                                         <?php
                                         $subjectRow=$db->getRows('xsms_specialization',array('order_by'=>'specializationCode ASC'));
@@ -323,6 +354,7 @@ $db= new DBHelper();
                                 <div class="form-group">
                                     <label for="subjectComb">Subject Combination</label>
                                     <select name="subjectCombId[]" class="form-control chosen-select" multiple="multiple" id="subjectComb" required="required">
+                                  
                                         <option value="">Select Here ...</option>
                                         <?php
                                         $subjectRow=$db->getRows('course',array('order_by'=>'courseID ASC'));
@@ -344,6 +376,11 @@ $db= new DBHelper();
                                 <div class="form-group">
                                     <label for="m">Education Level<span class="text-danger">*</span></label>
                                     <select name="staffLevelId" class="form-control" required="required">
+                                    <option value="<?php echo $userData['nationalityCode']; ?>">
+                                       
+                                       <?php echo $db->getData("country","countryName","countryID",$userData['nationalityCode']);?>
+
+                                   </option>
                                         <option value="">Select Here ...</option>
                                         <?php
                                         $staffLevel=$db->getRows('xsms_staff_level',array('order_by'=>'staffLevelName ASC'));
@@ -367,7 +404,7 @@ $db= new DBHelper();
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label for="m">Award<span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" name="award" required="required"></input>
+                                    <input type="text" class="form-control" name="award" required="required" ></input>
                                 </div>
                             </div>
                             <div class="col-md-4">
@@ -380,6 +417,12 @@ $db= new DBHelper();
                                 <div class="form-group">
                                     <label for="m">Graduation Year<span class="text-danger">*</span></label>
                                     <select name="yearId" class="form-control" required="required">
+                                    <option value="<?php echo $userData['nationalityCode']; ?>">
+                                       
+                                       <?php echo $db->getData("country","countryName","countryID",$userData['nationalityCode']);?>
+
+                                   </option>
+                                   <option value=""></option>
                                         <?php
                                         $current_year = date('Y');
                                         for ($i=0; $i < 50 ; $i++) {
@@ -400,27 +443,27 @@ $db= new DBHelper();
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label>PF NO<span class="text-danger">*</span></label>
-                                    <input type="text" name="pfNo" required placeholder="PF NO" class="form-control"/>
+                                    <input type="text" name="pfNo" required placeholder="PF NO" class="form-control" value="<?php echo $userData['pfNo'];?>"/>
                                 </div>
                             </div>
 
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label>Employment NO<span class="text-danger">*</span></label>
-                                    <input type="text" name="employmentNo" required  placeholder="Employment NO" class="form-control"/>
+                                    <input type="text" name="employmentNo" required  placeholder="Employment NO" class="form-control" value="<?php echo $userData['employmentNO'];?>"/>
                                 </div>
                             </div>
 
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label>Employment date<span class="text-danger">*</span></label><br>
-                                    <input class="form-control" name="employmentDate" type="date" required />
+                                    <input class="form-control" name="employmentDate" type="date" required value="<?php echo $userData['employmentDate'];?>" />
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label>Confirmation date<span class="text-danger">*</span></label>
-                                    <input class="form-control" name="confirmationDate" type="date" required />
+                                    <input class="form-control" name="confirmationDate" type="date" required value="<?php echo $userData['confirmationDate'];?>"/>
                                 </div>
                             </div>
                         </div>
@@ -429,6 +472,13 @@ $db= new DBHelper();
                                 <div class="form-group">
                                     <label>Recruitment type<span class="text-danger">*</span></label>
                                     <select name="recruitmentTypeCode" class="form-control" id="recruitmentTypeCode" onChange="showContractinfo(this);" required>
+
+
+                                    <option value="<?php echo $userData['recruitmentTypeCode']; ?>">
+                                       
+                                       <?php echo $db->getData("xsms_recruitment_type","recruitmentTypeName","recruitmentTypeCode",$userData['recruitmentTypeCode']);?>
+
+                                   </option>
                                         <option value="">Select here...</option>
                                         <?php
                                         $recruitmentTypes= $db->getRows('xsms_recruitment_type',array('order_by'=>'recruitmentTypeCode ASC'));
@@ -445,6 +495,14 @@ $db= new DBHelper();
                                 <div class="form-group">
                                     <label>Current Postion<span class="text-danger">*</span></label>
                                     <select name="positionCode" class="form-control">
+
+
+                                    <option value="<?php echo $userData['positionCode']; ?>">
+                                       
+                                       <?php echo $db->getData("xsms_position","positionName","positionCode",$userData['positionCode']);?>
+
+                                   </option>
+
                                         <option value="">Select here...</option>
                                         <?php
                                         $position= $db->getRows('xsms_position',array('order_by'=>'positionCode ASC'));
@@ -467,6 +525,8 @@ $db= new DBHelper();
                                     <div class="form-group">
                                         <label>Center Name<span class="text-danger">*</span></label>
                                         <select name="positionCode" class="form-control">
+
+                                           
                                             <option value="">Select here...</option>
                                             <?php
                                             $center_registration= $db->getRows('center_registration',array('order_by'=>'centerRegistrationID ASC'));
@@ -491,30 +551,32 @@ $db= new DBHelper();
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label>Name<span class="text-danger">*</span></label>
-                                    <input type="text" name="nextOfKinName" required placeholder="Full Name" class="form-control"/>
+                                    <input type="text" name="nextOfKinName" required placeholder="Full Name" class="form-control" value="<?php echo $userData['nextOfKin'];?>"/>
                                 </div>
                             </div>
 
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label>Telephone No<span class="text-danger">*</span></label>
-                                    <input type="text" name="nextOfKinTelephone" required placeholder="eg 0777111111" class="form-control"/>
+                                    <input type="text" name="nextOfKinTelephone" required placeholder="eg 0777111111" class="form-control" value="<?php echo $userData['nextOfKinTelephone'];?>"/>
                                 </div>
                             </div>
 
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label>Address<span class="text-danger">*</span></label>
-                                    <input type="text" name="nextOfKinAddress" required placeholder="Physical Address" class="form-control"/>
+                                    <input type="text" name="nextOfKinAddress" required placeholder="Physical Address" class="form-control" value="<?php echo $userData['nextOfKinAddress'];?>"/>
                                 </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-2"></div>
                             <div class="col-md-4">
+                                <input name="staffID" type="hidden" value="<?php echo $userData['teacherCode'];?>">
+
                                 <input name="schoolID" type="hidden" value="<?php echo $id_school;?>">
-                                <input type="hidden" name="action_type" value="addBasicInfo"/>
-                                <input type="submit" name="dosubmit" value="Save Records" class="btn btn-success form-control"/>
+                                <!-- <input type="hidden" name="action_type" value="addBasicInfo"/> -->
+                                <input type="submit" name="DoEdit" value="Update" class="btn btn-success form-control" />
                             </div>
                             <div class="col-md-4">
                                 <a href="index3.php?sp=view_teachers">
