@@ -71,6 +71,9 @@ $roleID=$_SESSION['roleID'];
             }
             break;
 
+            
+        
+
         /*case 'plevels':
             if(in_array(7,$roleID)==true) {
                 include('programmelevels.php');
@@ -314,6 +317,10 @@ $roleID=$_SESSION['roleID'];
             include('edit_programme.php');
             break;
 
+        case 'edit_staff':
+            include('edit_staff.php');
+
+            break;
 
         case 'edit_programme_major':
             include('edit_programme_major.php');
@@ -958,11 +965,20 @@ $roleID=$_SESSION['roleID'];
             include('viewstaff.php');
             break;
 
+            // case 'edit_staff':
+            //     include('edit_staff.php');
+            //     break;
+
+
+
+
+            
 
 
 
 
 
+            
         //default
         default:
             include('frontpage.php');

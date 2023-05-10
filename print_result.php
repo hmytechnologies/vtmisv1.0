@@ -187,7 +187,10 @@
                         <label for="FirstName">Academic Year</label>
                         <select name="academicYearID" id="academicYearID" class="form-control" required>
                             <?php
-                            $academic_year = $db->getRows('academic_year', array('where' => array('status' => 1), 'order_by' => 'academicYear ASC'));
+                            // $academic_year = $db->getRows('academic_year', array('where' => array('status' => 1), 'order_by' => 'academicYear ASC'));
+
+
+                            $academic_year = $db->getRows('academic_year', array( 'order_by' => 'academicYear ASC'));
                             if (!empty($academic_year)) {
                                 echo "<option value=''>Please Select Here</option>";
                                 $count = 0;
@@ -247,17 +250,24 @@
             $examCategoryID = $_POST["examCategoryID"];
 
 
+
+           $xam=  $db->getData("exam_category", "examCategory", "examCategoryID", $examCategoryID); 
+
+
             $student = $db->getStudentTermList($centerID, $academicYearID, $levelID, $programmeID);
             if (!empty($student)) {
             ?>
                 <div class="box box-solid box-primary">
                     <div class="box-header with-border text-center">
                         <h3 class="box-title">Term Report for
-                            <?php echo $sYear;
+                            <?php echo $db->getData("exam_category", "examCategory", "examCategoryID", $examCategoryID); 
+                            echo " ";
+                            echo $db->getData("academic_year", "academicYear", "academicYearID", $academicYearID);
+
                             echo " ";
                             echo $db->getData("programmes", "programmeName", "programmeID", $programmeID); ?>
                             <?php echo $db->getData("semester_setting", "semesterName", "semesterSettingID", $semesterID); ?>
-                            <?php echo $db->getData("batch", "batchName", "batchID", $batchID); ?></h3>
+                            
                     </div>
                     <!-- /.box-header -->
                     <div class="box-body table-responsive no-padding">
@@ -271,6 +281,9 @@
                         </div>
                         <!--End -->
                         <table id="" class="table table-hover table-bordered" cellspacing="0" width="100%" rules="groups">
+
+                            <!-- <?php echo $xam ?> -->
+                            <!-- <?php echo $_POST["examCategoryID"]; ?> -->
                             <thead>
                                 <tr>
                                     <th>No.</th>
@@ -398,8 +411,36 @@
 
                             </tbody>
                         </table>
+
+
+
+                        <div class="row">
+                                <div class="col-lg-3">
+                                    <a href='print_term_score_report.php?action=getPDF&termID=<?php echo $examCategoryID; ?>&aid=<?php echo $academicYearID; ?>&cid=<?php echo $centerID; ?>&lid=<?php echo $levelID;?>&pid=<?php echo $programmeID; ?>' target='_blank'> <button type="button" class="btn btn-primary pull-right form-control" style="margin-right: 5px;">
+                                            <i class="fa fa-download"></i>Print Grade Report
+                                        </button></a>
+                                </div>
+                                <div class="col-lg-3">
+                                    <!-- <button class="btn btn-primary pull-right form-control" style="margin-right: 5px;" data-toggle="modal" data-target="#add_new_atype_modal"><i class="fa fa-download"></i>Print Report in PDF</button> -->
+                                    <a href='print_term_score_report.php?action=getPDF&pid=<?php echo $programmeID; ?>&lid=<?php echo $levelID; ?>&aid=<?php echo $academicYearID; ?>&cid=<?php echo $centerID; ?>&termID=<?php echo $examCategoryID; ?>' target='_blank'> <button type="button" class="btn btn-primary pull-right form-control" style="margin-right: 5px;">
+                                            <i class="fa fa-download"></i>Print PDF Report
+                                        </button></a>
+                                </div>
+                                <!-- <div class="col-lg-3">
+                                    <a href='print_semester_report_extended_xls.php?action=getExcel&pid=<?php echo $programmeID; ?>&styear=<?php echo $studyYear; ?>&sid=<?php echo $semesterID; ?>&bid=<?php echo $batchID; ?>' target='_blank'> <button type="button" class="btn btn-primary pull-right form-control" style="margin-right: 5px;">
+                                            <i class="fa fa-download"></i>Print Excel(Extended) Report
+                                        </button></a>
+                                </div>
+                                <div class="col-lg-3">
+                                    <a href='print_semester_report_nacte_format_xls.php?action=getExcel&pid=<?php echo $programmeID; ?>&styear=<?php echo $studyYear; ?>&sid=<?php echo $semesterID; ?>&bid=<?php echo $batchID; ?>' target='_blank'> <button type="button" class="btn btn-primary pull-right form-control" style="margin-right: 5px;">
+                                            <i class="fa fa-download"></i>Print NACTE Format
+                                        </button></a>
+                                </div> -->
+                            </div>
+
                     </div>
 
+                
                 <?php
             } else {
                 ?>

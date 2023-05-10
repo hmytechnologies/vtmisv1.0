@@ -825,6 +825,18 @@ WHERE
         }
     }
 
+
+    public function  isFieldExistMult($table,$field,$field2,$field3,$field4){
+
+        $query = $this->getRows($table, array('where' => array($field => $field2,$field3 => $field4,), 'order_by' => $field . ' ASC'));
+        if (!empty($query)) {
+            return true;
+        } else {
+            return false;
+        }
+
+    }
+
     /*public function getGrade($semesterID,$courseID,$regNumber,$examCategoryID)
     {
         $examScore="";
@@ -3106,15 +3118,15 @@ WHERE
         return (float)sqrt($variance / $num_of_elements);
     }
 
-    public function getExamStatus($courseid, $sid, $bid, $eCategoryID, $status)
+    public function getExamStatus($courseid, $sid,  $eCategoryID, $status)
     {
         try {
             if ($eCategoryID == 2 || $eCategoryID == 4) {
-                $query = $this->conn->prepare("SELECT COUNT(*) as countStatus from final_result where courseID=:cid and semesterSettingID=:sem and batchID=:bid and examCategoryID=:ecatid and present=:prt");
+                $query = $this->conn->prepare("SELECT COUNT(*) as countStatus from final_result where courseID=:cid and semesterSettingID=:sem and examCategoryID=:ecatid and present=:prt");
             } else {
-                $query = $this->conn->prepare("SELECT COUNT(*) as countStatus from exam_result where courseID=:cid and semesterSettingID=:sem and batchID=:bid and examCategoryID=:ecatid and present=:prt");
+                $query = $this->conn->prepare("SELECT COUNT(*) as countStatus from exam_result where courseID=:cid and semesterSettingID=:sem  and examCategoryID=:ecatid and present=:prt");
             }
-            $query->execute(array(':cid' => $courseid, ':sem' => $sid, ':bid' => $bid, ':ecatid' => $eCategoryID, ':prt' => $status));
+            $query->execute(array(':cid' => $courseid, ':sem' => $sid,  ':ecatid' => $eCategoryID, ':prt' => $status));
             $row = $query->fetch(PDO::FETCH_ASSOC);
             $value = $row['countStatus'];
             return $value;
@@ -4308,7 +4320,7 @@ WHERE
                 $d[$k] = $this->utf8ize($v);
             }
         } else if (is_string($d)) {
-            return utf8_encode($d);
+            return utf8_decode($d);
         }
         return $d;
     }
