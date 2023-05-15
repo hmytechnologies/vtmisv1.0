@@ -6,10 +6,10 @@ $output = array('data' => array());
 
 $academicYearID=$_GET['academicYearID'];
 $programmeID=$_GET['programmeID'];
-$batchID=$_GET['batchID'];
+
 $duration=$db->getData("programmes","programmeDuration","programmeID",$programmeID);
 
-$student=$db->graduateList($programmeID,$duration,$academicYearID,$batchID);
+$student=$db->graduateList($programmeID,$duration,$academicYearID);
 if(!empty($student))
 {
     foreach($student as $st) {

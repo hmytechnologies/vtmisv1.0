@@ -2,7 +2,7 @@
     $(document).ready(function () {
         var titleheader = $('#titleheader').text();
         var programmeID=$("#programmeID").val();
-        var batchID=$("#batchID").val();
+        
         var admissionYearID=$("#admissionYearID").val();
         console.log(programmeID);
         $('#selection_list').DataTable(
@@ -11,7 +11,7 @@
                     {
                         type: 'GET',
                         url: 'api/graduate_list.php',
-                        data:{programmeID:programmeID,academicYearID:admissionYearID,batchID:batchID},
+                        data:{programmeID:programmeID,academicYearID:admissionYearID},
                         "serverSide" : true,
                         cache: false/*,
                         success: function(html) {
@@ -102,22 +102,7 @@
                 </div>
 
 
-                <div class="col-lg-3">
-                    <label for="LastName">Mode of Enrollment</label>
-                    <select name="batchID" id="batchID2"  class="form-control" required>
-                        <?php
-                        $batch = $db->getRows('batch',array('order_by'=>'batchName ASC'));
-                        if(!empty($batch)){
-                            echo "<option value=''>Select Here</option>";
-                            $count = 0; foreach($batch as $btc){ $count++;
-                                $batchID=$btc['batchID'];
-                                $batchName=$btc['batchName'];
-                                ?>
-                                <option value="<?php echo $batchID;?>"><?php echo $batchName;?></option>
-                            <?php }
-                        }?>
-                    </select>
-                </div>
+                
             </div>
             <div class="row">
                 <div class="col-lg-8"></div>
@@ -135,10 +120,10 @@
             if(isset($_POST['doSearch'])=="View Records") {
                 $academicYearID=$_POST['admissionYearID'];
                 $programmeID=$_POST['programmeID'];
-                $batchID=$_POST['batchID'];
+              
                 ?>
                 <input type="hidden" id="admissionYearID" value="<?php echo $academicYearID; ?>">
-                <input type="hidden" id="batchID" value="<?php echo $batchID; ?>">
+                <!-- <input type="hidden" id="batchID" value="<?php echo $batchID; ?>"> -->
                 <input type="hidden" id="programmeID" value="<?php echo $programmeID;?>">
 
                 <div class="col-lg-12">

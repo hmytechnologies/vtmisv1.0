@@ -15,9 +15,9 @@ include ('DB.php');
 $db=new DBHelper();
 $academicYearID=$_POST['academicYearID'];
 $programmeID=$_POST['programmeID'];
-$batchID=$_POST['batchID'];
+
 $duration=$db->getData("programmes","programmeDuration","programmeID",$programmeID);
-$student=$db->graduateList($programmeID,$duration,$academicYearID,$batchID);
+$student=$db->graduateList($programmeID,$duration,$academicYearID);
 if(!empty($student))
 {
     ?>

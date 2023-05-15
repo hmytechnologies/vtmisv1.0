@@ -125,27 +125,10 @@ if(isset($_REQUEST['action_type']) && !empty($_REQUEST['action_type'])){
             $update = $db->update('semester_setting',$userData,$condition);
             $statusMsg = true;
             header("Location:index3.php?sp=semester_date_setting&msg=edited");
-        // }
+            // }
 
 
 
-        // if(!empty($_POST['id'])){
 
-        //     echo
-        //     $userData = array(
-        //     'courseCode' => $courseCode,
-        //     'courseName'=>$courseName,
-        //     'capacity' => $_POST['capacity'],
-        //     'units'=>$_POST['units'],
-        //      'courseTypeID'=>$_POST['courseTypeID'],
-        //      'numberOfHours'=>$_POST['nhrs'],
-        //     'departmentID'=>$_POST['department_id'],
-        //     'status'=>$_POST['status']
-        // );
-        //     $condition = array('courseID' => $_POST['id']);
-        //     $update = $db->update($tblName,$userData,$condition);
-        //     $statusMsg = true;
-        //     header("Location:index3.php?sp=course&msg=edited");
-        // }
     }
 }

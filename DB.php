@@ -2871,12 +2871,12 @@ WHERE
         }
     }
 
-    public function approveGraduatedList($programmeID, $studyYear, $academicYearID, $batchID)
+    public function approveGraduatedList($programmeID, $studyYear, $academicYearID)
     {
         try {
             $query = $this->conn->prepare("SELECT registrationNumber,firstName,middleName,lastName,gender from student s, student_study_year sy where 
-        s.registrationNumber=sy.regNumber and programmeID=:pid and batchID=:bid and statusID=:st and sy.academicYearID=:acadID and studyYear=:styear");
-            $query->execute(array('pid' => $programmeID, ':bid' => $batchID, ':st' => 1, ':acadID' => $academicYearID, ':styear' => $studyYear));
+        s.registrationNumber=sy.regNumber and programmeID=:pid  and statusID=:st and sy.academicYearID=:acadID and studyYear=:styear");
+            $query->execute(array('pid' => $programmeID, ':st' => 1, ':acadID' => $academicYearID, ':styear' => $studyYear));
             $data = array();
             while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
                 $data[] = $row;
@@ -2887,11 +2887,11 @@ WHERE
         }
     }
 
-    public function graduateList($programmeID, $studyYear, $academicYearID, $batchID)
+    public function graduateList($programmeID, $studyYear, $academicYearID)
     {
         try {
             $query = $this->conn->prepare("SELECT registrationNumber,firstName,middleName,lastName,gender,gpa,date_format(graduationDate,'%d-%m-%Y') as gdate from student s, student_study_year sy,graduate_list gl where s.registrationNumber=sy.regNumber and s.registrationNumber=gl.regNumber and programmeID=:pid and batchID=:bid and statusID=:st and sy.academicYearID=:acadID and studyYear=:styear order by firstName");
-            $query->execute(array('pid' => $programmeID, ':bid' => $batchID, ':st' => 2, ':acadID' => $academicYearID, ':styear' => $studyYear));
+            $query->execute(array('pid' => $programmeID, ':st' => 2, ':acadID' => $academicYearID, ':styear' => $studyYear));
             $data = array();
             while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
                 $data[] = $row;
@@ -2906,7 +2906,7 @@ WHERE
     public function transcriptList($regNumber)
     {
         try {
-            $query = $this->conn->prepare("SELECT registrationNumber,programmeID,batchID,studentPicture,firstName,middleName,lastName,gender,date_format(graduationDate,'%d-%m-%Y') as gdate from student s, graduate_list gl where s.registrationNumber=gl.regNumber and gl.regNumber=:reg and statusID=:st");
+            $query = $this->conn->prepare("SELECT registrationNumber,studentPicture,firstName,middleName,lastName,gender,date_format(graduationDate,'%d-%m-%Y') as gdate from student s, graduate_list gl where s.registrationNumber=gl.regNumber and gl.regNumber=:reg and statusID=:st");
             $query->execute(array('reg' => $regNumber, ':st' => 2));
             $data = array();
             while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
@@ -4332,7 +4332,7 @@ WHERE
         if (!file_exists($file)) mkdir($file, 0777, true);
 
         // user existence
-        /*  $cnd['userCode'] = $_SESSION['user_session'];
+       /*  $cnd['userCode'] = $_SESSION['user_session'];
         $cond['where'] = $cnd;
         $cond['select'] = "roleCode";
         $cond['return_type'] = "single";

@@ -95,7 +95,7 @@
                             <th>Level</th>
                             <th>Programme Name</th>
                             <th>Study Year</th>
-                            <th>Study Mode</th>
+                            <!-- <th>Study Mode</th> -->
                             <th>Status</th>
                             <th>Picture</th>
                             <th>Action</th>
@@ -113,9 +113,9 @@
                             $lname=$std['lastName'];
                             $gender=$std['gender'];
                             $regNumber=$std['registrationNumber'];
-                            $programmeID=$std['programmeID'];
+                            // $programmeID=$std['programmeID'];
                             $statusID=$std['statusID'];
-                            $batchID=$std['batchID'];
+                            
                             $studentPicture=$std['studentPicture'];
                             $name="$fname $mname $lname";
 
@@ -129,12 +129,27 @@
                                 $semesterName=$s['semesterName'];
                                 $semesterSettingID=$s['semesterSettingID'];
                             }
+                         $student_program = $db->getRows('student_programme',array('where'=>array('regNumber'=>$regNumber),' order_by'=>' regNumber ASC'));
+                         if (!empty($student_program)) {
+                            foreach($student_program as $pro)
+                            {
+
+                                $studentProgrammeID=$pro['studentProgrammeID'];
+                                $programmeID=$pro['programmeID'];
+                                $programmeLevel=$pro['programmeLevelID'];
+                                $centerID=$pro['centerID'];
+                               
+
+                            } 
+                           
+                         }  
+                         
+                         
 
 
-                            echo "<tr><td>$name</td><td>$regNumber</td><td>$gender</td><td>";
-
-                            $programmeLevelID=$db->getData("programmes","programmeLevelID","programmeID",$programmeID);
-                            $level= $db->getRows('programme_level',array('where'=>array('programmeLevelID'=>$programmeLevelID),' order_by'=>' programmeLevelCode ASC'));
+                            echo "<tr><td>$name</td><td>$regNumber</td><td>$gender</td>";
+                          
+                            $level= $db->getRows('programme_level',array('where'=>array('programmeLevelID'=>$programmeLevel),' order_by'=>' programmeLevelCode ASC'));
                             if(!empty($level))
                             {
                                 foreach ($level as $lvl) {
@@ -161,11 +176,12 @@
                                 foreach ($study_year as $sy)
                                 {
                                     $studyYear=$sy['studyYear'];
+                                   
                                 }
                             }
-                            echo $studyYear."</td><td>";
+                            echo"<td $studyYear </td>";
 
-                            echo $db->getData("batch","batchName","batchID",$batchID)."</td><td>";
+                          
                             $status= $db->getRows('status',array('where'=>array('statusID'=>$statusID),' order_by'=>'status_value ASC'));
                             if(!empty($status))
                             {
@@ -183,7 +199,8 @@
                         {
                         ?>
                             <img id="image" src="student_images/<?php echo $studentPicture; ?>" height="150px"
-                                 width="150px;"/></td>
+                                 width="150px;"/>
+                        </td>
                         <?php
                         }else
                         {
@@ -301,7 +318,7 @@
                         <th>Gender</th>
                         <th>Level</th>
                         <th>Programme Name</th>
-                        <th>Study Mode</th>
+                        <!-- <th>Study Mode</th> -->
                          <!-- <th>CGPA</th>-->
                         <th>Status</th>
                         <th>Picture</th>
@@ -320,15 +337,32 @@
                       $lname=$std['lastName'];
                       $gender=$std['gender'];
                       $regNumber=$std['registrationNumber'];
-                      $programmeID=$std['programmeID'];
-                      $batchID=$std['batchID'];
+                    // $programmeID=$std['programmeID'];
+
+
+                     
 /*                      $gpa=$std['gpa'];*/
                       $name="$fname $mname $lname";
 
+                      $student_program = $db->getRows('student_programme',array('where'=>array('regNumber'=>$regNumber),' order_by'=>' regNumber ASC'));
+                         if (!empty($student_program)) {
+                            foreach($student_program as $pro)
+                            {
 
-                     echo "<tr><td>$name</td><td>$regNumber</td><td>$gender</td><td>";
+                                $studentProgrammeID=$pro['studentProgrammeID'];
+                                $programmeID=$pro['programmeID'];
+                                $programmeLevel=$pro['programmeLevelID'];
+                                $centerID=$pro['centerID'];
+                               
 
-                     $programmeLevelID=$db->getData("programmes","programmeLevelID","programmeID",$programmeID);
+                            } 
+                           
+                         }  
+
+
+                     echo "<tr><td>$name</td><td>$regNumber</td><td>$gender</td>";
+
+                    //  $programmeLevelID=$db->getData("programmes","programmeLevelID","programmeID",$programmeID);
                      $level= $db->getRows('programme_level',array('where'=>array('programmeLevelID'=>$programmeLevelID),' order_by'=>' programmeLevelCode ASC'));
 		                if(!empty($level))
 		                {
@@ -347,7 +381,7 @@
 		                		echo "<td>$programmeName</td>";
 		                	}
 		                }
-		                echo "<td>".$db->getData("batch","batchName","batchID",$batchID)."</td><td>Graduate</td>";
+		              
 		                
                     }
                 	?>

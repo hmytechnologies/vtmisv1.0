@@ -28,9 +28,9 @@ $db = new DBHelper(); ?>
         <h1>Staff Course Allocation</h1>
     </div>
     <div class="col-md-4">
-        <!--<div class="pull-right">
+        <!-- <div class="pull-right">
             <a href="index3.php?sp=semester_setting_hod" class="btn btn-warning">Back to Semester Settings</a>
-        </div>-->
+        </div> -->
     </div>
 </div>
 <hr>
@@ -40,7 +40,7 @@ $db = new DBHelper(); ?>
     <form name="" method="post" action="">
 
         <?php
-        if ($_SESSION['role_session'] == 7)
+        if ($_SESSION['role_session'] == 7 ||  $_SESSION['main_role_session']==1)
             $centerID = 'all';
         else
             $centerID = $_SESSION['department_session'];
@@ -152,11 +152,12 @@ $db = new DBHelper(); ?>
             $courseData = $db->getCenterMappingCourseList($_SESSION['department_session'], $academicYearID, $programmeID, $programmeLevelID);
             if (!empty($courseData)) {
         ?>
-                <h4 class="text-danger">List of Course for <?php
+                <h4 class="text-danger">List of Course <?php
                                                             if ($_SESSION['main_role_session'] == 7) {
                                                                 echo "all centers";
                                                             } else {
                                                                 echo $db->getData("center_registration", "centerName", "centerRegistrationID", $_SESSION['department_session']);
+                                                                
                                                             }
 
                                                             ?> in <?php echo $db->getData("academic_year", "academicYear", "academicYearID", $academicYearID);
@@ -172,7 +173,7 @@ $db = new DBHelper(); ?>
                                 <th>Subject Type</th>
                                 <th>Course Status</th>
                                 <th>Trade Level</th>
-                                <th>Instructor</th>
+                                <th>Instructor </th>
                             </tr>
                         </thead>
                         <tbody>

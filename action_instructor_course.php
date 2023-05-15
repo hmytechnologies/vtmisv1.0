@@ -39,10 +39,12 @@ if(isset($_REQUEST['action_type']) && !empty($_REQUEST['action_type'])){
         }
             header("Location:index3.php?sp=instructor_course&action=getRecords&msg=succ&acaid=".$db->my_simple_crypt($academicYearID,'e')."");
     }elseif($_REQUEST['action_type'] == 'delete'){
+
+        // echo $_GET['id'];
         if(!empty($_GET['id'])){
-            $condition = array('centerProgrammeCourseID' => $db->my_simple_crypt($_GET['id'],'d'));
-            $delete = $db->delete($tblName,$condition);
-            header("Location:index3.php?sp=instructor_course&action=getRecords&msg=delete&acaid=" . $db->my_simple_crypt($academicYearID, 'e') . "");
+           echo  $condition = array('centerProgrammeCourseID' => $db->my_simple_crypt($_GET['id'],'d'));
+           echo  $delete = $db->delete($tblName,$condition);
+            // header("Location:index3.php?sp=instructor_course&action=getRecords&msg=delete&acaid=" . $db->my_simple_crypt($academicYearID, 'e') . "");
         }
 }
 }
