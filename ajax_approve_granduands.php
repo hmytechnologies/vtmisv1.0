@@ -23,10 +23,10 @@
     $db=new DBHelper();
     $academicYearID=$_POST['academicYearID'];
     $programmeID=$_POST['programmeID'];
-    $batchID=$_POST['batchID'];
+    // $batchID=$_POST['batchID'];
     $graduationDate=$_POST['graduationDate'];
     $duration=$db->getData("programmes","programmeDuration","programmeID",$programmeID);
-    $student=$db->approveGraduatedList($programmeID,$duration,$academicYearID,$batchID);
+    $student=$db->approveGraduatedList($programmeID,$duration,$academicYearID);
     if(!empty($student))
     {
         ?>
@@ -91,12 +91,12 @@
 
                             $gradeID=$db->getMarksID($regNumber,$cwk, $sfe, $sup, $spc, $prj, $pt);
                             $gradePoint=$db->getData("grades","gradePoints","gradeID",$gradeID);*/
-                            $passCourseMark=$db->getExamCategoryMark(1,$regNumber,$studyYear);
-                            $passFinalMark=$db->getExamCategoryMark(2,$regNumber,$studyYear);
+                            $passCourseMark=$db->getExamCategoryMark(1,$regNumber);
+                            $passFinalMark=$db->getExamCategoryMark(2,$regNumbe);
                             $tmarks=$db->calculateTotal($cwk,$sfe,$sup,$spc,$prj,$pt);
                             if(!empty($sup))
                             {
-                                $passMark=$db->getExamCategoryMark(3,$regNumber,$studyYear);
+                                $passMark=$db->getExamCategoryMark(3,$regNumber);
                                 if($tmarks>=$passMark)
                                     $grade="C";
                                 else
@@ -106,7 +106,7 @@
                             }
                             else if(!empty($pt))
                             {
-                                $passMark=$db->getExamCategoryMark(6,$regNumber,$studyYear);
+                                $passMark=$db->getExamCategoryMark(6,$regNumber);
                                 $gradeID = $db->getMarksID($regNumber, $cwk, $sfe, $sup, $spc, $prj, $pt);
                                 if($tmarks>=$passMark)
                                     $grade=$db->getData("grades","gradeCode","gradeID",$gradeID);
@@ -116,7 +116,7 @@
                             }
                             else if(!empty($prj))
                             {
-                                $passMark=$db->getExamCategoryMark(5,$regNumber,$studyYear);
+                                $passMark=$db->getExamCategoryMark(5,$regNumber);
                                 $gradeID = $db->getMarksID($regNumber, $cwk, $sfe, $sup, $spc, $prj, $pt);
                                 if($tmarks>=$passMark)
                                     $grade=$db->getData("grades","gradeCode","gradeID",$gradeID);

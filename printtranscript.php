@@ -145,7 +145,7 @@ $header = array('Code', 'Course Name', 'Unit', 'Grade','Point','GPA');
                       $statusID=$std['status_id'];
                       $name="$fname $mname $lname";
 
-$pdf->AddPage(P);
+$pdf->AddPage('P');
 $pdf->setFont('Arial', '', 8); 
 $pdf->Banner();
 $pdf->setFont('Arial', '', 8);

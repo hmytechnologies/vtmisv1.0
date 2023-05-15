@@ -25,7 +25,7 @@
     <div class="pull-right">
             <a href="index3.php?sp=semester_setting" class="btn btn-warning">Back to Main Setting</a>
         </div>
-    </div>--></div>
+    </div>-->
     <hr>
 
   <div class="content">
@@ -178,7 +178,7 @@
  <?php
  }
  ?>
- ?>                     
+                  
                       </tbody>
                       </table>
  </div>
@@ -197,7 +197,7 @@
             
             <form name="" method="post" action="">
                 <?php
-                if( $_SESSION['main_role_session']==7)
+                if( $_SESSION['main_role_session']== 7 )
                 {
                     ?>
                     <div class="col-lg-3">

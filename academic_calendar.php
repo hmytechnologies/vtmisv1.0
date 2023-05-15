@@ -66,34 +66,34 @@
                             <tbody>
                             <?php
                             foreach ($semester as $sm) {
-                                $semisterID=$sm['semesterID'];
+                                // $semisterID=$sm['semesterID'];
                                 $academicYearID=$sm['academicYearID'];
 
-                                $startDate=$sm['startDate'];
-                                $endDate=$sm['endDate'];
+                                // $startDate=$sm['startDate'];
+                                // $endDate=$sm['endDate'];
 
                                 $semesterStatus=$sm['semesterStatus'];
 
                                 $semesterSettingID=$sm['semesterSettingID'];
 
-                                $semesterName=$sm['semesterName'];
+                                // $semesterName=$sm['semesterName'];
 
-                                $endDateRegistration=$sm['endDateRegistration'];
+                                // $endDateRegistration=$sm['endDateRegistration'];
                                 $examStartDate=$sm['examStartDate'];
                                 $examEndDate=$sm['examEndDate'];
-                                $endDatefinalExam=$sm['endDateFinalExam'];
+                                // $endDatefinalExam=$sm['endDateFinalExam'];
 
-                                $batchID=$sm['batchID'];
+                               
                                 if($semesterStatus==1)
                                     $status="Active";
                                 else
                                     $status="Not Active";
 
-                                $semister = $db->getRows('semister',array('where'=>array('semisterID'=>$semisterID),' order_by'=>' semisterName ASC'));
-                                foreach($semister as $sm)
-                                {
-                                    $semister_name=$sm['semisterName'];
-                                }
+                                // $semister = $db->getRows('semister',array('where'=>array('semisterID'=>$semisterID),' order_by'=>' semisterName ASC'));
+                                // foreach($semister as $sm)
+                                // {
+                                //     $semister_name=$sm['semisterName'];
+                                // }
                                 $academicYear = $db->getRows('academic_year',array('where'=>array('academicYearID'=>$academicYearID),' order_by'=>' academicYear ASC'));
                                 foreach($academicYear as $acy)
                                 {

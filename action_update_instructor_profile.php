@@ -3,32 +3,34 @@
 error_reporting (E_ALL | E_STRICT);*/
 include('DB.php');
 $db = new DBHelper();
+
+echo $_POST['edit'];
 //$userID=$_SESSION['user_session'];
 if(isset($_REQUEST['action_type']) && !empty($_REQUEST['action_type'])) {
-if ($_REQUEST['action_type'] == 'edit') {
-if (!empty($_POST['instructorID'])) {
-$instructorID = $_POST['instructorID'];
-$officeNumber = $_POST['officeNumber'];
-$fname = trim($_POST['fname']);
-$lname = trim($_POST["lname"]);
-$name = "$fname $lname";
-$userData = array(
-'salutation' => $_POST['salutation'],
-'titleID' => $_POST['titleID'],
-'gender' => $_POST['gender'],
-'phoneNumber' => $_POST['phone'],
-'employmentStatusID' => $_POST['employmentStatus'],
-'officeNumber' => $officeNumber,
-'departmentID'=>$_POST['departmentID'],
-'instructorStatus' => 1,
-'status'=>1
-);
-
-$userID = $db->getData("instructor", "userID", "instructorID", $instructorID);
+    $edit = $_REQUEST['action_type'];
+if ( $edit === 'edit') {
+   echo  $instructorID = $_POST['edit'];
+    echo $officeNumber = $_POST['officeNumber'];$officeNumber = $_POST['officeNumber'];
+   echo $fname = trim($_POST['fname']);
+   echo $lname = trim($_POST["lname"]);
+   echo  $name = "$fname $lname";
+    $userData = array(
+    'salutation' => $_POST['salutation'],
+    'titleID' => $_POST['titleID'],
+    'gender' => $_POST['gender'],
+    'phoneNumber' => $_POST['phone'],
+    'employmentStatusID' => $_POST['employmentStatus'],
+    'officeNumber' => $officeNumber,
+    'departmentID'=>$_POST['departmentID'],
+    'instructorStatus' => 1,
+    'status'=>1,
+    'createdBy'=>$instructorID
+    );
+    $userID = $db->getData("instructor", "userID", "instructorID", $instructorID);
 $condition = array('instructorID' => $instructorID);
 $update = $db->update("instructor", $userData, $condition);
 //upload image
-$imgFile = $_FILES['photo']['name'];
+echo $imgFile = $_FILES['photo']['name'];
 $tmp_dir = $_FILES['photo']['tmp_name'];
 $imgSize = $_FILES['photo']['size'];
 if (!empty($imgFile)) {
@@ -48,16 +50,17 @@ if (in_array($imgExt, $valid_extensions)) {
 if ($imgSize < 5000000) {
 move_uploaded_file($tmp_dir, $upload_dir . $userpic);
 $pictureData = array(
-'instructorImage' => $userpic
+ 'instructorImage' => $userpic
 );
-$condition = array('instructorID' => $_POST['instructorID']);
-$update = $db->update("instructor", $pictureData, $condition);
+$condition = array('instructorID' => $_POST['edit']);
+echo $update = $db->update("instructor", $pictureData, $condition);
 
 $userImage = array(
 'userImage' => $userpic
 );
 $condition_user = array('userID' => $userID);
 $update = $db->update("users", $userImage, $condition_user);
+header("Location:index3.php");
 
 } else {
 $errMSG = "Sorry, your image file is too large.";
@@ -68,8 +71,8 @@ $errMSG = "Sorry, only png,jpg,jpeg files are allowed.";
 $boolStaus = false;
 }
 }
+
+}
 header("Location:index3.php");
-}
-}
 }
 ?>
