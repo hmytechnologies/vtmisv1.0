@@ -35,6 +35,7 @@
 <div class="container">
   <div class="content">
     <h1>Student Academic Reports</h1>
+    <!-- Changing  -->
       <hr>
     <ul class="nav nav-tabs" id="myTab">
     

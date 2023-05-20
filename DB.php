@@ -286,7 +286,7 @@ class DBHelper
             }
         } catch (PDOException $e) {
             echo $e->getMessage();
-        }
+        }echo "Getting Data Error: " . $ex->getMessage();echo "Getting Data Error: " . $ex->getMessage();
     }
 
     public function doMobileLogin($uname, $upass)
@@ -1341,7 +1341,7 @@ WHERE
     public function getInstructorCourse($deptID, $semID)
     {
         $query = $this->conn->prepare("SELECT DISTINCT
-    cp.courseID,courseCode,courseName,courseTypeID,units,batchID
+    cp.courseID,courseCode,courseName,courseTypeID,units
 FROM
     course c,
     courseprogramme cp
@@ -2801,11 +2801,11 @@ WHERE
         }
     }
 
-    public function getTotalMarks($courseID, $semesterID, $batchID)
+    public function getTotalMarks($courseID, $semesterID)
     {
         try {
             $query = $this->conn->prepare("SELECT examScore from exam_result where courseID=:cid and semesterSettingID=:sem and batchID=:bid");
-            $query->execute(array(':cid' => $courseID, ':sem' => $semesterID, ':bid' => $batchID));
+            $query->execute(array(':cid' => $courseID, ':sem' => $semesterID));
             $exam_score = 0;
             while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
                 $exam_score += $this->decrypt($row['examScore']);
@@ -3299,7 +3299,7 @@ WHERE
                 $query = $this->conn->prepare("SELECT DISTINCT(s.registrationNumber),centerID from student s,student_programme sp where s.registrationNumber = sp.regNumber and programmeLevelID=:levelID and sp.programmeID=:progID  and sp.academicYearID=:acadID and currentStatus=:st and statusID=:stt");
                 $query->execute(array(':levelID' => $levelID, ':progID' => $programmeID, ':acadID' => $academicYearID, ':st' => 1, ':stt' => 1));
             } else {
-                $query = $this->conn->prepare("SELECT DISTINCT(s.registrationNumber),centerID from student s,student_programme sp where s.registrationNumber = sp.regNumber and centerRegistrationID=:centerID and programmeLevelID=:levelID and sp.programmeID=:progID  and sp.academicYearID=:acadID and currentStatus=:st and statusID=:stt");
+                $query = $this->conn->prepare("SELECT DISTINCT(s.registrationNumber),centerID from student s,student_programme sp where s.registrationNumber = sp.regNumber and sp.centerID=:centerID and programmeLevelID=:levelID and sp.programmeID=:progID  and sp.academicYearID=:acadID and currentStatus=:st and statusID=:stt");
                 $query->execute(array(':centerID' => $centerID, ':levelID' => $levelID, ':progID' => $programmeID, ':acadID' => $academicYearID, ':st' => 1, ':stt' => 1));
             }
             $data = array();

@@ -75,7 +75,7 @@
             }
             else
             {
-                $centerID=$_SESSION['department_session'];
+                $centerID=$_SESSION['user_session'];
             }
             ?>
 
@@ -144,9 +144,48 @@
                         </div>
                         <div class="col-lg-3">
                             <label for="Physical Address">Trade Name</label>
-                            <select name="programmeID" id="programmeID"  class="form-control" required>
-                                <option value="">Select Here</option>
-                            </select>
+                            <select name="programmeID"  class="form-control" required>
+                               <?php
+                                if($_SESSION['main_role_session']==7)
+                                {
+                                    $programmes = $db->getRows('programmes',array('order_by'=>'programmeName ASC'));
+                                }
+                                else {
+
+                                    $userId = $_SESSION['user_session'];
+                                    $instructor = $db->getRows('instructor',array('where'=>array('userID'=>$userId),'order_by'=>'instructorID ASC'));
+                               
+                                    if(!empty($instructor))
+                                     {
+                                        foreach($instructor as $i)
+                                      {
+                                             $instructorID=$i['instructorID'];
+                                             $centerID=$i['centerID'];
+                                             $departmentID=$i['departmentID'];
+                                            $instructorName=$db->getData("instructor","instructorName","instructorID",$instructorID);
+                                        }
+                                    }
+
+                                    $programmes = $db->getCenterMappingProgrammeList($centerID);
+                                    
+
+                                }
+                               if(!empty($programmes)){ 
+                                echo"<option value=''>Please Select Here</option>";
+                                $count = 0; foreach($programmes as $prog){ $count++;
+                                $programme_name=$prog['programmeName'];
+                                $programme_id=$prog['programmeID'];
+                               ?>
+                               <option value="<?php echo $programme_id;?>"><?php echo $programme_name;?></option>
+                               <?php }}
+                               else
+                               {
+                                   ?>
+                                   <option value=""><?php echo "No Data Found";?></option>
+                                <?php
+                               }
+                                  ?>
+                           </select>
                         </div>
 
                         <div class="col-lg-3">
@@ -176,9 +215,29 @@
                 <div class="row">
                     <?php
                     if(isset($_POST['doFind'])=="Find Records") {
+                        
                     $academicYearID = $_POST['admissionYearID'];
                     $programmeID = $_POST['programmeID'];
-                    $centerID = $_POST['centerID'];
+                    if(($_SESSION['main_role_session']==7)){
+                        $centerID = $_POST['centerID'];
+                    }else{
+
+                        $userId = $_SESSION['user_session'];
+                                    $instructor = $db->getRows('instructor',array('where'=>array('userID'=>$userId),'order_by'=>'instructorID ASC'));
+                               
+                                    if(!empty($instructor))
+                                     {
+                                        foreach($instructor as $i)
+                                      {
+                                             $instructorID=$i['instructorID'];
+                                             $centerID=$i['centerID'];
+                                             $departmentID=$i['departmentID'];
+                                            $instructorName=$db->getData("instructor","instructorName","instructorID",$instructorID);
+                                        }
+                                    }
+
+                    }
+                   
                     $levelID=$_POST['programmeLevelID'];
                     $student = $db->getStudentTransfer($centerID,$levelID,$programmeID,$academicYearID);
                     if (!empty($student)) {
@@ -291,7 +350,7 @@
                                             <td width="10"><input type='checkbox' class='checkbox_class' name='regNumber[]' value='<?php echo $regNumber;?>'></td>
                                         <input type="text" hidden name="centerID[]" value="<?php echo $centerID;?>">
                                         <td width="70"><?php echo $name ?></td>
-                                        <td width="50"><?php echo $st['registrationNumber']; ?></td>
+                                         <td width="50"><?php echo $st['registrationNumber']; ?></td>
                                         <td width="40"><?php /*echo $db->getData('center_registration','centerName','centerRegistrationID',$centerID);*/?>
                                         <select name="centerID[]" class="form-control">
                                             <option value="<?php echo $centerID;?>"><?php echo $db->getData('center_registration','centerName','centerRegistrationID',$centerID);?></option>

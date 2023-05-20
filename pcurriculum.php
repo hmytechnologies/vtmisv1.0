@@ -71,7 +71,7 @@
             <div class="row">
             <form name="" method="post" action="">
                        <div class="col-lg-4">
-                           <label for="MiddleName">Trade Name<?php echo $_SESSION['role_session'];?></label>
+                           <label for="MiddleName">Trade Name</label>
                             <select name="programmeID" class="form-control" required="">
                               <?php
                                 if($_SESSION['main_role_session']==7)
@@ -79,7 +79,24 @@
                                     $programmes = $db->getRows('programmes',array('order_by'=>'programmeName ASC'));
                                 }
                                 else {
-                                    $programmes = $db->getCenterMappingProgrammeList($_SESSION['department_session']);
+
+                                    $userId = $_SESSION['user_session'];
+                                    $instructor = $db->getRows('instructor',array('where'=>array('userID'=>$userId),'order_by'=>'instructorID ASC'));
+                               
+                                    if(!empty($instructor))
+                                     {
+                                        foreach($instructor as $i)
+                                      {
+                                             $instructorID=$i['instructorID'];
+                                             $centerID=$i['centerID'];
+                                             $departmentID=$i['departmentID'];
+                                            $instructorName=$db->getData("instructor","instructorName","instructorID",$instructorID);
+                                        }
+                                    }
+
+                                    $programmes = $db->getCenterMappingProgrammeList( $centerID);
+                                    
+
                                 }
                                if(!empty($programmes)){ 
                                 echo"<option value=''>Please Select Here</option>";

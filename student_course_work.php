@@ -116,13 +116,13 @@ if(isset($_POST['doFind'])=="View Records") {
                                 <td>".$db->getData("coursestatus","courseStatusCode","courseStatusID",$courseStatus)."</td><td>$units</td><td>40</td>";
 
                                 $cwk = $db->decrypt($db->getGrade($semesterSettingID, $courseID, $regNumber, 1));
-                                $published = $db->checkStatus($courseID, $semesterSettingID,'checked',$batchID);
+                                $published = $db->checkStatus($courseID, $semesterSettingID,'checked');
                                 //if($published==1)
                                 //{
                                     $scored=$cwk;
                                     $weighted=round(($scored/40)*40,2);
-                                    $totalMarks=$db->getTotalMarks($courseID, $semesterSettingID,$batchID);
-                                    $numberStudent=$db->getStudentCourseSum($courseID, $semesterSettingID,$batchID);
+                                    $totalMarks=$db->getTotalMarks($courseID, $semesterSettingID);
+                                    $numberStudent=$db->getStudentCourseSum($courseID, $semesterSettingID);
                                     $claverage=round($totalMarks/$numberStudent,2);
                                 /*}
                                 else

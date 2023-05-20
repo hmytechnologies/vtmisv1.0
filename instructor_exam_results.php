@@ -14,6 +14,27 @@
 </script>
 <?php $db=new DBHelper();
 $instructorID=$db->getData("instructor","instructorID","userID",$_SESSION['user_session']);
+
+if(!empty($instructor))
+ {
+    foreach($instructor as $i)
+  {
+         $instructorID=$i['instructorID'];
+         $centerID=$i['centerID'];
+         $departmentID=$i['departmentID'];
+        $instructorName=$db->getData("instructor","instructorName","instructorID",$instructorID);
+    }
+}
+$course=$db->getRows("center_programme_course",array('where'=>array('staffID'=> $instructorID),'order_by semesterName ASC'));
+
+    foreach ($course as $semi) {
+        // $semisterID=$s['semesterID'];
+        $courseID=$semi['courseID'];
+        $programmeLevelID=$semi['programmeLevelID'];
+        $programmeID=$semi['programmeID'];
+        $staffID=$semi['staffID'];
+        $count++;
+   }
 ?>
 <div class="container">
   <div class="content">
@@ -71,23 +92,26 @@ $instructorID=$db->getData("instructor","instructorID","userID",$_SESSION['user_
  });
 </script>
  <?php 
-$today=date("Y-m-d");
-$sm=$db->readSemesterSetting($today);
-foreach ($sm as $s) {
-    $semisterID=$s['semesterID'];
-    $academicYearID=$s['academicYearID'];
-    $semesterName=$s['semesterName'];
-    $semesterSettingID=$s['semesterSettingID'];
+// $today=date("Y-m-d");
+// $sm=$db->readSemesterSetting($today);
+$current_year = $db->getRows("semester_setting", array('where' => array('semesterStatus' => 1)));
+
+foreach ($current_year as $y) {
+    $academicYearID = $y['academicYearID'];
 }
-$courseprogramme = $db->getInstructorSemesterCourse($semesterSettingID,$instructorID);
-if(!empty($courseprogramme))
-{
+// echo $academicYearID ;
+
+if(!empty($current_year ))
+ {
+    
+//     echo $courseprogramme = $db->getInstructorCourse($departmentID,$semesterSettingID);
 ?>
 <div class="row">
  <div class="col-md-12">     
  <div class="box box-solid box-primary">
           <div class="box-header with-border text-center">
-            <h3 class="box-title">Registered Course for <?php echo $semesterName;?></h3>
+            <h3 class="box-title">Registered Course for 
+            <?php echo $db->getData('academic_year','academicYear','academicYearID',$academicYearID); ?></h3>
           </div>
           <!-- /.box-header -->
           <div class="box-body">
@@ -106,12 +130,18 @@ if(!empty($courseprogramme))
   </thead>
   <tbody>    
 <?php
-$count = 0; foreach($courseprogramme as $std){ $count++;
-$courseID=$std['courseID'];
-// $courseProgrammeID=$std['courseProgrammeID'];
-$batchID=$std['batchID'];
+$count = 0;
+foreach ($current_year as $s) {
+    $semisterID=$s['semesterID'];
+    $academicYearID=$s['academicYearID'];
+    $semesterName=$s['semesterName'];
+    $semesterSettingID=$s['semesterSettingID'];
+ $count++;
 
-$course = $db->getRows('course',array('where'=>array('courseID'=>$courseID),'order_by'=>'courseID ASC'));
+// $courseProgrammeID=$std['courseProgrammeID'];
+// $batchID=$std['batchID'];
+ $academicYearID=$s['academicYearID'];
+ $course = $db->getRows('course',array('where'=>array('courseID'=>$courseID),'order_by'=>'courseID ASC'));
 if(!empty($course))
 {
     foreach($course as $c)
@@ -136,12 +166,14 @@ if(!empty($course))
 //     $instructorName="Not assigned";
 // }
 
-$studentNumber=$db->getStudentCourseSum($courseID,$semesterSettingID,$batchID);
 
-$checked=$db->checkStatus($courseID,$semesterSettingID,'checked',$batchID);
-$published=$db->checkStatus($courseID,$semesterSettingID,'status',$batchID);
+ 
+$studentNumber=$db->getStudentCourseSum($centerID,$academicYearID,$programmeLevelID,$programmeID);
 
-$boolExamStatus=$db->checkExamResultStatus($courseID,$semesterSettingID,$batchID);
+$checked=$db->checkStatus($courseID, $academicYearID,'checked');
+$published=$db->checkStatus($courseID, $academicYearID,'status');
+
+$boolExamStatus=$db->checkExamResultStatus($courseID, $academicYearID);
 
 
 if($published==1)
@@ -182,26 +214,26 @@ else
             
             $viewButton = '
     	   <div class="btn-group">
-    	         <a href="index3.php?sp=view_score&cid='.$db->encrypt($courseID).'&sid='.$db->encrypt($semesterSettingID).'&bid='.$db->encrypt($batchID).'" class="glyphicon glyphicon-eye-open"></a>
+    	         <a href="index3.php?sp=view_score&cid='.$db->encrypt($courseID).'&sid='.$db->encrypt($semesterSettingID).'" class="glyphicon glyphicon-eye-open"></a>
     	   </div>';
     }
     else
     {
         $addButton = '
     	<div class="btn-group">
-    	     <a href="index3.php?sp=add_score&cid='.$db->encrypt($courseID).'&sid='.$db->encrypt($semesterSettingID).'&bid='.$db->encrypt($batchID).'" class="glyphicon glyphicon-plus"></a>
+    	     <a href="index3.php?sp=add_score&cid='.$db->encrypt($courseID).'&sid='.$db->encrypt($semesterSettingID).'" class="glyphicon glyphicon-plus"></a>
     	</div>';
         
         $excelButton = '
     	<div class="btn-group">
-    	     <a href="index3.php?sp=import_score&cid='.$db->encrypt($courseID).'&sid='.$db->encrypt($semesterSettingID).'&bid='.$db->encrypt($batchID).'"><i class="glyphicon glyphicon-import"></i></a>
+    	     <a href="index3.php?sp=import_score&cid='.$db->encrypt($courseID).'&sid='.$db->encrypt($semesterSettingID).'"><i class="glyphicon glyphicon-import"></i></a>
     	</div>';
         
         if($boolExamStatus==true)
         {
             $viewButton = '
     	   <div class="btn-group">
-    	         <a href="index3.php?sp=view_score&cid='.$db->encrypt($courseID).'&sid='.$db->encrypt($semesterSettingID).'&bid='.$db->encrypt($batchID).'" class="glyphicon glyphicon-eye-open"></a>
+    	         <a href="index3.php?sp=view_score&cid='.$db->encrypt($courseID).'&sid='.$db->encrypt($semesterSettingID).'" class="glyphicon glyphicon-eye-open"></a>
     	   </div>';
         }
         else 
@@ -221,7 +253,7 @@ else
  <td><?php echo $courseName;?></td>
  <td><?php echo $courseCode;?></td>
  <td><?php echo $studentNumber;?></td>
- <td><?php echo $db->getData("batch","batchName","batchID",$batchID);?></td>
+
  <td><?php echo $addButton;?></td>
  <td><?php echo $excelButton;?></td>
  <td><?php echo $viewButton;?></td>
@@ -282,6 +314,7 @@ else
  <?php 
  if(isset($_POST['doFind'])=="Find Records")
  {
+    echo "dapry";
      $semesterID=$_POST['semisterID'];
      $semester=$db->getRows("semester_setting",array('where'=>array('semesterSettingID'=>$semesterID),'order_by semesterName ASC'));
      if(!empty($semester))
@@ -293,8 +326,22 @@ else
          $semesterName=$sm['semesterName'];
          $semesterSettingID=$sm['semesterSettingID'];
      }
-     
-     $courseprogramme = $db->getInstructorSemesterCourse($semesterSettingID,$instructorID);
+     $userId = $_SESSION['user_session'];
+    $instructor = $db->getRows('instructor',array('where'=>array('userID'=>$userId),'order_by'=>'instructorID ASC'));
+
+    if(!empty($instructor))
+     {
+        foreach($instructor as $i)
+      {
+             $instructorID=$i['instructorID'];
+             $centerID=$i['centerID'];
+             $departmentID=$i['departmentID'];
+            $instructorName=$db->getData("instructor","instructorName","instructorID",$instructorID);
+        }
+    }
+ 
+   
+     $courseprogramme = $db->getInstructorCourse($departmentID,$semesterSettingID);
      if(!empty($courseprogramme))
      {
          $count = 0; 
@@ -332,7 +379,7 @@ else
   {
             $count++;
             $courseID=$std['courseID'];
-            $batchID=$std['batchID'];
+         
             // $courseProgrammeID=$std['courseProgrammeID'];
      
      $course = $db->getRows('course',array('where'=>array('courseID'=>$courseID),'order_by'=>'courseID ASC'));
@@ -359,13 +406,40 @@ else
     //  {
     //      $instructorName="Not assigned";
     //  }
+
+    $userId = $_SESSION['user_session'];
+    $instructor = $db->getRows('instructor',array('where'=>array('userID'=>$userId),'order_by'=>'instructorID ASC'));
+
+    if(!empty($instructor))
+     {
+        foreach($instructor as $i)
+      {
+             $instructorID=$i['instructorID'];
+             $centerID=$i['centerID'];
+             $departmentID=$i['departmentID'];
+            $instructorName=$db->getData("instructor","instructorName","instructorID",$instructorID);
+        }
+    }
+    $center_program_course = $db->getRows('center_programme_course',array('where'=>array('staffID'=>$instructorID),'order_by'=>'centerProgrammeCourseID ASC'));
+
+    if(!empty($center_program_course))
+     {
+        foreach($center_program_course as $ii)
+      {
+        $programmeLevelID=$ii['programmeLevelID'];
+        $programmeID=$ii['programmeID'];
+        $academicYearID=$ii['academicYearID'];
+        $courseID=$ii['courseID'];
+        }
+    }
+   
      
-     $studentNumber=$db->getStudentCourseSum($courseID,$semesterSettingID,$batchID);
+    $studentNumber=$db->getStudentCourseSum($centerID,$academicYearID,$programmeLevelID,$programmeID);
      
-     $checked=$db->checkStatus($courseID,$semesterSettingID,'checked',$batchID);
-     $published=$db->checkStatus($courseID,$semesterSettingID,'status',$batchID);
+     $checked=$db->checkStatus($courseID,$academicYearID,'checked');
+     $published=$db->checkStatus($courseID, $academicYearID,'status');
      
-     $boolExamStatus=$db->checkExamResultStatus($courseID,$semesterSettingID,$batchID);
+     $boolExamStatus=$db->checkExamResultStatus($courseID, $academicYearID);
      
      
      if($checked==1)
@@ -411,26 +485,26 @@ else
                              
                              $viewButton = '
     	   <div class="btn-group">
-    	         <a href="index3.php?sp=view_score&cid='.$db->encrypt($courseID).'&sid='.$db->encrypt($semesterSettingID).'&bid='.$db->encrypt($batchID).'" class="glyphicon glyphicon-eye-open"></a>
+    	         <a href="index3.php?sp=view_score&cid='.$db->encrypt($courseID).'&sid='.$db->encrypt($semesterSettingID).'" class="glyphicon glyphicon-eye-open"></a>
     	   </div>';
                          }
                          else
                          {
                              $addButton = '
     	<div class="btn-group">
-    	     <a href="index3.php?sp=add_score&cid='.$db->encrypt($courseID).'&sid='.$db->encrypt($semesterSettingID).'&bid='.$db->encrypt($batchID).'" class="glyphicon glyphicon-plus"></a>
+    	     <a href="index3.php?sp=add_score&cid='.$db->encrypt($courseID).'&sid='.$db->encrypt($semesterSettingID).'" class="glyphicon glyphicon-plus"></a>
     	</div>';
                              
                              $excelButton = '
     	<div class="btn-group">
-    	     <a href="index3.php?sp=import_score&cid='.$db->encrypt($courseID).'&sid='.$db->encrypt($semesterSettingID).'&bid='.$db->encrypt($batchID).'"><i class="glyphicon glyphicon-import"></i></a>
+    	     <a href="index3.php?sp=import_score&cid='.$db->encrypt($courseID).'&sid='.$db->encrypt($semesterSettingID).'"><i class="glyphicon glyphicon-import"></i></a>
     	</div>';
                              
                              if($boolExamStatus==true)
                              {
                                  $viewButton = '
     	   <div class="btn-group">
-    	         <a href="index3.php?sp=view_score&cid='.$db->encrypt($courseID).'&sid='.$db->encrypt($semesterSettingID).'&bid='.$db->encrypt($batchID).'" class="glyphicon glyphicon-eye-open"></a>
+    	         <a href="index3.php?sp=view_score&cid='.$db->encrypt($courseID).'&sid='.$db->encrypt($semesterSettingID).'" class="glyphicon glyphicon-eye-open"></a>
     	   </div>';
                              }
                              else
@@ -450,7 +524,7 @@ else
  <td><?php echo $courseName;?></td>
  <td><?php echo $courseCode;?></td>
  <td><?php echo $studentNumber;?></td>
- <td><?php echo $db->getData("batch","batchName","batchID",$batchID);?></td>
+
  <td><?php echo $addButton;?></td>
  <td><?php echo $excelButton;?></td>
  <td><?php echo $viewButton;?></td>

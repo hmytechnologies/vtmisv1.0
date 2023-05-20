@@ -70,11 +70,24 @@
             			?>
                          <div class="col-lg-3">
                            <label for="MiddleName">Center Name</label>
+                                
                              <select name="centerID" id="centerIDD"  class="form-control" required>
                                  <option value="">Select Here</option>
                                  <?php
-
-                                 $center = $db->getRows('center_registration',array('where'=>array('centerRegistrationID'=>$_SESSION['department_session']),'order_by'=>'centerName ASC'));
+                                    $userId = $_SESSION['user_session'];
+                                    $instructor = $db->getRows('instructor',array('where'=>array('userID'=>$userId),'order_by'=>'instructorID ASC'));
+                            
+                                    if(!empty($instructor))
+                                     {
+                                        foreach($instructor as $i)
+                                      {
+                                             $instructorID=$i['instructorID'];
+                                             $centerID=$i['centerID'];
+                                             $departmentID=$i['departmentID'];
+                                            $instructorName=$db->getData("instructor","instructorName","instructorID",$instructorID);
+                                        }
+                                    }
+                                 $center = $db->getRows('center_registration',array('where'=>array('centerRegistrationID'=> $centerID),'order_by'=>'centerName ASC'));
                                  if(!empty($center)){
 
                                      $count = 0; foreach($center as $cnt){ $count++;
@@ -120,7 +133,22 @@
               if($_SESSION['main_role_session']==7)
                   $centerID=$_POST['centerID'];
               else
-                  $centerID=$_SESSION['department_session'];
+                //   $centerID=$_SESSION['department_session'];\
+
+
+                $userId = $_SESSION['user_session'];
+                                    $instructor = $db->getRows('instructor',array('where'=>array('userID'=>$userId),'order_by'=>'instructorID ASC'));
+                            
+                                    if(!empty($instructor))
+                                     {
+                                        foreach($instructor as $i)
+                                      {
+                                             $instructorID=$i['instructorID'];
+                                             $centerID=$i['centerID'];
+                                             $departmentID=$i['departmentID'];
+                                            $instructorName=$db->getData("instructor","instructorName","instructorID",$instructorID);
+                                        }
+                                    }
 
               $academicYearID=$_POST['academicYearID'];
               ?>
@@ -198,6 +226,7 @@
             <form name="" method="post" action="">
                 <?php
                 if( $_SESSION['main_role_session']== 7 )
+
                 {
                     ?>
                     <div class="col-lg-3">
@@ -228,7 +257,21 @@
                             <option value="">Select Here</option>
                             <?php
 
-                            $center = $db->getRows('center_registration',array('where'=>array('centerRegistrationID'=>$_SESSION['department_session']),'order_by'=>'centerName ASC'));
+                                $userId = $_SESSION['user_session'];
+                                $instructor = $db->getRows('instructor',array('where'=>array('userID'=>$userId),'order_by'=>'instructorID ASC'));
+
+                                if(!empty($instructor))
+                                {
+                                    foreach($instructor as $i)
+                                {
+                                        $instructorID=$i['instructorID'];
+                                        $centerID=$i['centerID'];
+                                        $departmentID=$i['departmentID'];
+                                        $instructorName=$db->getData("instructor","instructorName","instructorID",$instructorID);
+                                    }
+                                }
+
+                            $center = $db->getRows('center_registration',array('where'=>array('centerRegistrationID'=>  $centerID),'order_by'=>'centerName ASC'));
                             if(!empty($center)){
 
                                 $count = 0; foreach($center as $cnt){ $count++;
@@ -273,7 +316,21 @@
                 if($_SESSION['main_role_session']==7)
                     $centerID=$_POST['centerID'];
                 else
-                    $centerID=$_SESSION['department_session'];
+                    // $centerID=$_SESSION['department_session'];
+
+                    $userId = $_SESSION['user_session'];
+                    $instructor = $db->getRows('instructor',array('where'=>array('userID'=>$userId),'order_by'=>'instructorID ASC'));
+            
+                    if(!empty($instructor))
+                     {
+                        foreach($instructor as $i)
+                      {
+                             $instructorID=$i['instructorID'];
+                             $centerID=$i['centerID'];
+                             $departmentID=$i['departmentID'];
+                            $instructorName=$db->getData("instructor","instructorName","instructorID",$instructorID);
+                        }
+                    }
 
                 $academicYearID=$_POST['academicYearID'];
                 ?>
@@ -300,6 +357,7 @@
                          </thead>
                       <tbody>
  <?php 
+   $totalHours=0;
  $progStudy= $db->getInstructorCourseProgramme($centerID,$academicYearID);
  if(!empty($progStudy))
  {
@@ -327,6 +385,9 @@
                      $courseName=$cv['courseName'];
                      $units=$cv['units'];
                      $courseTypeID=$cv['courseTypeID'];
+                     $nhours=$cv['numberOfHours'];
+                     $courseOutline=$cv['courseOutline'];
+                     $totalHours+=$nhours;
 
                      $studentNumber=$db->getStudentCourseSum($centerID,$academicYearID,$programmeLevelID,$programmeID);
                  }
@@ -346,7 +407,7 @@
          }
          ?>
          </tbody>
-         <tr><th colspan="5" style="font-size:16px;">Total Number of Hours</th><th style="font-size:16px;"><?php echo $tnhours;?></th></tr>
+         <tr><th colspan="5" style="font-size:16px;">Total Number of Hours</th><th style="font-size:16px;"><?php echo $totalHours;?></th></tr>
          
          <?php
      }
