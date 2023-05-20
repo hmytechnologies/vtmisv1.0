@@ -61,7 +61,7 @@
                                             $gender=$std['gender'];
                                             $regNumber=$std['registrationNumber'];
                                             $programmeID=$std['programmeID'];
-                                            $batchID=$std['batchID'];
+                                            // $batchID=$std['batchID'];
                                             $studentPicture=$std['studentPicture'];
                                             $name="$fname $mname $lname";
 
@@ -87,8 +87,8 @@
                                                     echo "$programmeName</td>";
                                                 }
                                             }
-                                            echo "<td>".$db->getData("batch","batchName","batchID",$batchID)."</td><td>Graduate</td>";
-
+                                            // echo "<td>".$db->getData("batch","batchName","batchID",$batchID)."</td><td>Graduate</td>";
+                                            echo "<td>Graduate</td>";
                                         }
                                         ?>
                                         <td>

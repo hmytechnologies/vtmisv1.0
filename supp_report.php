@@ -210,7 +210,7 @@
                         echo " ";
                         echo $db->getData("programmes", "programmeName", "programmeID", $programmeID); ?>
                         <?php echo $db->getData("semester_setting", "semesterName", "semesterSettingID", $semesterID); ?>
-                        <?php echo $db->getData("batch", "batchName", "batchID", $batchID); ?></h3>
+                       
                 </div>
                 <!-- /.box-header -->
                 <div class="box-body table-responsive no-padding">

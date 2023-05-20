@@ -532,7 +532,7 @@
                                     <table class="table table-striped table-bordered table-condensed">
                                         <thead>
                                         <tr>
-                                            <th>Student Name</th>
+                                            <th>Student Name  echo "<td>".$db->getData("batch","batchName","batchID",$batchID)."</td><td>Graduate</td>";</th>
                                             <th>Reg.No</th>
                                             <th>Gender</th>
                                             <th>Level</th>

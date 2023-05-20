@@ -1,4 +1,5 @@
 <?php
+// 
 $instructor = $db->getRows('instructor',array('where'=>array('userID'=>$userID),'order by'=>'firstName ASC'));
 if(!empty($instructor)) {
     $x = 0;
@@ -13,14 +14,13 @@ if(!empty($instructor)) {
 
 
         ?>
-            <form action="action_update_instructor_profile.php" enctype="multipart/form-data" method="post" name="register"
-                  id="register">
+            <form action="action_update_instructor_profile.php" enctype="multipart/form-data" method="post" >
                 <div class="col-md-10">
                         <div class="well">
                             <fieldset>
-                                <legend>Personal Information</legend>
-                                <form name="" method="post" enctype="multipart/form-data"
-                                      action="action_instructor.php">
+                                <legend>Personal Information </legend>
+                                <!-- <form name="" method="post" enctype="multipart/form-data"
+                                      action="action_instructor.php"> -->
                                     <div class="modal-body">
                                         <script>
                                             function readURL(input) {
@@ -242,7 +242,7 @@ if(!empty($instructor)) {
                                         <div class="row">
                                             <div class="col-lg-6"></div>
                                             <div class="col-lg-6">
-                                                <input type="hidden" name="instructorID" value="<?php echo $inst['instructorID']; ?>">
+                                                <input type="hidden" name="edit" value="<?php echo $inst['instructorID']; ?>">
                                                 <input type="hidden" name="action_type" value="edit"/>
                                                 <input type="submit" name="doSubmit" value="Update Records" class="btn btn-success">
                                                 <button onclick="goBack()" class="btn btn-primary">Cancel</button>
