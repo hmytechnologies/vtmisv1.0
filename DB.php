@@ -588,7 +588,7 @@ class DBHelper
 
     public function getCourseCredit($levelID, $progID)
     {
-        $query = $this->conn->prepare("SELECT DISTINCT(cp.courseID),courseName,courseCode,units,courseTypeID,courseCategoryID from programmemaping cp,course c
+        $query = $this->conn->prepare("SELECT DISTINCT(cp.courseID),courseName,courseCode,units,courseTypeID,courseRank,courseCategoryID from programmemaping cp,course c
         where c.courseID=cp.courseID
         AND cp.programmeID=:progID 
         AND cp.programmeLevelID=:levelID
@@ -826,15 +826,15 @@ WHERE
     }
 
 
-    public function  isFieldExistMult($table,$field,$field2,$field3,$field4){
+    public function  isFieldExistMult($table, $field, $field2, $field3, $field4)
+    {
 
-        $query = $this->getRows($table, array('where' => array($field => $field2,$field3 => $field4,), 'order_by' => $field . ' ASC'));
+        $query = $this->getRows($table, array('where' => array($field => $field2, $field3 => $field4,), 'order_by' => $field . ' ASC'));
         if (!empty($query)) {
             return true;
         } else {
             return false;
         }
-
     }
 
     /*public function getGrade($semesterID,$courseID,$regNumber,$examCategoryID)
