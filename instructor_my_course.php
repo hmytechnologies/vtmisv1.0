@@ -70,7 +70,34 @@ $instructorID=$db->getData("instructor","instructorID","userID",$_SESSION['user_
  <?php
 
 $today=date("Y-m-d");
-$academicYearID=$db->getCurrentAcademicYear();
+// $academicYearID=$db->getCurrentAcademicYear();
+$userId = $_SESSION['user_session'];
+    $instructor = $db->getRows('instructor',array('where'=>array('userID'=>$userId),'order_by'=>'instructorID ASC'));
+
+    if(!empty($instructor))
+     {
+        foreach($instructor as $i)
+      {
+             $instructorID=$i['instructorID'];
+             $centerID=$i['centerID'];
+             $departmentID=$i['departmentID'];
+            $instructorName=$db->getData("instructor","instructorName","instructorID",$instructorID);
+        }
+    }
+    $center_program_course = $db->getRows('center_programme_course',array('where'=>array('staffID'=>$instructorID),'order_by'=>'centerProgrammeCourseID ASC'));
+
+    if(!empty($center_program_course))
+     {
+        foreach($center_program_course as $ii)
+      {
+        $programmeLevelID=$ii['programmeLevelID'];
+        $programmeID=$ii['programmeID'];
+        $academicYearID=$ii['academicYearID'];
+        }
+    }
+   
+  
+     
 
 $courseprogramme = $db->getInstructorAcademicCourse($academicYearID,$instructorID);
 if(!empty($courseprogramme))
@@ -124,8 +151,22 @@ if(!empty($courseprogramme))
              $totalHours+=$nhours;
          }
      }
+     $userId = $_SESSION['user_session'];
+     $instructor = $db->getRows('instructor',array('where'=>array('userID'=>$userId),'order_by'=>'instructorID ASC'));
 
-      $studentNumber=$db->getStudentCourseSum($_SESSION['department_session'],$academicYearID,$programmeLevelID,$programmeID);
+     if(!empty($instructor))
+      {
+         foreach($instructor as $i)
+       {
+              $instructorID=$i['instructorID'];
+              $centerID=$i['centerID'];
+              $departmentID=$i['departmentID'];
+             $instructorName=$db->getData("instructor","instructorName","instructorID",$instructorID);
+         }
+     }
+     
+
+      $studentNumber=$db->getStudentCourseSum($centerID,$academicYearID,$programmeLevelID,$programmeID);
      if($studentNumber>0)
      {
         $viewButton = '
@@ -181,7 +222,11 @@ if(!empty($courseprogramme))
 else 
 {
     ?>
-    <h4 class="text-danger">No Subject Found</h4>
+    <h4 class="text-danger">No Subject Found<?php  echo $center_program_course; 
+          
+          echo  $programmeLevel;
+    
+    ?></h4>
     <?php 
 }
  ?> 
@@ -202,7 +247,8 @@ else
                     <label for="FirstName">Academic Year</label>
                     <select name="academicYearID" id="academicYearID" class="form-control" required>
                         <?php
-                        $academic_year = $db->getRows('academic_year',array('where'=>array('status'=>1),'order_by'=>'academicYear ASC'));
+                        // $academic_year = $db->getRows('academic_year',array('where'=>array('status'=>1),'order_by'=>'academicYear ASC'));
+                        $academic_year = $db->getRows('academic_year',array('order_by'=>'academicYear ASC'));
                         if(!empty($academic_year)){
                             echo"<option value=''>Please Select Here</option>";
                             $count = 0; foreach($academic_year as $sm){ $count++;
@@ -226,20 +272,34 @@ else
  <?php 
  if(isset($_POST['doFind'])=="Find Records")
  {
-     $semesterID=$_POST['semisterID'];
-     $semester=$db->getRows("semester_setting",array('where'=>array('semesterSettingID'=>$semesterID),'order_by semesterName ASC'));
+     $academicYearID=$_POST['academicYearID'];
+     $semester=$db->getRows("semester_setting",array('where'=>array('academicYearID'=>$academicYearID),'order_by semesterName ASC'));
      if(!empty($semester))
      {
      foreach($semester as $sm)
      {
          $semisterID=$sm['semesterID'];
-         $academicYearID=$sm['academicYearID'];
+        $academicYearID=$sm['academicYearID'];
          $semesterName=$sm['semesterName'];
          $semesterSettingID=$sm['semesterSettingID'];
      }
+
+     $userId = $_SESSION['user_session'];
+     $instructor = $db->getRows('instructor',array('where'=>array('userID'=>$userId),'order_by'=>'instructorID ASC'));
+
+     if(!empty($instructor))
+      {
+         foreach($instructor as $i)
+       {
+              $instructorID=$i['instructorID'];
+              $centerID=$i['centerID'];
+              $departmentID=$i['departmentID'];
+             $instructorName=$db->getData("instructor","instructorName","instructorID",$instructorID);
+         }
+     }
      
  
-     $courseprogramme = $db->getInstructorSemesterCourse($semesterSettingID,$instructorID);
+     $courseprogramme = $db->getInstructorCourse($departmentID,$semesterSettingID);
      if(!empty($courseprogramme))
      {
          $count = 0; 
@@ -254,7 +314,7 @@ else
  		 <div class="box box-solid box-primary">
 
              <div class="box-header with-border text-center">
-                 <h3 class="box-title">List of Assigned Courses for <?php echo $semesterName;?></h3>
+                 <h3 class="box-title">List of Assigned Courses for <?php echo $semesterName; echo' ';echo  $academicYearID?></h3>
              </div>
 
           <!-- /.box-header -->
@@ -269,7 +329,7 @@ else
     <th>Credits</th>
     <th>Hours</th>
     <th>No. of Students</th>
-    <th>Slot Name</th>
+    <!-- <th>Slot Name</th> -->
     <th>View</th>
      </tr>
   </thead>
@@ -280,7 +340,7 @@ else
   {
             $count++;
             $courseID=$std['courseID'];
-            $batchID=$std['batchID'];
+            // $batchID=$std['batchID'];
             // $courseProgrammeID=$std['courseProgrammeID'];
      
      $course = $db->getRows('course',array('where'=>array('courseID'=>$courseID),'order_by'=>'courseID ASC'));
@@ -309,9 +369,32 @@ else
     //  else
     //  {
     //      $instructorName="Not assigned";
-    //  }
-     
-     $studentNumber=$db->getStudentCourseSum($courseID,$semesterSettingID,$batchID);
+    //  }getStudentCourseSum($centerID, $academicYearID, $programmeLevelID, $progID)
+
+    $userId = $_SESSION['user_session'];
+    $instructor = $db->getRows('instructor',array('where'=>array('userID'=>$userId),'order_by'=>'instructorID ASC'));
+
+    if(!empty($instructor))
+     {
+        foreach($instructor as $i)
+      {
+             $instructorID=$i['instructorID'];
+             $centerID=$i['centerID'];
+             $departmentID=$i['departmentID'];
+            $instructorName=$db->getData("instructor","instructorName","instructorID",$instructorID);
+        }
+    }
+    $center_program_course = $db->getRows('center_programme_course',array('where'=>array('staffID'=>$instructorID),'order_by'=>'centerProgrammeCourseID ASC'));
+    if(!empty($center_program_course))
+    {
+       foreach($center_program_course as $ii)
+     {
+       $programmeLevelID=$ii['programmeLevelID'];
+       $programmeID=$ii['programmeID'];
+       $academicYearID=$ii['academicYearID'];
+       }
+   }
+     $studentNumber=$db->getStudentCourseSum( $centerID, $academicYearID, $programmeLevelID,$programmeID);
      
      if($studentNumber>0)
      {
@@ -338,7 +421,7 @@ else
   <td><?php echo $units;?></td>
   <td><?php echo $nhours;?></td>
  <td><?php echo $studentNumber;?></td>
- <td><?php echo $db->getData("batch","batchName","batchID",$batchID);?></td>
+ 
  <td><?php echo $viewButton;?></td>
  </tr>
  

@@ -55,7 +55,8 @@ $instructorID=$db->getData("instructor","instructorID","userID",$_SESSION['user_
                     <label for="FirstName">Academic Year</label>
                     <select name="academicYearID" id="academicYearID" class="form-control" required>
                         <?php
-                        $academic_year = $db->getRows('academic_year',array('where'=>array('status'=>1),'order_by'=>'academicYear ASC'));
+                        // $academic_year = $db->getRows('academic_year',array('where'=>array('status'=>1),'order_by'=>'academicYear ASC'));
+                        $academic_year = $db->getRows('academic_year',array('order_by'=>'academicYear ASC'));
                         if(!empty($academic_year)){
                             echo"<option value=''>Please Select Here</option>";
                             $count = 0; foreach($academic_year as $sm){ $count++;

@@ -36,6 +36,7 @@ $db = new DBHelper(); ?>
 <hr>
 <h3>Assign Course In a Semester</h3>
 <div class="row">
+  
 
     <form name="" method="post" action="">
 
@@ -44,8 +45,26 @@ $db = new DBHelper(); ?>
             $centerID = 'all';
         else
             $centerID = $_SESSION['department_session'];
+           $userId = $_SESSION['user_session'];
         ?>
         <input type="text" hidden name="centerID" id="centerIDD" value="<?php echo $centerID; ?>">
+        <?php 
+             $userId = $_SESSION['user_session'];
+            $instructor = $db->getRows('instructor',array('where'=>array('userID'=>$userId),'order_by'=>'instructorID ASC'));
+
+            if(!empty($instructor))
+             {
+                foreach($instructor as $i)
+              {
+                     $instructorID=$i['instructorID'];
+                     $centerID=$i['centerID'];
+                     $departmentID=$i['departmentID'];
+                    $instructorName=$db->getData("instructor","instructorName","instructorID",$instructorID);
+                }
+            }
+        
+        ?>
+       
 
         <div class="col-lg-3">
             <label for="MiddleName">Academic Year</label>
@@ -93,7 +112,7 @@ $db = new DBHelper(); ?>
                 if ($_SESSION['main_role_session'] == 7) {
                     $programmes = $db->getRows('programmes', array('order_by' => 'programmeName ASC'));
                 } else {
-                    $programmes = $db->getCenterMappingProgrammeList($_SESSION['department_session']);
+                    $programmes = $db->getCenterMappingProgrammeList($centerID);
                 }
                 if (!empty($programmes)) {
                     echo "<option value=''>Please Select Here</option>";
@@ -107,7 +126,7 @@ $db = new DBHelper(); ?>
                     <?php }
                 } else {
                     ?>
-                    <option value=""><?php echo "No Data Found"; ?></option>
+                    <option value=""><?php echo "No Data Found";  ?></option>
                 <?php
                 }
                 ?>
@@ -137,6 +156,8 @@ $db = new DBHelper(); ?>
     ?>
 </div>
 <div class="row">
+
+       
     <div class="col-md-12">
         <?php
         if ((isset($_POST['doFind']) == "Find Records") || (isset($_REQUEST['action']) == "getRecords")) {
@@ -148,8 +169,23 @@ $db = new DBHelper(); ?>
                 $academicYearID = $db->my_simple_crypt($_REQUEST['acaid'], 'd');
             }
 
+            $userId = $_SESSION['user_session'];
+            $instructor = $db->getRows('instructor',array('where'=>array('userID'=>$userId),'order_by'=>'instructorID ASC'));
 
-            $courseData = $db->getCenterMappingCourseList($_SESSION['department_session'], $academicYearID, $programmeID, $programmeLevelID);
+            if(!empty($instructor))
+             {
+                foreach($instructor as $i)
+              {
+                     $instructorID=$i['instructorID'];
+                     $centerID=$i['centerID'];
+                     $departmentID=$i['departmentID'];
+                    $instructorName=$db->getData("instructor","instructorName","instructorID",$instructorID);
+                }
+            }
+
+
+            // $courseData = $db->getCenterMappingCourseList($_SESSION['department_session'], $academicYearID, $programmeID, $programmeLevelID);
+            $courseData = $db->getCenterMappingCourseList( $userId, $academicYearID, $programmeID, $programmeLevelID);
             if (!empty($courseData)) {
         ?>
                 <h4 class="text-danger">List of Course <?php
@@ -253,7 +289,21 @@ $db = new DBHelper(); ?>
 <div class="row">
     <div class="col-md-12">
         <?php
-            $data = $db->getCourseInstructor($_SESSION['department_session'], $academicYearID);
+        $userId = $_SESSION['user_session'];
+        $instructor = $db->getRows('instructor',array('where'=>array('userID'=>$userId),'order_by'=>'instructorID ASC'));
+
+        if(!empty($instructor))
+         {
+            foreach($instructor as $i)
+          {
+                 $instructorID=$i['instructorID'];
+                 $centerID=$i['centerID'];
+                 $departmentID=$i['departmentID'];
+                $instructorName=$db->getData("instructor","instructorName","instructorID",$instructorID);
+            }
+        }
+            // $data = $db->getCourseInstructor($_SESSION['department_session'], $academicYearID);
+            $data = $db->getCourseInstructor($userId, $academicYearID);
             if (!empty($data)) {
         ?>
 

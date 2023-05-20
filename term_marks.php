@@ -54,7 +54,22 @@ $instructorID = $db->getData("instructor", "instructorID", "userID", $_SESSION['
                     <label for="MiddleName">Center Name</label>
                     <select name="centerID" class="form-control chosen-select" required="">
                         <?php
-                        $center = $db->getRows('center_registration', array('order_by' => 'centerName ASC'));
+
+                        $userId = $_SESSION['user_session'];
+                        $instructor = $db->getRows('instructor',array('where'=>array('userID'=>$userId),'order_by'=>'instructorID ASC'));
+
+                        if(!empty($instructor))
+                        {
+                            foreach($instructor as $i)
+                        {
+                                $instructorID=$i['instructorID'];
+                                $centerID=$i['centerID'];
+                                $departmentID=$i['departmentID'];
+                                $instructorName=$db->getData("instructor","instructorName","instructorID",$instructorID);
+                            }
+                        }
+
+                        $center = $db->getRows('center_registration', array('where'=>array('centerRegistrationID'=>$centerID),'order_by' => 'centerName ASC'));
                         if (!empty($center)) {
                             echo "<option value=''>Please Select Here</option>";
                             $count = 0;
@@ -144,7 +159,20 @@ $instructorID = $db->getData("instructor", "instructorID", "userID", $_SESSION['
             $instructorID = $db->getData("instructor", "instructorID", "userID", $_SESSION['user_session']);
             $courseprogramme = $db->getInstructorAssessmentCourse($academicYearID, $instructorID);
         } else {
-            $courseprogramme = $db->getAssessmentCourse($_SESSION['department_session'], $academicYearID);
+            $userId = $_SESSION['user_session'];
+        $instructor = $db->getRows('instructor',array('where'=>array('userID'=>$userId),'order_by'=>'instructorID ASC'));
+
+        if(!empty($instructor))
+         {
+            foreach($instructor as $i)
+          {
+                 $instructorID=$i['instructorID'];
+                 $centerID=$i['centerID'];
+                 $departmentID=$i['departmentID'];
+                $instructorName=$db->getData("instructor","instructorName","instructorID",$instructorID);
+            }
+        }
+            $courseprogramme = $db->getAssessmentCourse($centerID, $academicYearID);
         }
         if (!empty($courseprogramme)) {
     ?>
