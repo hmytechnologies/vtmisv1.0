@@ -18,6 +18,7 @@ try {
                 header("Location:index3.php?sp=student_academic_reports&msg=$errMSG&action=getRecords&search_student=$regNumber");
             } else {
                 $upload_dir = 'student_images/'; // upload directory
+                echo $upload_dir;
 
                 $imgExt = strtolower(pathinfo($imgFile, PATHINFO_EXTENSION)); // get image extension
                 // valid image extensions

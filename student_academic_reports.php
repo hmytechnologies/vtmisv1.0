@@ -95,7 +95,7 @@
                             <th>Gender</th>
                             <th>Level</th>
                             <th>Programme Name</th>
-                            <th>Study Year</th>
+                            <!-- <th>Study Year</th> -->
                             <!-- <th>Study Mode</th> -->
                             <th>Status</th>
                             <th>Picture</th>
@@ -180,7 +180,7 @@
                                    
                                 }
                             }
-                            echo"<td $studyYear </td>";
+                            // echo"<td $studyYear </td>";
 
                           
                             $status= $db->getRows('status',array('where'=>array('statusID'=>$statusID),' order_by'=>'status_value ASC'));
@@ -199,14 +199,23 @@
                         if(!empty($studentPicture))
                         {
                         ?>
-                            <img id="image" src="student_images/<?php echo $studentPicture; ?>" height="150px"
-                                 width="150px;"/>
+                            <img id="image" src="student_images/<?php echo $studentPicture; ?>" height="150px" width="150px;"/>
                         </td>
                         <?php
                         }else
                         {
+                            
                             ?>
-                            You must upload picture
+                            
+                            <form method="post" name="upload" action="action_upload_new_picture.php" enctype="multipart/form-data">
+                                <img id="image" src="student_images/<?php echo $studentPicture;?>" height="150px" width="150px;" />
+                                <input type='file' name="student_image" accept=".jpg" onchange="readURL(this);" />
+                                <input type="hidden" name="regNumber" value="<?php echo $regNumber;?>">
+                                <input type="hidden" name="action_type" value="add"/>
+                                <input  type="submit" class="btn btn-success" name="btnSave" value="Upload Picture"/>
+                              </form>
+                             
+                                       
                             <?php
                         }
                             ?>
@@ -214,10 +223,41 @@
 
                                 <?php
                                 if(!empty($studentPicture))
-                                {
+                                {     
                                     ?>
-                                    <div class="col-lg-12">
+
+                                    <div class="col-lg-6">
+                                    
+                            
+
+                                    <select name="examcategory[]" class="form-control chosen-select" multiple required>
+                              <?php
+                                 $student = $db->getRows('exam_category',array('order_by'=>'examCategoryID ASC'));
+                                 if(!empty($student)){
+                                  echo"<option value=''>Please Select Here</option>";
+                                  $count = 0; foreach($student as $studentlevel){ $count++;
+                                         $examCategoryID=$studentlevel['examCategoryID'];
+                                        //  $centerID=$studentlevel['centerID'];
+                                         $regNumber=$studentlevel['regNumber'];
+                                         $term=$db->getData('exam_category','examCategory','examCategoryID',$examCategoryID);
+                                 ?>
+                                         <option value="<?php echo $examCategoryID;?>"><?php echo $term;?></option>
+                                <?php
+                                    }
+                                 }
+                                 ?>
+                           </select>
+                                        
+                                    
+                                </div>
+                                    
+                                    <div class="col-lg-6">
+                                
+                                           
+                                        
                                         <button class="btn btn-primary pull-right form-control" style="margin-right: 5px;" data-toggle="modal" data-target="#add_new_atype_modal"><i class="fa fa-download"></i>Print Preview</button>
+                                        <!-- <a href="print_statement_report.php?action=getPDF&regNo=<?php echo $regNumber; ?>">click</a> -->
+
                                     </div>
                                     <?php
                                 }
@@ -257,7 +297,8 @@
                     <h4 class="modal-title">Preview Course Result</h4>
                 </div>
                 <div class="modal-body">
-
+                    
+                
                     <embed src="print_statement_report.php?action=getPDF&regNo=<?php echo $regNumber;?>" frameborder="0" width="100%" height="600px">
 
                     <div class="modal-footer">

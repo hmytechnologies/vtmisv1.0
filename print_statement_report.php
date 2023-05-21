@@ -5,7 +5,7 @@ if($_REQUEST['action']=="getPDF")
     include 'DB.php';
     $db=new DBHelper();
     require('fpdf.php');
-    $organization = $db->getRows('organization',array('order_by'=>'organizationName DESC'));
+     $organization = $db->getRows('organization',array('order_by'=>'organizationName DESC'));
     if(!empty($organization))
     {
         foreach($organization as $org)
@@ -109,7 +109,7 @@ if($_REQUEST['action']=="getPDF")
             $lname = str_replace("&#039;","'",$std['lastName']);
             $gender = $std['gender'];
             $regNumber = $std['registrationNumber'];
-            $programmeID = $std['programmeID'];
+            // $programmeID = $std['programmeID'];
             $statusID = $std['statusID'];
             $admissionYearID = $std['academicYearID'];
             $name = "$fname $mname $lname";
@@ -117,8 +117,21 @@ if($_REQUEST['action']=="getPDF")
             $pdf->AddPage("P");
             $pdf->setFont('Arial', '', 10);
             $pdf->Banner($organizationName, $organizationPicture, $phone, $email, $website, $postal);
-
-            $programmeLevelID = $db->getData("programmes", "programmeLevelID", "programmeID", $programmeID);
+        //  echo   $admissionYearID = $std['academicYearID'];
+       // echo  $regNumber = $std['registrationNumber'];
+                
+         $studentprogramID = $db->getRows('student_programme',array('where'=>array('regNumber'=>$regNumber),'order_by'=>'programmeLevelID ASC'));
+          if(!empty($studentprogramID ))
+                {
+                foreach($studentprogramID  as $ii)
+                {
+                $programmeLevelID=$ii['programmeLevelID'];
+                $programmeID=$ii['programmeID'];
+                // $academicYearID=$ii['academicYearID'];
+                }
+            }
+            // $studentprogramID = $db->getData("student_programme", "programmeID", "regNumber", $regNumber);
+            // $programmeLevelID = $db->getData("programmes", "programmeLevelID", "programmeID", $studentprogramID);
             $level = $db->getRows('programme_level', array('where' => array('programmeLevelID' => $programmeLevelID), ' order_by' => ' programmeLevelCode ASC'));
             if (!empty($level)) {
                 foreach ($level as $lvl) {
@@ -151,12 +164,14 @@ if($_REQUEST['action']=="getPDF")
                 $totalUnits = 0;
                 foreach ($semester as $sm) {
                     $semesterSettingID = $sm['semesterSettingID'];
-                    $semesterName = $sm['semesterName'];
-                    $course = $db->getStudentSearchResult($regNumber, $semesterSettingID);
+                    $examCategoryID = $sm['examCategoryID'];
+                    $academicYearID = $sm['academicYearID'];
+                    // $semesterName = $sm['semesterName'];
+                     $course = $db->getStudentSearchResult($regNumber, $semesterSettingID);
                     if (!empty($course)) {
                         $pdf->Cell(5, 6, '');
                         $pdf->setFont('Arial', 'B', 10);
-                        $pdf->Cell(185, 6, "Exam Result for " . $semesterName, 1, '', 'C');
+                        $pdf->Cell(185, 6, "Exam Result for " . $examCategoryID, 1, '', 'C');
                         $pdf->Ln(6);
                         $pdf->Cell(5, 6, '');
                         $pdf->BasicTable($header);
@@ -167,8 +182,8 @@ if($_REQUEST['action']=="getPDF")
 
                         foreach ($course as $st) {
                             $count++;
-                            $courseID = $st['courseID'];
-                            $crstatus = $st['courseStatus'];
+                             $courseID = $st['courseID'];
+                             $crstatus = $st['courseCategory'];
 
                             $coursec = $db->getRows('course', array('where' => array('courseID' => $courseID), ' order_by' => ' courseName ASC'));
                             if (!empty($coursec)) {
@@ -192,19 +207,22 @@ if($_REQUEST['action']=="getPDF")
                             else
                                 $status = "Elective";
 
-                            $cwk = $db->decrypt($db->getGrade($semesterSettingID, $courseID, $regNumber, 1));
-                            $sfe = $db->decrypt($db->getFinalGrade($semesterSettingID, $courseID, $regNumber, 2));
-                            $sup = $db->decrypt($db->getGrade($semesterSettingID, $courseID, $regNumber, 3));
-                            $spc = $db->decrypt($db->getFinalGrade($semesterSettingID, $courseID, $regNumber, 4));
-                            $prj = $db->decrypt($db->getGrade($semesterSettingID, $courseID, $regNumber, 5));
-                            $pt = $db->decrypt($db->getGrade($semesterSettingID, $courseID, $regNumber, 6));
+                                
+                                
+                          $cwk = $db->decrypt($db->getGrade($semesterSettingID, $courseID, $regNumber, 1));
+                         
+                             $sfe = $db->decrypt($db->getFinalGrade($academicYearID, $courseID, $regNumber, 2));
+                              $sup = $db->decrypt($db->getGrade($semesterSettingID, $courseID, $regNumber, 3));
+                             $spc = $db->decrypt($db->getFinalGrade($academicYearID, $courseID, $regNumber, 4));
+                              $prj = $db->decrypt($db->getGrade($semesterSettingID, $courseID, $regNumber, 5));
+                             $pt = $db->decrypt($db->getGrade($semesterSettingID, $courseID, $regNumber, 6));
                             $tunits += $units;
-                            $passCourseMark=$db->getExamCategoryMark(1,$regNumber,$studyYear);
-                            $passFinalMark=$db->getExamCategoryMark(2,$regNumber,$studyYear);
-                            $tmarks=$db->calculateTotal($cwk,$sfe,$sup,$spc,$prj,$pt);
+                            $passCourseMark=$db->getExamCategoryMark(1,$regNumber);
+                            $passFinalMark=$db->getExamCategoryMark(2,$regNumber);
+                             $tmarks=$db->calculateTotal($cwk,$sfe,$sup,$spc,$prj,$pt);
                             if(!empty($sup))
                             {
-                                $passMark=$db->getExamCategoryMark(3,$regNumber,$studyYear);
+                                $passMark=$db->getExamCategoryMark(3,$regNumber);
                                 if($tmarks>=$passMark)
                                     $grade="C";
                                 else
@@ -214,7 +232,7 @@ if($_REQUEST['action']=="getPDF")
                             }
                             else if(!empty($pt))
                             {
-                                $passMark=$db->getExamCategoryMark(6,$regNumber,$studyYear);
+                                $passMark=$db->getExamCategoryMark(6,$regNumber);
                                 $gradeID = $db->getMarksID($regNumber, $cwk, $sfe, $sup, $spc, $prj, $pt);
                                 if($tmarks>=$passMark)
                                     $grade=$db->getData("grades","gradeCode","gradeID",$gradeID);
@@ -224,7 +242,7 @@ if($_REQUEST['action']=="getPDF")
                             }
                             else if(!empty($prj))
                             {
-                                $passMark=$db->getExamCategoryMark(5,$regNumber,$studyYear);
+                                $passMark=$db->getExamCategoryMark(5,$regNumber);
                                 $gradeID = $db->getMarksID($regNumber, $cwk, $sfe, $sup, $spc, $prj, $pt);
                                 if($tmarks>=$passMark)
                                     $grade=$db->getData("grades","gradeCode","gradeID",$gradeID);

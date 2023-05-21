@@ -69,7 +69,7 @@ $instructorID = $db->getData("instructor", "instructorID", "userID", $_SESSION['
                             }
                         }
 
-                        $center = $db->getRows('center_registration', array('where'=>array('centerRegistrationID'=>$centerID),'order_by' => 'centerName ASC'));
+                        $center = $db->getRows('center_registration', array('order_by' => 'centerName ASC'));
                         if (!empty($center)) {
                             echo "<option value=''>Please Select Here</option>";
                             $count = 0;
@@ -80,7 +80,22 @@ $instructorID = $db->getData("instructor", "instructorID", "userID", $_SESSION['
                         ?>
                                 <option value="<?php echo $centerID; ?>"><?php echo $centerName; ?></option>
                         <?php }
+                        }else{
+
+                            $center = $db->getRows('center_registration', array('where'=>array('centerRegistrationID'=>$centerID),'order_by' => 'centerName ASC'));
+                            if (!empty($center)) {
+                                echo "<option value=''>Please Select Here</option>";
+                                $count = 0;
+                                foreach ($center as $cnt) {
+                                    $count++;
+                                    $centerName = $cnt['centerName'];
+                                    $centerID = $cnt['centerRegistrationID'];
+                            ?>
+                                    <option value="<?php echo $centerID; ?>"><?php echo $centerName; ?></option>
+                            <?php }
+
                         }
+                    }
                         ?>
                     </select>
                 </div>
