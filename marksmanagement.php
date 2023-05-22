@@ -48,7 +48,6 @@ error_reporting(E_ALL | E_STRICT);
                 $academicYearID = $_POST['academicYearID'];
                 $semesterSettingID = $db->getData("semester_setting", "semesterSettingID", "academicYearID", $academicYearID);
                 $courseprogramme = $db->getMappingCourseList($academicYearID, $_SESSION['main_role_session'], $_SESSION['department_session']);
-                //$courseprogramme = $db->getSemesterCourse($semesterSettingID, $_SESSION['main_role_session'], $_SESSION['department_session']);
                 if (!empty($courseprogramme)) {
                     $count = 0;
             ?>
@@ -149,8 +148,6 @@ error_reporting(E_ALL | E_STRICT);
                 <i class="fa fa-eye" aria-hidden="true"></i>
         	</div>';
                                             }
-
-                                            //}
                                         }
                                     ?>
 
@@ -171,17 +168,18 @@ error_reporting(E_ALL | E_STRICT);
 
                                     <?php
                                     }
+
                                     ?>
                                 </tbody>
                             </table>
                         </div>
                     </div>
                 <?php
-                } else {
-                ?>
-                    <h4 class="text-danger">No Course Found</h4>
-            <?php
                 }
+            } else {
+                ?>
+                <h4 class="text-danger">No Course Found</h4>
+            <?php
             }
             ?>
         </div>
