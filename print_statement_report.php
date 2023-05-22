@@ -30,6 +30,9 @@ if($_REQUEST['action']=="getPDF")
         $postal="P.O.BOX XXX Zanzibar-Tanzania";
     }
     $regNumber=$_REQUEST['regNo'];
+    $examCategoryID = $_REQUEST['examCategoryID'];
+    
+    echo  $examCategoryID;
     class PDF extends FPDF
     {
 //Page header

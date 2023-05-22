@@ -227,27 +227,29 @@
                                     ?>
 
                                     <div class="col-lg-6">
+                                
+                                    <select name="examcategory[]" class="form-control chosen-select" multiple required>
+                                    <?php
+                                        $student = $db->getRows('exam_category',array('order_by'=>'examCategoryID ASC'));
+                                        if(!empty($student)){
+                                        echo"<option value=''>Please Select Here</option>";
+                                        $count = 0; foreach($student as $studentlevel){ $count++;
+                                                $examCategoryID=$studentlevel['examCategoryID'];
+                                                //  $centerID=$studentlevel['centerID'];
+                                                $regNumber=$studentlevel['regNumber'];
+                                                $term=$db->getData('exam_category','examCategory','examCategoryID',$examCategoryID);
+                                        ?>
+                                                <option value="<?php echo $examCategoryID;?>"><?php echo $term;?></option>
+                                        <?php
+                                            }
+                                        }
+                                        ?>
+                                </select>
+                                       
                                     
                             
 
-                                    <select name="examcategory[]" class="form-control chosen-select" multiple required>
-                              <?php
-                                 $student = $db->getRows('exam_category',array('order_by'=>'examCategoryID ASC'));
-                                 if(!empty($student)){
-                                  echo"<option value=''>Please Select Here</option>";
-                                  $count = 0; foreach($student as $studentlevel){ $count++;
-                                         $examCategoryID=$studentlevel['examCategoryID'];
-                                        //  $centerID=$studentlevel['centerID'];
-                                         $regNumber=$studentlevel['regNumber'];
-                                         $term=$db->getData('exam_category','examCategory','examCategoryID',$examCategoryID);
-                                 ?>
-                                         <option value="<?php echo $examCategoryID;?>"><?php echo $term;?></option>
-                                <?php
-                                    }
-                                 }
-                                 ?>
-                           </select>
-                                        
+                                   
                                     
                                 </div>
                                     
@@ -256,7 +258,7 @@
                                            
                                         
                                         <button class="btn btn-primary pull-right form-control" style="margin-right: 5px;" data-toggle="modal" data-target="#add_new_atype_modal"><i class="fa fa-download"></i>Print Preview</button>
-                                        <!-- <a href="print_statement_report.php?action=getPDF&regNo=<?php echo $regNumber; ?>">click</a> -->
+                                        <!-- <a href="print_statement_report.php?action=getPDF&regNo=<?php echo $regNumber; ?>&cateID=<?php echo $examCategoryID; ?>">click</a> -->
 
                                     </div>
                                     <?php
@@ -299,7 +301,7 @@
                 <div class="modal-body">
                     
                 
-                    <embed src="print_statement_report.php?action=getPDF&regNo=<?php echo $regNumber;?>" frameborder="0" width="100%" height="600px">
+                    <embed src="print_statement_report.php?action=getPDF&regNo=<?php echo $regNumber;?>&categoryID=<?php echo $examCategoryID;?>" frameborder="0" width="100%" height="600px">
 
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
