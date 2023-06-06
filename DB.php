@@ -419,16 +419,86 @@ class DBHelper
         return $data;
     }
 
-    public function filterTrade($ID)
+
+    // public function getLevel($regNumber,$id)
+    // {
+    //     $query = $this->conn->prepare("SELECT * from student_programme where regNumber =:regNumber And programmeLevelID IN (:levelID) ");
+    //     $query->execute(array(':regNumber' => $regNumber, ':levelID' => $id));
+    //     $data = array();
+    //     while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
+    //         $data[] = $row;
+    //     }
+    //     return $data;
+    // }
+
+
+
+    public function getLevel($regNumber,$id)
     {
-        $query = $this->conn->prepare("SELECT * from programmes where status=:st AND programmeID NOT IN (SELECT programmeID from center_programme where centerRegistrationID=:centerID order by programmeID ASC)");
-        $query->execute(array('st' => 1, ':centerID' => $ID));
+        $query = $this->conn->prepare("SELECT * from student_programme where regNumber =:regNumber And programmeLevelID IN (:levelID) ");
+        $query->execute(array(':regNumber' => $regNumber, ':levelID' => $id));
         $data = array();
         while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
             $data[] = $row;
         }
         return $data;
     }
+
+    // public function getStudentStatus($sid, $status)
+    // {
+    //     try {
+    //         if ($status == 1) {
+    //             $query = $this->conn->prepare("SELECT COUNT(*) as countStatus from student s,student_course sc where s.registrationNumber=sc.regNumber AND sc.semesterSettingID=:sem  and s.statusID=:st");
+    //         } else {
+    //             $query = $this->conn->prepare("SELECT COUNT(*) as countStatus from student s,student_status ss where s.registrationNumber=ss.regNumber AND ss.semesterSettingID=:sem  and s.statusID<>:st");
+    //         }
+    //         $query->execute(array(':sem' => $sid, ':st' => $status));
+    //         $row = $query->fetch(PDO::FETCH_ASSOC);
+    //         $value = $row['countStatus'];
+    //         return $value;
+    //     } catch (PDOException $ex) {
+    //         echo "Getting Data Error: " . $ex->getMessage();
+    //     }
+    // }
+
+    // public function countLevel($regNumber,$id)
+    // {
+    //     $query = $this->conn->prepare("SELECT COUNT(programmeLevelID) as countProgrammelevelID from student_programme where regNumber =:regNumber And programmeLevelID IN (:levelID) ");
+    //     $query->execute(array(':regNumber' => $regNumber, ':levelID' => $id));
+    //     return    $query->rowCount();
+    // }
+
+
+    // function getStudentsByLevels($regNumber, $selectedLevels)
+    // {
+    // //   include 'DB.php'; // Include your database connection file
+    // //   $db = new DBHelper();
+    
+    // //   $placeholders = implode(',', array_fill(0, count($selectedLevels), '?'));
+    
+    //   $query = $this->conn->prepare("SELECT * FROM student_programme WHERE regNumber = :regNumber AND programmeLevelID IN ($placeholders)");
+    //   $query->bindValue(':regNumber', $regNumber);
+    
+    //   foreach ($selectedLevels as $index => $level) {
+    //     $query->bindValue($index + 1, $level);
+    //   }
+    
+    //   $query->execute();
+    
+    //   $students = $query->fetchAll(PDO::FETCH_ASSOC);
+    //   return $students;
+    // }
+    
+    // public function filterTrade($ID)
+    // {
+    //     $query = $this->conn->prepare("SELECT * from programmes where status=:st AND programmeID NOT IN (SELECT programmeID from center_programme where centerRegistrationID=:centerID order by programmeID ASC)");
+    //     $query->execute(array('st' => 1, ':centerID' => $ID));
+    //     $data = array();
+    //     while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
+    //         $data[] = $row;
+    //     }
+    //     return $data;
+    // }
 
     public function getCenterProgramme($ID)
     {
@@ -469,10 +539,10 @@ class DBHelper
     }
 
 
-    public function getFinalResult($cID, $semID, $bID)
+    public function getFinalResult($examNumber, $regNumber)
     {
-        $query = $this->conn->prepare("SELECT DISTINCT(regNumber) from final_result  where semesterSettingID=:semesterID  AND courseID=:courseID AND batchID=:batchID");
-        $query->execute(array(':semesterID' => $semID, ':courseID' => $cID, ':batchID' => $bID));
+        $query = $this->conn->prepare("SELECT DISTINCT(f.examNumber),examScore,f.academicYearID from final_result f,exam_number ex where f.examNumber = ex.examNumber and ex.regNumber='MWVTC/L2ELE/NS/20/1000'");
+        $query->execute(array(':examNumber' => $examNumber, ':regNumber' => $regNumber));
         $data = array();
         while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
             $data[] = $row;
@@ -595,6 +665,22 @@ class DBHelper
         AND status=:st
         ORDER BY courseRank ASC");
         $query->execute(array('progID' => $progID, ':levelID' => $levelID, ':st' => 1));
+        $data = array();
+        while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
+            $data[] = $row;
+        }
+        return $data;
+    }
+
+
+    public function getCourseCreditstudent($levelID, $progID)
+    {
+        $query = $this->conn->prepare("SELECT DISTINCT(cp.courseID),courseName,courseCode,units,courseTypeID,courseRank,courseCategoryID from programmemaping cp,course c
+        where c.courseID=cp.courseID
+        AND cp.programmeID=:progID 
+        AND cp.programmeLevelID=:levelID
+        ORDER BY courseRank ASC");
+        $query->execute(array('progID' => $progID, ':levelID' => $levelID));
         $data = array();
         while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
             $data[] = $row;
@@ -860,6 +946,25 @@ WHERE
 
         $query = $this->conn->prepare("SELECT examScore from exam_result where regNumber=:rNumber and academicYearID=:sem and courseID=:cid and examCategoryID=:ecatID");
         $query->execute(array(':rNumber' => $regNumber, ':sem' => $academicYearID, ':cid' => $courseID, ':ecatID' => $examCategoryID));
+        $row = $query->fetch(PDO::FETCH_ASSOC);
+        $score = $row['examScore'];
+        $examScore = "";
+        //$score=$this->getRows('exam_result',array('where'=>array('regNumber'=>$regNumber,'semesterSettingID'=>$semesterID,'courseID'=>$courseID,'examCategoryID'=>$examCategoryID),' order_by'=>'regNumber ASC'));
+
+        if (!empty($score)) {
+            $examScore = $score;
+        } else {
+            $examScore = "";
+        }
+        return $examScore;
+    }
+
+
+    public function getstudentTermGrade( $courseID, $regNumber, $examCategoryID)
+    {
+
+        $query = $this->conn->prepare("SELECT examScore from exam_result where regNumber=:rNumber  and courseID=:cid and examCategoryID=:ecatID");
+        $query->execute(array(':rNumber' => $regNumber, ':cid' => $courseID, ':ecatID' => $examCategoryID));
         $row = $query->fetch(PDO::FETCH_ASSOC);
         $score = $row['examScore'];
         $examScore = "";
@@ -1565,6 +1670,18 @@ WHERE
         return $data;
     }
 
+    public function getcourseStudent($stdID,$exam_number,$academicYearID)
+    {
+       
+        $query = $this->conn->prepare("SELECT DISTINCT(fr.courseID) ,courseName,c.courseCategoryID,courseCategory,courseCode,units ,examScore from course_category  cc, course c,exam_number en, final_result fr where  fr.examNumber =en.examNumber AND c.courseID = fr.courseID and  en.regNumber=:studentID and en.examNumber =:exam_number and fr.academicYearID =:academicYearID and c.courseCategoryID  = cc.courseCategoryID");
+
+        $query->execute(array(':studentID' => $stdID,':exam_number' => $exam_number,':academicYearID' => $academicYearID,));
+        $data = array();
+        while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
+            $data[] = $row;
+        }
+        return $data;
+    }
     public function getAcademicYear($studentID)
     {
         $query = $this->conn->prepare("SELECT DISTINCT(ac.academic_year_id),academic_year from academic_year ac,exam_result er,student s where ac.academic_year_id=er.academic_year_id and s.student_id=er.student_id and er.student_id=:stdID group by academic_year order by academic_year ASC ");
@@ -1813,11 +1930,11 @@ ORDER BY semesterSettingID DESC");
         }
     }
 
-    public function getCourseInfo($centerProgrammeCourseID)
+    public function getCourseInfo($centerProgrammeCourseID,$programmeID)
     {
         try {
-            $query = $this->conn->prepare("SELECT DISTINCT c.courseID,courseCode,courseName,courseTypeID,programmeLevelID,programmeID,classNumber,staffID,academicYearID,centerID FROM center_programme_course cp,course c where c.courseID=cp.courseID and centerProgrammeCourseID=:sID");
-            $query->execute(array(':sID' => $centerProgrammeCourseID));
+            $query = $this->conn->prepare("SELECT DISTINCT c.courseID,courseCode,courseName,courseTypeID,programmeLevelID,cp.programmeID,classNumber,staffID,academicYearID,centerID FROM center_programme_course cp,course c ,programmes pr where c.courseID=cp.courseID and  pr.programmeID =cp.programmeID and  cp.centerID=:sID and cp.programmeID =:pID");
+            $query->execute(array(':sID' => $centerProgrammeCourseID,':pID' => $programmeID));
 
             $data = array();
             while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
@@ -1829,21 +1946,52 @@ ORDER BY semesterSettingID DESC");
         }
     }
 
-    public function getCenterAnnualCourse($academicYear, $centerID)
-    {
-        try {
-            $query = $this->conn->prepare("SELECT DISTINCT c.courseID,courseCode,courseName,units,courseTypeID,programmeLevelID,courseStatus FROM courseprogramme cp,course c where c.courseID=cp.courseID and academicYearID=:sID");
-            $query->execute(array(':sID' => $academicYear));
+    // public function getCourseInf($centerProgrammeCourseID,$programmeID)
+    // {
+    //     try {
+    //         $query = $this->conn->prepare("SELECT DISTINCT c.courseID,courseCode,courseName,courseTypeID,programmeLevelID,cp.programmeID,classNumber,staffID,academicYearID,centerID FROM center_programme_course cp,course c,programmes p where c.courseID=cp.courseID and p.programmeID =cp.programmeID  and cp.courseID=:sID and cp.programmeID =:pID ");
+    //         $query->execute(array(':sID' => $centerProgrammeCourseID,':pID' => $programmeID));
 
-            $data = array();
-            while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
-                $data[] = $row;
-            }
-            return $data;
-        } catch (PDOException $ex) {
-            echo "Getting Data Error: " . $ex->getMessage();
-        }
-    }
+    //         $data = array();
+    //         while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
+    //             $data[] = $row;
+    //         }
+    //         return $data;
+    //     } catch (PDOException $ex) {
+    //         echo "Getting Data Error: " . $ex->getMessage();
+    //     }
+    // }
+    
+    // public function getCourseInfo1($centerProgrammeCourseID,$termID,$levelID,$programmeID,$academicYearID)
+    // {
+    //     try {
+    //         $query = $this->conn->prepare("SELECT DISTINCT c.courseID,courseCode,courseName,courseTypeID,programmeLevelID,cp.programmeID,classNumber,staffID,academicYearID,centerID FROM center_programme_course cp,course c ,programmes p where c.courseID=cp.courseID  and cp.centerID=:sID and p.programmeID =cp.programmeID and cp.academicYearID=:academicYearID and c.courseTypeID=:termID and cp.programmeLevelID=:levelID and cp.academicYearID =:academicYearID and  cp.programmeID =:programmeID");
+    //         $query->execute(array(':sID' => $centerProgrammeCourseID,':termID' =>$termID,':levelID' => $levelID,':programmeID' => $programmeID,':academicYearID' => $academicYearID));
+
+    //         $data = array();
+    //         while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
+    //             $data[] = $row;
+    //         }
+    //         return $data;
+    //     } catch (PDOException $ex) {
+    //         echo "Getting Data Error: " . $ex->getMessage();
+    //     }
+    // }
+    // public function getCenterAnnualCourse($academicYear, $centerID)
+    // {
+    //     try {
+    //         $query = $this->conn->prepare("SELECT DISTINCT c.courseID,courseCode,courseName,units,courseTypeID,programmeLevelID,courseStatus FROM courseprogramme cp,course c where c.courseID=cp.courseID and academicYearID=:sID");
+    //         $query->execute(array(':sID' => $academicYear));
+
+    //         $data = array();
+    //         while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
+    //             $data[] = $row;
+    //         }
+    //         return $data;
+    //     } catch (PDOException $ex) {
+    //         echo "Getting Data Error: " . $ex->getMessage();
+    //     }
+    // }
 
     public function getCenterProgrammes($centerID)
     {
@@ -2193,7 +2341,7 @@ ORDER BY semesterSettingID DESC");
     public function getStudentTermList($centerID, $academicYearID, $programmeLevelID, $programmeID)
     {
         try {
-            $query = $this->conn->prepare("SELECT sc.regNumber from student s, student_programme sc 
+            $query = $this->conn->prepare("SELECT * from student s, student_programme sc 
             WHERE s.registrationNumber=sc.regNumber
             AND sc.academicYearID=:acadID
             AND sc.programmeID=:pid

@@ -117,14 +117,16 @@
                                                 $name = "$fname $mname $lname";
 
 
-                                                $today = date("Y-m-d");
-                                                $sm = $db->readSemesterSetting($today);
-                                                foreach ($sm as $s) {
-                                                    $semisterID = $s['semesterID'];
-                                                    $academicYearID = $s['academicYearID'];
-                                                    $semesterName = $s['semesterName'];
-                                                    $semesterSettingID = $s['semesterSettingID'];
-                                                }
+                                                //$today = date("Y-m-d");
+                                                $current_year = $db->getRows("academic_year", array('where' => array('status' => 1)));
+                                                    // $sm=$db->readSemesterSetting($);
+                                                    foreach ($current_year as $s) {
+                                                        // $semisterID=$s['semesterID'];
+                                                        $academicYearID=$s['academicYearID'];
+                                                        $academicYear=$s['academicYear'];
+                                                        
+                                                    }
+                                                   // echo  $academicYearID;
                                                 $student_program = $db->getRows('student_programme', array('where' => array('regNumber' => $regNumber), ' order_by' => ' regNumber ASC'));
                                                 if (!empty($student_program)) {
                                                     foreach ($student_program as $pro) {
@@ -206,44 +208,65 @@
                                             <?php
                                             if (!empty($studentPicture)) {
                                             ?>
+                                              
+                                               
+                                                <div class="col-12">
 
-                                                <div class="col-lg-6">
-
-                                                    <select name="examcategory[]" class="form-control chosen-select" multiple required>
+                                                <form method="POST" action="print_statement_report.php" target= "_blank" >
                                                         <?php
-                                                        $student = $db->getRows('exam_category', array('order_by' => 'examCategoryID ASC'));
+                                                        $student = $db->getRows('student_programme', array('where' => array('regNumber' => $regNumber),'order_by' => 'programmeLevelID ASC'));
                                                         if (!empty($student)) {
-                                                            echo "<option value=''>Please Select Here</option>";
+                                                           
                                                             $count = 0;
                                                             foreach ($student as $studentlevel) {
                                                                 $count++;
-                                                                $examCategoryID = $studentlevel['examCategoryID'];
+                                                                $LevelID = $studentlevel['programmeLevelID'];
                                                                 //  $centerID=$studentlevel['centerID'];
                                                                 $regNumber = $studentlevel['regNumber'];
-                                                                $term = $db->getData('exam_category', 'examCategory', 'examCategoryID', $examCategoryID);
+                                                               
                                                         ?>
-                                                                <option value="<?php echo $examCategoryID; ?>"><?php echo $term; ?></option>
+                                                                <input type="checkbox" name="level[]"  value="<?php echo $LevelID;?>">
+                                                                
+                                                                <label for=""><?php echo $db->getData('programme_level', 'programmeLevel', 'programmeLevelID',  $LevelID);?></label>
+                                                              
+                                                                <br>
+                                                                
+
                                                         <?php
-                                                            }
+                                                            }?>
+
+                                                             <!-- <a href="#edit_?$levelID=<?php echo  $LevelID; ?>$studentReg=<?php echo $regNumber; ?>"  style="margin-right: 5px;" class="btn btn-primary btn-sm" data-toggle="modal">
+                                                            
+                                                            <i class="fa fa-download"></i>Print PDF Report
+                                                                 <span><strong></strong></span>
+                                                                  
+                                                         </a> -->
+
+                                                            <input type="submit" value="Print PDF Report" class="btn btn-primary pull-right form-control"  />
+                                                            <input type="hidden" name="action" value="getPDF"/>
+                                                        
+                                                        <input type="hidden" name="regNumber" value="<?php echo $studentlevel['regNumber']?>">
+                                                        <input type="hidden" name="programmeLevelID" value="<?php echo $studentlevel['programmeLevelID']?>">
+                                                                        <!-- <i class="fa fa-download"></i>Print PDF Report -->
+                                                         <!-- <button type="button" name="submit" class="btn btn-primary pull-right form-control" style="margin-right: 5px;" data-toggle="modal" data-target="#add_new_atype_modal">
+                                                    <i class="fa fa-download"></i>Print PDF Report -->
+                                                </button>
+                                                        <?php   
                                                         }
                                                         ?>
-                                                    </select>
+                                                          
+                                               <!-- <button type="button" name="submit" class="btn btn-primary pull-right form-control" style="margin-right: 5px;" data-toggle="modal" data-target="#add_new_atype_modal">
+                                                    <i class="fa fa-download"></i>Print PDF Report
+                                                </button></a> -->
+                                                   
 
 
 
-
-
-
-                                                </div>
-
-                                                <div class="col-lg-6">
-
-
-
-                                                    <button class="btn btn-primary pull-right form-control" style="margin-right: 5px;" data-toggle="modal" data-target="#add_new_atype_modal"><i class="fa fa-download"></i>Print Preview</button>
-                                                    <!-- <a href="print_statement_report.php?action=getPDF&regNo=<?php echo $regNumber; ?>&cateID=<?php echo $examCategoryID; ?>">click</a> -->
+                                                </form>
 
                                                 </div>
+
+                                               
                                             <?php
                                             } else {
                                             ?>
@@ -278,9 +301,11 @@
                                 <h4 class="modal-title">Preview Course Result</h4>
                             </div>
                             <div class="modal-body">
+                           
+                       
 
 
-                                <embed src="print_statement_report.php?action=getPDF&regNo=<?php echo $regNumber; ?>&categoryID=<?php echo $examCategoryID; ?>" frameborder="0" width="100%" height="600px">
+                                <!-- <embed src="print_statement_report.php?action=getPDF&regNo=<?php echo $regNumber; ?>&programmeLevelID=<?php echo  $programmeLevelID ; ?>" frameborder="0" width="100%" height="600px"> -->
 
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

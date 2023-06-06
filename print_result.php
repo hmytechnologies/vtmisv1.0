@@ -243,7 +243,7 @@
             //include('DB.php');
             //$db = new DBHelper();
 
-            $programmeID = $_POST["programmeID"];
+            echo $programmeID = $_POST["programmeID"];
             $levelID = $_POST["programmeLevelID"];
             $academicYearID = $_POST["academicYearID"];
             $centerID = $_POST["centerID"];
@@ -422,7 +422,7 @@
                                 </div>
                                 <div class="col-lg-3">
                                     <!-- <button class="btn btn-primary pull-right form-control" style="margin-right: 5px;" data-toggle="modal" data-target="#add_new_atype_modal"><i class="fa fa-download"></i>Print Report in PDF</button> -->
-                                    <a href='print_term_score_report.php?action=getPDF&pid=<?php echo $programmeID; ?>&lid=<?php echo $levelID; ?>&aid=<?php echo $academicYearID; ?>&cid=<?php echo $centerID; ?>&termID=<?php echo $examCategoryID; ?>' target='_blank'> <button type="button" class="btn btn-primary pull-right form-control" style="margin-right: 5px;">
+                                    <a href='print_term_score_report.php?action=getPDF&proid=<?php echo $programmeID; ?>&lid=<?php echo $levelID; ?>&aid=<?php echo $academicYearID; ?>&cid=<?php echo $centerID; ?>&termID=<?php echo $examCategoryID; ?>' target='_blank'> <button type="button" class="btn btn-primary pull-right form-control" style="margin-right: 5px;">
                                             <i class="fa fa-download"></i>Print PDF Report
                                         </button></a>
                                 </div>
