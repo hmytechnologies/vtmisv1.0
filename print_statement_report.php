@@ -108,7 +108,7 @@ if($_REQUEST['action']=="getPDF") {
                 //$this->Text(45,15,strtoupper($name));
                 //Image(string file [, float x [, float y [, float w [, float h [, string type [, mixed link]]]]]])
                $this->Image($image,130,9,30,30);
-               $this->setFont('Arial', 'B', 20);
+               $this->setFont('Arial', 'B', 25);
                $this-> Cell(0,67,$name,0,0,'C');
             //    $this-> Cell(0,69,,0,0,'C');
                 $this->setFont('Arial', 'B', 14);
@@ -120,8 +120,8 @@ if($_REQUEST['action']=="getPDF") {
                  $this->SetFont('Times', '');
                  $this->Text(120,58,'(Invalid without National Certificate)');
     
-                 $this->setFont('Arial', 'B', 11);
-                 $this->Text(105,64,'         OCCUPATION:  '.$proName.'');
+                 $this->setFont('Arial', 'B', 8);
+                 $this->Text(105,64,'                 OCCUPATION:  '.$proName.'');
              }
              function SetCol($col)
              {
