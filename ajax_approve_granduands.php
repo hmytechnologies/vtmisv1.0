@@ -21,13 +21,13 @@
 <?php
     include ('DB.php');
     $db=new DBHelper();
-    $academicYearID=$_POST['academicYearID'];
+    $academicYearID=$_POST['admissionYearID'];
     $programmeID=$_POST['programmeID'];
     // $batchID=$_POST['batchID'];
     $graduationDate=$_POST['graduationDate'];
     $duration=$db->getData("programmes","programmeDuration","programmeID",$programmeID);
     $student=$db->approveGraduatedList($programmeID,$duration,$academicYearID);
-    if(!empty($student))
+   if(!empty($student))
     {
         ?>
         <div class="row">
@@ -242,8 +242,6 @@
     }
     else
     {
-        ?>
-        <h4><span class="text-danger">No Student(s) found....</span> </h4>
-        <?php
+         header("Location:index3.php?sp=approve_graduands&msg=unsucc");
     }
     ?>

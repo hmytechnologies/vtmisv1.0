@@ -34,7 +34,7 @@ if($_REQUEST['action']=="getPDF") {
         function SetCol($col)
         {
             // Set position at a given column
-            $this->col = $col;
+            $this->$col = $col;
             $x = 10 + $col * 65;
             $this->SetLeftMargin($x);
             $this->SetX($x);
@@ -79,7 +79,23 @@ if($_REQUEST['action']=="getPDF") {
     $courseID = $db->decrypt($_REQUEST['cid']);
     $academicYearID = $db->decrypt($_REQUEST['aid']);
     $programmeLevelID = $db->decrypt($_REQUEST['lid']);
+    $programmeID= $db->decrypt($_REQUEST['proid']);
 
+    $course = $db->getCourseInfo($courseID,$programmeID);
+    foreach ($course as $std) {
+        // $count++;
+        // $courseID = $std['courseID'];
+        //  $courseCode = $std['courseCode'];
+        // $courseName = $std['courseName'];
+        // $courseTypeID = $std['courseTypeID'];
+        //  $programmeLevelID = $std['programmeLevelID'];
+        
+        //  $classNumber = $std['classNumber'];
+        $staffID = $std['staffID'];
+        // $cpcourseID = $std['centerProgrammeCourseID'];
+        
+        // $centerID=$std['centerID'];
+    }
     $course = $db->getRows('course', array('where' => array('courseID' => $courseID), 'order_by' => 'courseID ASC'));
     if (!empty($course)) {
         foreach ($course as $c) {
@@ -189,7 +205,7 @@ if($_REQUEST['action']=="getPDF") {
                         $gender=$std['gender'];
 
                         $final_result = $db->decrypt($db->getFinalTermGrade($academicYearID, $courseID, $examNumber, 3));
-            
+
                         $exam_category_marks = $db->getTermCategorySetting();
                         if (!empty($exam_category_marks)) {
                             foreach ($exam_category_marks as $gd) {
@@ -275,12 +291,12 @@ if($_REQUEST['action']=="getPDF") {
     $avgcwk=$tcwk/$count;
     $avgsfe=$tsfe/$count;
 
-    $sdvcwk=$db->standDeviation($termScore);
-    $sdvsfe=$db->standDeviation($sfearr);
-    $cwkpresent=$db->getExamStatus($courseID,$semesterSettingID,$batchID,1,1);
-    $cwkabsent=$db->getExamStatus($courseID,$semesterSettingID,$batchID,1,0);
-    $sfepresent=$db->getExamStatus($courseID,$semesterSettingID,$batchID,2,1);
-    $sfeabsent=$db->getExamStatus($courseID,$semesterSettingID,$batchID,2,0);
+    // $sdvcwk=$db->standDeviation($termScore);
+    // $sdvsfe=$db->standDeviation($sfearr);
+    // $cwkpresent=$db->getExamStatus($courseID,$semesterSettingID,$batchID,1,1);
+    // $cwkabsent=$db->getExamStatus($courseID,$semesterSettingID,$batchID,1,0);
+    // $sfepresent=$db->getExamStatus($courseID,$semesterSettingID,$batchID,2,1);
+    // $sfeabsent=$db->getExamStatus($courseID,$semesterSettingID,$batchID,2,0);
     /* $pdf->Ln(10);
     $pdf->SetFont('Arial','B',14);
     $pdf->Cell(50,6,"Summary");
@@ -414,7 +430,7 @@ if($_REQUEST['action']=="getPDF") {
         $instructorID=0;
     } */
 
-    if($instructorID !=0) {
+    // if($instructorID !=0) {
         $inName = $db->getRows("instructor", array('where' => array('instructorID' => $staffID)));
         if (!empty($inName)) {
             foreach ($inName as $inst) {
@@ -424,11 +440,11 @@ if($_REQUEST['action']=="getPDF") {
                 $instructorName = "$salutation $fname $lname";
             }
         }
-    }
-    else
-    {
-        $instructorName="___________________________________________";
-    }
+    // }
+    // else
+    // {
+    //     $instructorName="___________________________________________";
+    // }
     $pdf->Cell(100,6,$instructorName);$pdf->Cell(100,6,"_____________________________");
     $pdf->Ln(6);
     $pdf->Cell(100,6,"Examination Officer's Name");$pdf->Cell(100,6,"Signature");

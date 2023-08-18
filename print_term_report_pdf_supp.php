@@ -20,7 +20,7 @@ if($_REQUEST['action']=="getPDF") {
     require('fpdf.php');
     $centerID = $_REQUEST['cid'];
     $programmeLevelID = $_REQUEST['lid'];
-    $academicYearID = $_REQUEST['ay'];
+    $academicYearID = $_REQUEST['aid'];
 
     class PDF extends FPDF
     {
@@ -37,7 +37,7 @@ if($_REQUEST['action']=="getPDF") {
         function SetCol($col)
         {
             // Set position at a given column
-            $this->col = $col;
+            $this->$col = $col;
             $x = 10 + $col * 65;
             $this->SetLeftMargin($x);
             $this->SetX($x);

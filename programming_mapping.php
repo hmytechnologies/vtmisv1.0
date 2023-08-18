@@ -117,12 +117,12 @@
                            <label for="FirstName">Course Category</label>
                             <select name="courseStatusID" class="form-control" required>
                               <?php
-                                 $course_status = $db->getRows('coursestatus',array('order_by'=>'courseStatus DESC'));
+                                 $course_status = $db->getRows('course_category',array('order_by'=>'courseCategoryID DESC'));
                                  if(!empty($course_status)){
                                   echo"<option value=''>Please Select Here</option>";
                                   $count = 0; foreach($course_status as $cstatus){ $count++;
-                                  $courseStatus=$cstatus['courseStatus'];
-                                  $courseStatusID=$cstatus['courseStatusID'];
+                                  $courseStatus=$cstatus['courseCategory'];
+                                  $courseStatusID=$cstatus['courseCategoryID'];
                                  ?>
                                  <option value="<?php echo $courseStatusID;?>"><?php echo $courseStatus;?></option>
                                  <?php }}
@@ -194,7 +194,7 @@ if(!empty($_REQUEST['msg']))
                                 $count++;
                                 $programmeMappingID=$dt['programmeMappingID'];
                                 $courseID=$dt['courseID'];
-                                $semisterID=$dt['semesterID'];
+                                // $semisterID=$dt['semesterID'];
                                 $programmeLevelID=$dt['programmeLevelID'];
                                 $courseStatusID=$dt['courseStatusID'];
                                 $courseStatus=$dt['courseStatus'];

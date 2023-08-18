@@ -14,6 +14,7 @@
 </script>
 <?php $db=new DBHelper();
 $instructorID=$db->getData("instructor","instructorID","userID",$_SESSION['user_session']);
+$instructor=$db->getRows("instructor",array('where'=>array('instructorID'=> $instructorID),'order_by instructorID ASC'));
 
 if(!empty($instructor))
  {
@@ -33,7 +34,7 @@ $course=$db->getRows("center_programme_course",array('where'=>array('staffID'=> 
         $programmeLevelID=$semi['programmeLevelID'];
         $programmeID=$semi['programmeID'];
         $staffID=$semi['staffID'];
-        $count++;
+        // $count++;
    }
 ?>
 <div class="container">
@@ -132,9 +133,9 @@ if(!empty($current_year ))
 <?php
 $count = 0;
 foreach ($current_year as $s) {
-    $semisterID=$s['semesterID'];
+    // $semisterID=$s['semesterID'];
     $academicYearID=$s['academicYearID'];
-    $semesterName=$s['semesterName'];
+    // $semesterName=$s['semesterName'];
     $semesterSettingID=$s['semesterSettingID'];
  $count++;
 

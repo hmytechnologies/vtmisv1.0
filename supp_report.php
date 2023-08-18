@@ -206,10 +206,10 @@
             <div class="box box-solid box-primary">
                 <div class="box-header with-border text-center">
                     <h3 class="box-title">Final Report for
-                        <?php echo $sYear;
+                    <?php   echo $db->getData("academic_year", "academicYear", "academicYearID", $academicYearID);
                         echo " ";
                         echo $db->getData("programmes", "programmeName", "programmeID", $programmeID); ?>
-                        <?php echo $db->getData("semester_setting", "semesterName", "semesterSettingID", $semesterID); ?>
+                      
                        
                 </div>
                 <!-- /.box-header -->

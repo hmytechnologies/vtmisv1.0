@@ -19,9 +19,10 @@
         $("#academicYearID").change(function()
         {
             var academicYearID=$(this).val();
-            var semisterID=$("#semisterID").val();
+            // var semisterID=$("#semisterID").val();
 
-            var dataString = 'academicYearID='+ academicYearID+'&semisterID='+semisterID;
+            // var dataString = 'academicYearID='+ academicYearID+'&semisterID='+semisterID;
+            var dataString = 'academicYearID='+ academicYearID;
 
             $.ajax
             ({
@@ -89,13 +90,19 @@
 
                     <?php
                     if(isset($_POST['doSearch'])=="View List") {
-                        $semesterSettingID = $_POST['semesterID'];
+                        // $semesterSettingID = $_POST['semesterID'];
 
-                        $courseprogramme = $db->getSemesterPublishCourse($semesterSettingID);
+                        $academicYearID = $_POST['academicYearID'];
+
+                        $courseprogramme = $db->getSemesterPublishCourse1($academicYearID);
                         if (!empty($courseprogramme)) {
                             ?>
                             <h3 id="titleheader">Registered Course
-                                for <?php echo $db->getData("semester_setting", "semesterName", "semesterSettingID", $semesterSettingID); ?></h3>
+                                for <?php 
+
+
+                                // $semesterSettingID = $db->getData("semester_setting", "semesterSettingID", "academicYearID", $academicYearID);
+                                echo $academicYearName= $db->getData("academic_year","academicYear","academicYearID",$academicYearID);?></h3>
                             <hr>
 
                             <form name="register" id="register" method="post" action="action_publish.php">
@@ -104,10 +111,10 @@
                                     <tr>
                                         <th>No.</th>
                                         <th width="10"><input type="checkbox" name="select_all" id="select_all"></th>
+                                        <th>Program </th>
                                         <th>Course Name</th>
                                         <th>Course Code</th>
                                         <th>#Students</th>
-                                        <th>Batch</th>
                                         <th>Study Year</th>
                                         <th>Lecturer</th>
                                         <th>Published</th>
@@ -120,8 +127,12 @@
                                     foreach ($courseprogramme as $cs) {
                                         $count++;
                                         $courseID = $cs['courseID'];
-                                        $batchID = $cs['batchID'];
-                                        $studyYear = $cs['studyYear'];
+                                        $centerID = $cs['centerID'];
+                                        $programmeLevelID = $cs['programmeLevelID'];
+                                        $staffID = $cs['staffID'];
+                                        $progID = $cs['programmeID'];
+                                        // $batchID = $cs['batchID'];
+                                        // $studyYear = $cs['studyYear'];
                                         $course = $db->getRows("course", array('where' => array('courseID' => $courseID), ' order_by' => 'courseName ASC'));
                                         if (!empty($course)) {
                                             $course = $db->getRows('course', array('where' => array('courseID' => $courseID), 'order_by' => 'courseID ASC'));
@@ -133,22 +144,36 @@
                                                 }
                                             }
 
-                                            $instructor = $db->getRows('instructor_course', array('where' => array('courseID' => $courseID, 'batchID' => $batchID, 'semesterSettingID' => $semesterSettingID), 'order_by' => 'courseID ASC'));
+
+
+                                         $programme = $db->getRows('programmes', array('where' => array('programmeID' => $progID), 'order_by' => 'programmeID ASC'));
+                                            if (!empty($programme)) {
+                                                foreach ($programme as $pro) {
+                                                    $programmeName = $pro['programmeName'];
+                                                  
+                                                }
+                                            }
+                                            // $instructor = $db->getRows('center_programme_course', array('where' => array('staffID' => $staffID, 'courseID' => $courseID, 'academicYearID' => $academicYearID,), 'order_by' => 'courseID ASC'));
+                                           
+                                            $instructor = $db->getRows('instructor', array('where' => array('instructorID' => $staffID), 'order_by' => 'instructorID ASC'));
                                             if (!empty($instructor)) {
                                                 foreach ($instructor as $i) {
                                                     $instructorID = $i['instructorID'];
-                                                    $instructorName = $db->getData("instructor", "instructorName", "instructorID", $instructorID);
+                                                    $instructorName = $i['instructorName'];
+                                                    // $instructorName = $db->getData("instructor", "instructorName", "instructorID", $instructorID);
                                                 }
                                             } else {
                                                 $instructorName = "Not assigned";
                                             }
 
-                                            $studentNumber = $db->getStudentCourseSum($courseID, $semesterSettingID, $batchID);
+                                            // public function getStudentCourseSum($centerID, $academicYearID, $programmeLevelID, $progID)
 
-                                            $checked = $db->checkStatus($courseID, $semesterSettingID, 'checked', $batchID);
-                                            $published = $db->checkStatus($courseID, $semesterSettingID, 'status', $batchID);
+                                            $studentNumber = $db->getStudentCourseSum($centerID, $academicYearID, $programmeLevelID, $progID);
 
-                                            $boolExamStatus = $db->checkFinalResultStatus($courseID, $semesterSettingID, $batchID);
+                                            $checked=$db->checkStatus($courseID,$academicYearID,'checked');
+                                            $published=$db->checkStatus($courseID,$academicYearID,'status');
+
+                                            $boolExamStatus = $db->checkFinalResultStatus1($courseID, $academicYearID);
 
                                             if ($published == 1)
                                                 $statusPublished = "<span class='label label-success'>Yes</span>";
@@ -173,12 +198,12 @@
                                                     <td><input type='checkbox' class='checkbox_class' name='id[]'
                                                                value='<?php echo $courseID; ?>'></td>
                                                     <?php
-                                                } ?>
+                                                } ?> 
+                                                <td><?php echo $programmeName; ?></td>
                                                 <td><?php echo $courseName; ?></td>
                                                 <td><?php echo $courseCode; ?></td>
                                                 <td><?php echo $studentNumber; ?></td>
-                                                <td><?php echo $db->getData("batch", "batchName", "batchID", $batchID); ?></td>
-                                                <td><?php echo $studyYear; ?></td>
+                                                <td><?php echo $academicYearName; ?></td>
                                                 <td><?php echo $instructorName; ?></td>
                                                 <td><?php echo $statusPublished; ?></td>
                                                 <td><?php echo $statusChecked;?></td>
@@ -195,8 +220,8 @@
                                     <!--            <div class="col-lg-6"></div>
                                     -->
                                     <input type="hidden" name="number_applicants" value="<?php echo $count; ?>">
-                                    <input type="hidden" name="semesterID" value="<?php echo $semesterSettingID; ?>">
-                                    <input type="hidden" name="batchID" value="<?php echo $batchID; ?>">
+                                    <input type="hidden" name="academicYearID" value="<?php echo $academicYearID ; ?>">
+                                    
                                     <div class="col-lg-3">
                                         <input type="hidden" name="action_type" value="check"/>
                                         <input type="submit" name="doCheck" value="Check"
@@ -288,16 +313,16 @@
             <?php
             if(isset($_POST['doFind'])=="View Records")
             {
-                $semesterSettingID=$_POST['semesterID'];
+                $academicYearID=$_POST['academicYearID'];
                 $programmeID=$_POST['programmeID'];
-                $batchID=$_POST['batchID'];
-
-                $courseprogramme = $db->getSemesterProgrammeCourse($programmeID,$semesterSettingID,$batchID);
+               
+                // getSemesterProgrammeCourse($programmeID, $academicYearID)
+                $courseprogramme = $db->getSemesterProgrammeCourse1($programmeID, $academicYearID);
                 if(!empty($courseprogramme))
                 {
                     ?>
-                    <h3 id="titleheader">Registered Course for <?php echo $db->getData("programmes","programmeName","programmeID",$programmeID);?>-<?php echo $db->getData("batch","batchName","batchID",$batchID);?>
-                        -<?php echo $db->getData("semester_setting","semesterName","semesterSettingID",$semesterSettingID);?></h3>
+                    <h3 id="titleheader">Registered Course for <?php echo $db->getData("programmes","programmeName","programmeID",$programmeID);?>
+                        -<?php echo $academicYearName =$db->getData("academic_year","academicYear","academicYearID", $academicYearID);?></h3>
                     <hr>
 
                     <form name="register" id="register" method="post" action="action_publish.php">
@@ -306,10 +331,11 @@
                             <tr>
                                 <th>No.</th>
                                 <th width="10"><input type="checkbox" name="select_all" id="select_all"></th>
+                                <th>Program</th>
                                 <th>Course Name</th>
                                 <th>Course Code</th>
                                 <th>#Students</th>
-                                <th>Batch</th>
+                                
                                 <th>Study Year</th>
                                 <th>Lecturer</th>
                                 <th>Published</th>
@@ -319,12 +345,15 @@
                             <tbody>
                             <?php
                             $count=0;
-                            foreach($courseprogramme as $cs)
-                            {
+                            foreach ($courseprogramme as $cs) {
                                 $count++;
-                                $courseID=$cs['courseID'];
-                                $batchID=$cs['batchID'];
-                                $studyYear=$cs['studyYear'];
+                                $courseID = $cs['courseID'];
+                                $centerID = $cs['centerID'];
+                                $programmeLevelID = $cs['programmeLevelID'];
+                                $staffID = $cs['staffID'];
+                                $progID = $cs['programmeID'];
+                                // $batchID=$cs['batchID'];
+                                // $studyYear=$cs['studyYear'];
                                 $course=$db->getRows("course",array('where'=>array('courseID'=>$courseID),' order_by'=>'courseName ASC'));
                                 if(!empty($course))
                                 {
@@ -339,7 +368,15 @@
                                         }
                                     }
 
-                                    $instructor = $db->getRows('instructor_course',array('where'=>array('courseID'=>$courseID,'batchID'=>$batchID,'semesterSettingID'=>$semesterSettingID),'order_by'=>'courseID ASC'));
+                                    $programme = $db->getRows('programmes', array('where' => array('programmeID' => $programmeID), 'order_by' => 'programmeID ASC'));
+                                            if (!empty($programme)) {
+                                                foreach ($programme as $pro) {
+                                                    $programmeName = $pro['programmeName'];
+                                                  
+                                                }
+                                            }
+                                    $instructor = $db->getRows('instructor', array('where' => array('instructorID' => $staffID), 'order_by' => 'instructorID ASC'));
+                                    
                                     if(!empty($instructor))
                                     {
                                         foreach($instructor as $i)
@@ -353,12 +390,12 @@
                                         $instructorName="Not assigned";
                                     }
 
-                                    $studentNumber=$db->getStudentCourseSum($courseID,$semesterSettingID,$batchID);
+                                    $studentNumber=$db->$db->getStudentCourseSum($centerID,$academicYearID, $programmeLevelID, $progID);
 
-                                    $checked=$db->checkStatus($courseID,$semesterSettingID,'checked',$batchID);
-                                    $published=$db->checkStatus($courseID,$semesterSettingID,'status',$batchID);
+                                    $checked=$db->checkStatus($courseID,$academicYearID,'checked');
+                                    $published=$db->checkStatus($courseID,$academicYearID,'status');
 
-                                    $boolExamStatus=$db->checkExamResultStatus($courseID,$semesterSettingID,$batchID);
+                                    $boolExamStatus=$db->checkExamResultStatus($courseID,$academicYearID);
 
                                     if($published==1)
                                         $statusPublished="<span class='label label-success'>Yes</span>";
@@ -387,11 +424,12 @@
                                             <td><input type='checkbox' class='checkbox_class' name='id[]' value='<?php echo $courseID;?>'></td>
                                             <?php
                                         }?>
+                                        <td><?php echo $programmeName; ?></td>
                                         <td><?php echo $courseName;?></td>
                                         <td><?php echo $courseCode;?></td>
                                         <td><?php echo $studentNumber;?></td>
-                                        <td><?php echo $db->getData("batch","batchName","batchID",$batchID);?></td>
-                                        <td><?php echo $studyYear;?></td>
+                                        
+                                        <td><?php echo $academicYearName;?></td>
                                         <td><?php echo $instructorName;?></td>
                                         <td><?php echo $statusPublished;?></td>
                                         <td><?php echo $statusChecked;?></td>
@@ -408,8 +446,8 @@
                             <!--            <div class="col-lg-6"></div>
                             -->
                             <input type="hidden" name="number_applicants" value="<?php echo $count;?>">
-                            <input type="hidden" name="semesterID" value="<?php echo $semesterSettingID;?>">
-                            <input type="hidden" name="batchID" value="<?php echo $batchID;?>">
+                            <input type="hidden" name="academicYearID" value="<?php echo $academicYearID ; ?>">
+                            
                             <div class="col-lg-3">
                                 <input type="hidden" name="action_type" value="check"/>
                                 <input type="submit" name="doCheck" value="Check" class="btn btn-success form-control">

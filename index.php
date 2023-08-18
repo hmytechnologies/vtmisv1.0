@@ -14,6 +14,8 @@ if(isset($_POST['doLogin'])=='Sign In!')
 
     if($user->doLogin($username,$upass))
     {
+
+		
         $user->redirect('index3.php');
     }
     else

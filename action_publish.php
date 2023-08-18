@@ -8,8 +8,8 @@ try {
     //if(isset($_REQUEST['action_type']) && !empty($_REQUEST['action_type']))
     //{
     $id=$_POST['id'];
-    $batchID=$_POST['batchID'];
-    $semesterID=$_POST['semesterID'];
+    // $batchID=$_POST['batchID'];
+    $academicYearID=$_POST['academicYearID'];
     $status=false;
     if(isset($_POST['doAdmit']) == 'Publish')
     {
@@ -22,7 +22,7 @@ try {
                     'status'=>1,
                     'checked'=>1
                 );
-                $condition=array('courseID'=>$courseID,'semesterSettingID'=>$semesterID,'batchID'=>$batchID);
+                $condition=array('courseID'=>$courseID,'academicYearID'=>$academicYearID);
                 $updateapp=$db->update($tblName, $userData, $condition);
                 $updateapp=$db->update($tblFinal, $userData, $condition);
                 $status=true;
@@ -49,7 +49,7 @@ try {
                 $userData=array(
                     'status'=>0
                 );
-                $condition=array('courseID'=>$courseID,'semesterSettingID'=>$semesterID,'batchID'=>$batchID);
+                $condition=array('courseID'=>$courseID,'academicYearID'=>$academicYearID);
                 $updateapp=$db->update($tblName, $userData, $condition);
                 $updateapp=$db->update($tblFinal, $userData, $condition);
                 $status=true;
@@ -75,7 +75,7 @@ try {
                 $userData=array(
                     'checked'=>1
                 );
-                $condition=array('courseID'=>$courseID,'semesterSettingID'=>$semesterID,'batchID'=>$batchID);
+                $condition=array('courseID'=>$courseID,'academicYearID'=>$academicYearID);
                 $updateapp=$db->update($tblName, $userData, $condition);
                 $updateapp=$db->update($tblFinal, $userData, $condition);
                 $status=true;
@@ -95,13 +95,14 @@ try {
 
         if($_POST['id'])
         {
+            $academicYearID=$_POST['academicYearID'];
             foreach ($id as $courseID)
             {
 
                 $userData=array(
                     'checked'=>0
                 );
-                $condition=array('courseID'=>$courseID,'semesterSettingID'=>$semesterID,'batchID'=>$batchID);
+                $condition=array('courseID'=>$courseID,'academicYearID'=>$academicYearID);
                 $updateapp=$db->update($tblName, $userData, $condition);
                 $updateapp=$db->update($tblFinal, $userData, $condition);
                 $status=true;

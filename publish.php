@@ -90,7 +90,7 @@
                 $academicYearID=$_POST['academicYearID'];
                 $programmeID=$_POST['programmeID'];
                 // $batchID=$_POST['batchID'];
-                $semesterSettingID=$_POST['semesterID'];
+                // $semesterSettingID=$_POST['semesterID'];
                 $courseprogramme = $db->getSemesterProgrammeCourse($programmeID,$academicYearID,);
                 if(!empty($courseprogramme))
                 {
@@ -208,7 +208,7 @@
 -->
                 <input type="hidden" name="number_applicants" value="<?php echo $count;?>">
             <input type="hidden" name="semesterID" value="<?php echo $semesterSettingID;?>">
-            <input type="hidden" name="batchID" value="<?php echo $batchID;?>">
+            <!-- <input type="hidden" name="batchID" value="<?php echo $batchID;?>"> -->
                 <div class="col-lg-3">
                     <input type="hidden" name="action_type" value="add"/>
                     <input type="submit" name="doCheck" value="Check" class="btn btn-success form-control">

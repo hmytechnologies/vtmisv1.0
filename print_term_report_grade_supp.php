@@ -20,7 +20,7 @@ if($_REQUEST['action']=="getPDF") {
     require('fpdf.php');
     $centerID = $_REQUEST['cid'];
     $programmeLevelID = $_REQUEST['lid'];
-    $academicYearID = $_REQUEST['ay'];
+    $academicYearID = $_REQUEST['aid'];
 
     class PDF extends FPDF
     {
@@ -37,7 +37,7 @@ if($_REQUEST['action']=="getPDF") {
         function SetCol($col)
         {
             // Set position at a given column
-            $this->col = $col;
+            $this->$col = $col;
             $x = 10 + $col * 65;
             $this->SetLeftMargin($x);
             $this->SetX($x);
@@ -162,6 +162,8 @@ if($_REQUEST['action']=="getPDF") {
                     $countgs = 0;
                     $countcs = 0;
                     $graderemarks = 0;
+                    $totalPass =0;
+                    $totalSupp =0;
                     foreach ($course as $cs) {
                         $courseID = $cs['courseID'];
                         $courseCategoryID = $cs['courseCategoryID'];
@@ -237,7 +239,7 @@ if($_REQUEST['action']=="getPDF") {
                     $graderemarks++;
                 }
                         
-                    }
+                    } 
                         $gsaverage = round(($gstotal / $countgs), 2);
                         $csaverage = round(($cstotal / $countcs), 2);
 

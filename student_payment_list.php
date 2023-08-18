@@ -163,7 +163,7 @@
                                 <th>Reg.Number</th>
                                 <th>Prog.Code</th>
                                 <th>Study Year</th>
-                                <th>Study Mode</th>
+                                <!-- <th>Study Mode</th> -->
                                 <th>Student Status</th>
                                 <th>Sponsor</th>
                                 <th>Req.Fees</th>
@@ -184,8 +184,16 @@
                                     $mname = $lst['middleName'];
                                     $lname = $lst['lastName'];
                                     $sponsor=$lst['sponsor'];
-                                    $programmeID=$lst['programmeID'];
+                                    $levelID = $db->getRows('student_programme', array('where' => array('regNumber' => $searchStudent), ' order_by' => ' regNumber ASC'));
+                                            foreach ($levelID as $lv) {
+
+                                                $programmeID = $lv['programmeID'];
+                                                $programmeLevelID = $lv['programmeLevelID'];
+                                               
+
+                                            }
                                     $name = "$fname $mname $lname";
+                                    $academicYearID = $std['academicYearID'];
 
                                     $progFees=$db->getAllFees($programmeID);
                                     $paidOnce=$db->getOnceFees($programmeID);
@@ -203,8 +211,8 @@
                                         <td><?php echo $name ?></td>
                                         <td><?php echo $st['registrationNumber']; ?></td>
                                         <td><?php echo $db->getData("programmes","programmeCode","programmeID",$programmeID); ?></td>
-                                        <td><?php echo $studyYear;?></td>
-                                        <td><?php echo $db->getData("batch", "batchName", "batchID", $lst['batchID']); ?></td>
+                                        <td><?php echo $db->getData("academic_year", "academicYear", "academicYearID", $academicYearID) ?></td>
+                                        <!-- <td><?php echo $db->getData("batch", "batchName", "batchID", $lst['batchID']); ?></td> -->
                                         <td><?php echo $db->getData("status", "statusValue", "statusID", $lst['statusID']); ?></td>
                                         <td><?php echo $db->getData("sponsor_type", "sponsorCode", "sponsorTypeID", $sponsor);?></td>
                                         <td><?php echo number_format($requiredFees,2);?></td>

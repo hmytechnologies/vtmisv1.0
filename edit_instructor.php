@@ -96,7 +96,7 @@ if(!empty($instructor)) {
                                         $fname = $inst['firstName'];
                                         $mname = $inst['middleName'];
                                         $lname = $inst['lastName'];
-                                        $title=$inst['title'];
+                                        $title=$inst['titleID'];
                                         ?>
                                         <div class="row">
                                             <div class="col-lg-8">

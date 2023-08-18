@@ -20,9 +20,9 @@ if($_REQUEST['action']=="getPDF") {
     }
 
     require('fpdf.php');
-     $centerID = $_REQUEST['cid'];
-      $programmeLevelID = $_REQUEST['lid'];
-    $academicYearID = $_REQUEST['ay'];
+    $centerID = $_REQUEST['cid'];
+    $programmeLevelID = $_REQUEST['lid'];
+    $academicYearID = $_REQUEST['aid'];
 
     class PDF extends FPDF
     {
@@ -39,7 +39,7 @@ if($_REQUEST['action']=="getPDF") {
         function SetCol($col)
         {
             // Set position at a given column
-            $this->col = $col;
+            $this->$col = $col;
             $x = 10 + $col * 65;
             $this->SetLeftMargin($x);
             $this->SetX($x);
@@ -288,6 +288,7 @@ if($_REQUEST['action']=="getPDF") {
 
                 if ($gender == 'M') {
                     if ($grade == "A" || $grade == "B" || $grade == "C" || $grade == "D") {
+                        
                         $tmpass++;
                     } else {
                         $tmfail++;
@@ -362,6 +363,8 @@ if($_REQUEST['action']=="getPDF") {
     $ppass = round(($totalPass / ($totalPass + $totalSupp)) * 100, 2);
     $pfail = round(($totalSupp / ($totalPass + $totalSupp)) * 100, 2);
 
+    
+
     $tpass=$npassmale+$npassfemale;
     $tfail=$nsuppfemale+$nsuppmale;
 
@@ -415,8 +418,14 @@ if($_REQUEST['action']=="getPDF") {
     $pdf->Cell(40, 6, "Total(%)", 1);
     $pdf->SetFont('Arial', '', 12);
     $pdf->Cell(46, 6, $studentNumber . "(" . $pgender . "%)", 1,0,'C');
-    $pdf->Cell(46, 6, $gB . "(" . $pB . "%)", 1, 0, 'C');
-    $pdf->Cell(46, 6, $gC . "(" . $pC . "%)", 1, 0, 'C');
+    // $pdf->Cell(46, 6, $gB . "(" . $pB . "%)", 1, 0, 'C');
+    // $pdf->Cell(46, 6, $gC . "(" . $pC . "%)", 1, 0, 'C');
+
+
+    $pdf->Cell(46, 6, $gB . "", 1, 0, 'C');
+    $pdf->Cell(46, 6, $gC ."", 1, 0, 'C');
+
+    
     $pdf->Cell(46, 6, $tpass . "(" . $ppass . "%)", 1, 0, 'C');
     $pdf->Cell(46, 6, $tfail . "(" . $pfail . "%)", 1, 0, 'C');
 

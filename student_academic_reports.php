@@ -70,11 +70,32 @@
                     if (((isset($_POST['doSearch']) == "Search Student") || (isset($_REQUEST['action']) == "getRecords"))) {
                         $searchStudent = $_POST['search_student'];
                         $searchStudent = $_REQUEST['search_student'];
+                        $studentid = $db->transcriptList1($searchStudent);
+                        if (!empty($studentid)) {
 
-                        $studentID = $db->getRows('student', array('where' => array('registrationNumber' => $searchStudent), ' order_by' => ' studentID ASC'));
-                    ?>
+                            foreach ($studentid as $std) {
+                              
+                                $stdID = $std['regNumber'];
 
-                        <?php
+                          
+                            }
+
+                            $resetdata = array(
+                                'statusID' => 2
+                            );
+                            $condition = array('registrationNumber' => $stdID);
+                            $update=$db->update("student",$resetdata,$condition);
+
+                            $studentID = $db->getRows('student', array('where' => array('registrationNumber' => $stdID), ' order_by' => ' studentID ASC'));
+
+                        }
+                        else{
+
+                            $studentID = $db->getRows('student', array('where' => array('registrationNumber' => $searchStudent), ' order_by' => ' studentID ASC'));
+                            
+                        }
+
+                        
                         if (!empty($studentID)) {
 
                         ?>
@@ -346,11 +367,39 @@
                         $searchStudent = $_POST['search_student'];
                         $searchStudent = $_REQUEST['search_student'];
 
-                        $studentID = $db->transcriptList($searchStudent);
+                        $studentid = $db->transcriptList1($searchStudent);
+                        if (!empty($studentid)) {
+
+                            foreach ($studentid as $std) {
+                              
+                                $stdID = $std['regNumber'];
+
+                          
+                            }
+
+                            $resetdata = array(
+                                'statusID' => 2
+                            );
+                            $condition = array('registrationNumber' => $stdID);
+                            $update=$db->update("student",$resetdata,$condition);
+
+                            $studentID = $db->getRows('student', array('where' => array('registrationNumber' => $stdID), ' order_by' => ' studentID ASC'));
+
+                        }
+                        else{
+
+                            $studentID = $db->getRows('student', array('where' => array('registrationNumber' => $searchStudent), ' order_by' => ' studentID ASC'));
+                            
+                        }
+
+                        
                         if (!empty($studentID)) {
 
                     ?>
-                            <div class="box box-solid box-primary">
+                          
+
+
+                          <div class="box box-solid box-primary">
                                 <div class="box-header with-border text-center">
                                     <h3 class="box-title">Personal Information</h3>
                                 </div>
@@ -364,12 +413,11 @@
                                                 <th>Gender</th>
                                                 <th>Level</th>
                                                 <th>Programme Name</th>
+                                                <!-- <th>Study Year</th> -->
                                                 <!-- <th>Study Mode</th> -->
-                                                <!-- <th>CGPA</th>-->
                                                 <th>Status</th>
                                                 <th>Picture</th>
-                                                <th>Preview</th>
-                                                <th>More</th>
+                                                <th>Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -377,18 +425,29 @@
                                             $count = 0;
                                             foreach ($studentID as $std) {
                                                 $count++;
+                                                $studentID = $std['studentID'];
                                                 $fname = $std['firstName'];
                                                 $mname = $std['middleName'];
                                                 $lname = $std['lastName'];
                                                 $gender = $std['gender'];
                                                 $regNumber = $std['registrationNumber'];
                                                 // $programmeID=$std['programmeID'];
+                                                $statusID = $std['statusID'];
 
-
-
-                                                /*                      $gpa=$std['gpa'];*/
+                                                $studentPicture = $std['studentPicture'];
                                                 $name = "$fname $mname $lname";
 
+
+                                                //$today = date("Y-m-d");
+                                                $current_year = $db->getRows("academic_year", array('where' => array('status' => 1)));
+                                                    // $sm=$db->readSemesterSetting($);
+                                                    foreach ($current_year as $s) {
+                                                        // $semisterID=$s['semesterID'];
+                                                        $academicYearID=$s['academicYearID'];
+                                                        $academicYear=$s['academicYear'];
+                                                        
+                                                    }
+                                                   // echo  $academicYearID;
                                                 $student_program = $db->getRows('student_programme', array('where' => array('regNumber' => $regNumber), ' order_by' => ' regNumber ASC'));
                                                 if (!empty($student_program)) {
                                                     foreach ($student_program as $pro) {
@@ -401,10 +460,11 @@
                                                 }
 
 
+
+
                                                 echo "<tr><td>$name</td><td>$regNumber</td><td>$gender</td>";
 
-                                                //  $programmeLevelID=$db->getData("programmes","programmeLevelID","programmeID",$programmeID);
-                                                $level = $db->getRows('programme_level', array('where' => array('programmeLevelID' => $programmeLevelID), ' order_by' => ' programmeLevelCode ASC'));
+                                                $level = $db->getRows('programme_level', array('where' => array('programmeLevelID' => $programmeLevel), ' order_by' => ' programmeLevelCode ASC'));
                                                 if (!empty($level)) {
                                                     foreach ($level as $lvl) {
                                                         $programme_level_code = $lvl['programmeLevelCode'];
@@ -420,57 +480,172 @@
                                                         echo "<td>$programmeName</td>";
                                                     }
                                                 }
+
+
+
+                                                $study_year = $db->getRows('student_study_year', array('where' => array('regNumber' => $regNumber, 'academicYearID' => $academicYearID), ' order_by' => 'studentID ASC'));
+                                                if (!empty($study_year)) {
+                                                    foreach ($study_year as $sy) {
+                                                        $studyYear = $sy['studyYear'];
+                                                    }
+                                                }
+                                                // echo"<td $studyYear </td>";
+
+
+                                                $status = $db->getRows('status', array('where' => array('statusID' => $statusID), ' order_by' => 'status_value ASC'));
+                                                if (!empty($status)) {
+                                                    foreach ($status as $st) {
+                                                        $status_value = $st['statusValue'];
+                                                        echo "<td>$status_value</td>";
+                                                    }
+                                                }
                                             }
                                             ?>
                                             <td>
                                                 <?php
                                                 if (!empty($studentPicture)) {
                                                 ?>
-                                                    <form method="post" name="upload" action="action_upload_new_picture.php" enctype="multipart/form-data">
-                                                        <img id="image" src="student_images/<?php echo $studentPicture; ?>" height="150px" width="150px;" />
-                                                        <input type='file' name="student_image" accept=".jpg" onchange="readURL(this);" />
-                                                        <input type="hidden" name="regNumber" value="<?php echo $regNumber; ?>">
-                                                        <input type="hidden" name="action_type" value="add" />
-                                                        <input type="submit" class="btn btn-success" name="btnSave" value="Upload Picture" />
-                                                    </form>
-                                                <?php
-                                                } else {
-                                                ?>
-                                                    <form method="post" name="upload" action="action_upload_new_picture.php" enctype="multipart/form-data">
-                                                        <img id="image" src="student_images/<?php echo $studentPicture; ?>" height="150px" width="150px;" />
-                                                        <input type='file' name="student_image" accept=".jpg" onchange="readURL(this);" />
-                                                        <input type="hidden" name="regNumber" value="<?php echo $regNumber; ?>">
-                                                        <input type="hidden" name="action_type" value="add" />
-                                                        <input type="submit" class="btn btn-success" name="btnSave" value="Upload Picture" />
-                                                    </form>
-                                                <?php
-                                                }
-                                                ?>
+                                                    <img id="image" src="student_images/<?php echo $studentPicture; ?>" height="150px" width="150px;" />
                                             </td>
-                                            <td>
-                                                <?php
-                                                if (!empty($studentPicture)) {
-                                                ?>
-                                                    <div class="col-lg-12">
-                                                        <button class="btn btn-primary pull-right form-control" style="margin-right: 5px;" data-toggle="modal" data-target="#view_transcript"><i class="fa fa-download"></i>Print Preview</button>
-                                                    </div>
-                                                <?php
+                                        <?php
                                                 } else {
-                                                ?>
-                                                    No Preview
-                                                <?php
-                                                }
-                                                ?>
 
-                                            </td>
-                                            <td>
-                                                <a href="index3.php?sp=transcript_details&regNo=<?php echo $db->my_simple_crypt($regNumber, 'e'); ?>" class="btn btn-primary glyphicon glyphicon-fast-forward" role="button"></a>
-                                            </td>
-                                            </tr>
+                                        ?>
+
+                                            <form method="post" name="upload" action="action_upload_new_picture.php" enctype="multipart/form-data">
+                                                <img id="image" src="student_images/<?php echo $studentPicture; ?>" height="150px" width="150px;" />
+                                                <input type='file' name="student_image" accept=".jpg" onchange="readURL(this);" />
+                                                <input type="hidden" name="regNumber" value="<?php echo $regNumber; ?>">
+                                                <input type="hidden" name="action_type" value="add" />
+                                                <input type="submit" class="btn btn-success" name="btnSave" value="Upload Picture" />
+                                            </form>
+
+
+                                        <?php
+                                                }
+                                        ?>
+                                        <td>
+
+                                            <?php
+                                            if (!empty($studentPicture)) {
+                                            ?>
+                                              
+                                               
+                                                <div class="col-12">
+
+                                                <form method="POST" action="print_student_transcript.php" target= "_blank" >
+
+                                                    
+                                                        <?php
+
+                                                    $studentid = $db->transcriptList1($searchStudent);
+                                                    if (!empty($studentid)) {
+                                                        $count = 0;
+                                                         $completedLevels = 0;
+                                                        
+                                                        $student = $db->getRows('student_programme', array('where' => array('regNumber' => $regNumber),'order_by' => 'programmeLevelID ASC'));
+                                                        if (!empty($student)) {
+                                                           
+                                                            $isChecked = ($count <= $completedLevels);
+                                                            foreach ($student as $studentlevel) {
+                                                                $count++;
+                                                                $LevelID = $studentlevel['programmeLevelID'];
+                                                                //  $centerID=$studentlevel['centerID'];
+                                                                $regNumber = $studentlevel['regNumber'];
+                                                                
+                                                               
+                                                        ?>
+                                                                <input type="checkbox" name="level[]"  readonly value="<?php echo $LevelID;?>"<?php echo ($isChecked) ? 'checked' : ''; ?> hidden>
+                                                                
+                                                                <label for=""><?php echo $db->getData('programme_level', 'programmeLevel', 'programmeLevelID',  $LevelID);?></label>
+                                                              
+                                                                <br>
+                                                                
+
+                                                        <?php
+                                                            }?>
+
+                                                             <!-- <a href="#edit_?$levelID=<?php echo  $LevelID; ?>$studentReg=<?php echo $regNumber; ?>"  style="margin-right: 5px;" class="btn btn-primary btn-sm" data-toggle="modal">
+                                                            
+                                                            <i class="fa fa-download"></i>Print PDF Report
+                                                                 <span><strong></strong></span>
+                                                                  
+                                                         </a> -->
+
+                                                            <input type="submit" value="Print Transcript Report" class="btn btn-primary pull-right form-control"  />
+                                                           
+                                                           
+                                                            <input type="hidden" name="action" value="getPDF"/>
+                                                        
+                                                        <input type="hidden" name="regNumber" value="<?php echo $studentlevel['regNumber']?>">
+                                                        <input type="hidden" required name="programmeLevelID" value="<?php echo $studentlevel['programmeLevelID']?>">
+                                                                        
+                                                        
+                                                        
+                                                        
+                                                        <!-- <i class="fa fa-download"></i>Print PDF Report -->
+                                                         <!-- <button type="button" name="submit" class
+                                                         ="btn btn-primary pull-right form-control" style="margin-right: 5px;" data-toggle="modal" data-target="#add_new_atype_modal">
+                                                    <i class="fa fa-download"></i>Print PDF Report -->
+                                                </button>
+                                                        <?php   
+                                                        }///MKVTC/CJ20/19
+                                                    }else{
+
+                                                        echo "<h3 class='text-danger'>Student with Reg.Number: " . $searchStudent . " are not graduate </h3>";
+
+                                                    }
+                                                        ?>
+                                                          
+                                               <!-- <button type="button" name="submit" class="btn btn-primary pull-right form-control" style="margin-right: 5px;" data-toggle="modal" data-target="#add_new_atype_modal">
+                                                    <i class="fa fa-download"></i>Print PDF Report
+                                                </button></a> -->
+                                                   
+
+
+
+                                                </form>
+
+                                                </div>
+
+                                               
+                                            <?php
+                                            } else {
+                                            ?>
+                                                No Preview
+                                            <?php
+                                            }
+                                            ?>
+
+                                        </td>
+                                        </tr>
                                         </tbody>
                                     </table>
                                 </div>
                             </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                             <hr>
                     <?php
                         } else {

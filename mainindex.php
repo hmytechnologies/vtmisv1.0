@@ -172,6 +172,11 @@ $roleID=$_SESSION['roleID'];
             include('programming_mapping.php');
             break;
 
+
+            
+
+            
+
         //Registration Form
         case 'rform':
             include('registernewstudent.php');

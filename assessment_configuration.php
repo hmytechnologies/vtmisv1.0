@@ -91,13 +91,14 @@ $instructorID=$db->getData("instructor","instructorID","userID",$_SESSION['user_
                         $academicYearID = $_POST['academicYearID'];
 
                         $courseprogramme = $db->getInstructorAcademicCourse($academicYearID, $instructorID);
+                        $semesterSettingID = $db->getData("semester_setting","semesterSettingID","academicYearID",$academicYearID);
                         if (!empty($courseprogramme)) {
                             ?>
                             <div class="col-md-12">
                                 <div class="box box-solid box-primary">
                                     <div class="box-header with-border text-center">
                                         <h3 class="box-title">List of Assigned Courses
-                                            for <?php echo $db->getData("semester_setting","semesterName","semesterSettingID",$semesterSettingID);?></h3>
+                                            for <?php echo $db->getData("academic_year","academicYear","academicYearID",$academicYearID);?></h3>
                                     </div>
                                     <!-- /.box-header -->
                                     <div class="box-body">
@@ -143,7 +144,7 @@ $instructorID=$db->getData("instructor","instructorID","userID",$_SESSION['user_
 
                                                 $viewButton = '
 	   <div class="btn-group">
-	         <a href="index3.php?sp=marks_configuration&id=' . $db->encrypt($courseID) . '&sid=' . $db->encrypt($semesterSettingID).'&instID='.$db->encrypt($instructorID). '&bid=' . $db->encrypt($batchID). '"class="fa fa-eye" title="View Configuration Settings"></a>
+	         <a href="index3.php?sp=marks_configuration&id=' . $db->encrypt($courseID) . '&sid=' . $db->encrypt($semesterSettingID).'&instID='.$db->encrypt($instructorID). '&ac=' . $db->encrypt($academicYearID). '"class="fa fa-eye" title="View Configuration Settings"></a>
 	   </div>';
                                                 ?>
 

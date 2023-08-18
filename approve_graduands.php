@@ -24,7 +24,7 @@
 <div class="container">
 <h3>Approve Graduands</h3>
 <hr>
-    <form name="" method="post" action="" onsubmit="return viewGranduands();">
+    <form name="" method="post" action="ajax_approve_granduands.php" onsubmit="return viewGranduands();">
 <div class="row">
         <div class="col-lg-3">
             <label for="MiddleName">Trade Name</label>

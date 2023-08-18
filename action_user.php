@@ -33,24 +33,24 @@ if(isset($_REQUEST['action_type']) && !empty($_REQUEST['action_type'])) {
     if ($_REQUEST['action_type'] == 'adduser') {
         $fname = htmlentities(strtoupper($_POST['fname']),ENT_QUOTES);
         $lname = htmlentities(strtoupper($_POST['lname']),ENT_QUOTES);
-        $email = $_POST['email'];
+       $email = $_POST['email'];
         $phoneNumber = $_POST['phoneNumber'];
-        $roleID=$_POST['roleID'];
+         $roleID=$_POST['roleID'];
         //$departmentID=$_POST['departmentID'];
         //$pwd = $db->generate_password(8);
         $pwd = strtoupper(trim($lname));
         $username = $email;
-        $password = $db->PwdHash($pwd);
+       $password = $db->PwdHash($pwd);
         if ($db->isFieldExist($tblName, 'userName', $username)) {
             $boolStatus = false;
             $msg = "exists";
         } else {
             if(!empty($_POST['centerID']))
-                $centerID=$_POST['centerID'];
+                echo $centerID=$_POST['centerID'];
             else
                 $officeID="";
             if(!empty($_POST['departmentID']))
-                $departmentID=$_POST['departmentID'];
+               echo  $departmentID=$_POST['departmentID'];
             else
                 $departmentID='';
 
@@ -61,11 +61,12 @@ if(isset($_REQUEST['action_type']) && !empty($_REQUEST['action_type'])) {
                 'lastName' => $lname,
                 'email' => $email,
                 'phoneNumber' => $phoneNumber,
-                'departmentID'=>$centerID,
+                'departmentID'=> $departmentID,
                 'status' => 1,
                 'login' => 0
             );
-            $insert = $db->insert($tblName, $userData);
+            
+           $insert = $db->insert($tblName, $userData);
             $userID = $insert;
 
             $userRolesData = array(
@@ -86,8 +87,9 @@ if(isset($_REQUEST['action_type']) && !empty($_REQUEST['action_type'])) {
                     'phoneNumber' => $phoneNumber,
                     'email' => $email,
                     'centerID'=>$centerID,
-                    'departmentID'=>$_POST['departmentID'],
-                    'centerID'=>$centerID,
+                    'departmentID'=>$departmentID,
+                    'salutation'=>'Dear',
+                          'middleName' =>$lname,
                     'instructorStatus'=>1,
                     'isLogin'=>1,
                     'userID'=>$userID,

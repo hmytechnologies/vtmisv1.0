@@ -1,35 +1,33 @@
 <script type="text/javascript" src="js/jquery.min.js"></script>
-<script src="js/jquery-1.4.2.min.js"></script>   
+<script src="js/jquery-1.4.2.min.js"></script>
 <script>
-function readURL(input) {
-  if (input.files && input.files[0]) {
-    var reader = new FileReader();
-    reader.onload = function (e) {
-      $('#image')
-        .attr('src', e.target.result)
-        .width(150)
-        .height(150);
-    };
-    reader.readAsDataURL(input.files[0]);
-  }
-}
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $('#image')
+                    .attr('src', e.target.result)
+                    .width(150)
+                    .height(150);
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
 </script>
 <script type="text/javascript">
     function confirmEmail() {
-        var email = document.getElementById("email").value
-        var confemail = document.getElementById("confemail").value
-        if (email != confemail) {
+        var email = document.getElementById("email").value;
+        var confemail = document.getElementById("confemail").value;
+        if (email !== confemail) {
             alert('Email Not Matching!');
         }
     }
 </script>
 <script>
-function goBack() {
-    window.history.back();
-}
+    function goBack() {
+        window.history.back();
+    }
 </script>
-
-
 <h1>Edit User Data</h1>
 <?php
 $db = new DBHelper();
@@ -244,13 +242,25 @@ if(!empty($userData)) {
                 <div class="col-lg-1">
                     <!-- Picture -->
                     <div class="row">
-                        <div class="col-lg-12">
-                            <label for="Picture">Profile Picture</label>
-                            <img id="image" src="student_images/<?php echo $userData['userImage']; ?>" height="150px"
-                                 width="150px;"/>
-                            <input type='file' name="photo" accept=".jpg" onchange="readURL(this);"/>
-                        </div>
-                    </div>
+    <div class="col-lg-12">
+        <label for="photo">Profile Picture</label>
+           <?php
+     // Check if the userImage key exists in $userData array and if it has a valid value
+        if (isset($userData['userImage']) && !empty($userData['userImage'])) {
+            $imagePath = "student_images/" . $userData['userImage'];
+        } else {
+            // Set a default image path here if needed
+            $imagePath = "default_profile_image.jpg";
+        }
+        ?>
+        <img id="image" src="<?php echo $imagePath; ?>" height="150px" width="150px"/>
+        <input type="file" name="photo" id="photo" accept=".jpg" onchange="readURL(this);"/>
+    </div>
+
+    
+</div>
+
+
                     <!-- Picture -->
                 </div>
             </div>

@@ -347,7 +347,7 @@
                                             <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                                             <input type="hidden" name="action_type" value="edit"/>
                                             <input type="hidden" name="id" value="<?php echo $user['semesterSettingID'];?>"/>
-                                            <input type="hidden" name="semisterID" value="<?php echo $_GET['semesterSettingID'];?>">
+                                            <!-- <input type="hidden" name="semisterID" value="<?php echo $_GET['semesterSettingID'];?>"> -->
                                             <input type="hidden" name="academicYearID" value="<?php echo $user['academicYearID'];?>">
                                             <input type="hidden" name="batchID" value="">
                                             <input type="submit" name="doSubmit" value="Update Record" class="btn btn-primary">

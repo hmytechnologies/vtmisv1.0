@@ -75,7 +75,8 @@
                                 $semesterStatus=$sm['semesterStatus'];
 
                                 $semesterSettingID=$sm['semesterSettingID'];
-
+                                $startDate =$sm['t1startDate'];
+                                $endDate =$sm['t1endDate'];
                                 // $semesterName=$sm['semesterName'];
 
                                 // $endDateRegistration=$sm['endDateRegistration'];
@@ -169,8 +170,8 @@
                                 <tr>
                                     <td>Final Exam Marks Uploading</td>
                                     <td><?php echo date('d-m-Y',strtotime($examStartDate));?></td>
-                                    <td><?php echo date('d-m-Y',strtotime($endDatefinalExam));?></td>
-                                    <td><?php echo $db->dateDiff($examStartDate,$endDatefinalExam);?></td>
+                                    <td><?php echo date('d-m-Y',strtotime($examEndDate));?></td>
+                                    <td><?php echo $db->dateDiff($examStartDate,$examEndDate);?></td>
                                     <td>
 
                                         <div class="progress progress-xs">
@@ -186,9 +187,9 @@
 
                                 <tr>
                                     <td>Semester Course Registration</td>
-                                    <td><?php echo date('d-m-Y',strtotime($examStartDate));?></td>
-                                    <td><?php echo date('d-m-Y',strtotime($endDatefinalExam));?></td>
-                                    <td><?php echo $db->dateDiff($examStartDate,$endDatefinalExam);?></td>
+                                    <td><?php echo date('d-m-Y',strtotime($startDate));?></td>
+                                    <td><?php echo date('d-m-Y',strtotime($endDate));?></td>
+                                    <td><?php echo $db->dateDiff($examStartDate,$endDate);?></td>
                                     <td>
 
                                         <div class="progress progress-xs">
@@ -205,8 +206,8 @@
                                 <tr>
                                     <td>Fees Payment Dates</td>
                                     <td><?php echo date('d-m-Y',strtotime($examStartDate));?></td>
-                                    <td><?php echo date('d-m-Y',strtotime($endDatefinalExam));?></td>
-                                    <td><?php echo $db->dateDiff($examStartDate,$endDatefinalExam);?></td>
+                                    <td><?php echo date('d-m-Y',strtotime($examEndDate));?></td>
+                                    <td><?php echo $db->dateDiff($examStartDate,$examEndDate);?></td>
                                     <td>
 
                                         <div class="progress progress-xs">

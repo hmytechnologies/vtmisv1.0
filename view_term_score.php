@@ -42,10 +42,12 @@ $db = new DBHelper();
         $termID = $db->decrypt($_REQUEST['termID']);
         $centerID = $db->decrypt($_REQUEST['centerID']);
 
-        $course = $db->getCourseInfo($centerProgrammeCourseID);
+        // $centerid = $db->decrypt($_REQUEST['centerID']);
+
+        $course = $db->getCourseInfoo($centerProgrammeCourseID);
 
         foreach ($course as $std) {
-            $count++;
+            // $count++;
             $courseID = $std['courseID'];
             $courseCode = $std['courseCode'];
             $courseName = $std['courseName'];
@@ -57,8 +59,17 @@ $db = new DBHelper();
             $cpcourseID = $std['centerProgrammeCourseID'];
             $academicYearID = $std['academicYearID'];
         }
+
+        // echo  $courseName; $studentNumber = $db->getStudentCourseSum($centerID, $academicYearID, $programmeLevelID, $programmeID);
+        // ($centerID, $academicYearID, $programmeLevelID, $progID)
         $studentNumber = $db->getStudentCourseSum($_SESSION['department_session'], $academicYearID, $programmeLevelID, $programmeID);
+        $xam=  $db->getData("exam_category", "examCategory", "examCategoryID", $termID); 
+
+// echo $programmeID;
+        $student = $db->getStudentTermList($centerID, $academicYearID,$programmeLevelID , $programmeID);
         ?>
+
+        
         <form name="" action="" method="post">
             <div class="col-md-12">
                 <div class="box box-solid box-primary">
@@ -98,7 +109,8 @@ $db = new DBHelper();
             <hr>
             <div class="row">
                 <?php
-                $student = $db->getStudentTermList($centerID, $academicYearID, $programmeLevelID, $programmeID);
+                $student = $db->getStudentTermList($_SESSION['department_session'], $academicYearID, $programmeLevelID, $programmeID);
+               
                 if (!empty($student)) {
                 ?>
                     <table id="view_score" class="display nowrap">
@@ -182,9 +194,16 @@ $db = new DBHelper();
 
                                     $editButton = '
                                     <div class="btn-group">
-                                            <a href="index3.php?sp=edit_score&cid=' . $db->my_simple_crypt($courseID, 'e') . '&sid=' . $db->my_simple_crypt($semesterSettingID, 'e') . '&regno=' . $db->my_simple_crypt($regNumber, 'e') . '&bid=' . $db->my_simple_crypt($batchID, 'e') . '" class="glyphicon glyphicon-edit"></a>
+                                            <a href="index3.php?sp=edit_score&termID=' . $db->my_simple_crypt($termID, 'e').'cid=' . $db->my_simple_crypt($courseID, 'e').' &lid=' . $db->my_simple_crypt($programmeLevelID, 'e')   .'&pid=' . $db->my_simple_crypt($programmeID, 'e')  .  '&aid=' . $db->my_simple_crypt($academicYearID, 'e')  .  '&regno=' . $db->my_simple_crypt($regNumber, 'e') . '" class="glyphicon glyphicon-edit"></a>
                                     </div>';
-                            ?>
+                            ?> 
+                          
+                        
+
+
+                       
+
+           
                                     <!--<td>
                                         <?php
                                         /*                                        echo $editButton;
@@ -282,12 +301,15 @@ $db = new DBHelper();
             </button>-->
         <!--  <button class="btn btn-primary pull-right form-control" style="margin-right: 5px;" data-toggle="modal" data-target="#add_new_atype_modal"><i class="fa fa-download"></i>Print Report</button> -->
         <div class="col-lg-3">
-            <a href='print_term_score_report.php?action=getPDF&cid=<?php echo $centerProgrammeCourseID; ?>&termID=<?php echo $termID;?>' target='_blank'> <button type="button" class="btn btn-primary pull-right form-control" style="margin-right: 5px;">
-                    <i class="fa fa-download"></i>Print Report
+            <a href='print_term_score_report.php?action=getPDF&cid=<?php echo $courseID; ?>&termID=<?php echo $termID;?>&lid=<?php echo $programmeLevelID;?>&pid=<?php echo $programmeID; ?>&aid=<?php echo $academicYearID;?>' target='_blank'> 
+
+            <button type="button" class="btn btn-primary pull-right form-control" style="margin-right: 5px;"> 
+            <!-- <a href='print_term_score_report.php?action=getPDF&termID=<?php echo $termID; ?>&aid=<?php echo $academicYearID; ?>&cid=<?php echo $centerID; ?>&lid=<?php echo $levelID;?>&pid=<?php echo $programmeID; ?>' target='_blank'> <button type="button" class="btn btn-primary pull-right form-control" style="margin-right: 5px;">         -->
+            <i class="fa fa-download"></i>Print Report
                 </button></a>
         </div>
     </div>
-
+    
 </div>
 
 <!-- <div id="add_new_atype_modal" class="modal fade" role="dialog">

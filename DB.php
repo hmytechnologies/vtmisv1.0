@@ -335,7 +335,8 @@ class DBHelper
 
     public function readSemesterSetting()
     {
-        $query = $this->conn->prepare("SELECT academicYearID from academic_year where status=:sts");
+        $query = $this->conn->prepare("SELECT y.academicYearID,semesterSettingID from academic_year   y, semester_setting ss  where 
+        ss.academicYearID  = y.academicYearID and status=:sts");
         $query->execute(array(':sts' => 1));
         $data = array();
         while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
@@ -444,6 +445,20 @@ class DBHelper
         return $data;
     }
 
+
+    // public function getUserRole($userid,$roleid)
+    // {
+    //     $query = $this->conn->prepare("SELECT * from userroles where userID =:userID, roleID IN (:roleID) ");
+    //     $query->execute(array(':roleID' => $roleid,':userID' => $userid));
+    //     $data = array();
+    //     while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
+    //         $data[] = $row;
+    //     }
+    //     return $data;
+    // }
+
+
+
     // public function getStudentStatus($sid, $status)
     // {
     //     try {
@@ -489,16 +504,16 @@ class DBHelper
     //   return $students;
     // }
     
-    // public function filterTrade($ID)
-    // {
-    //     $query = $this->conn->prepare("SELECT * from programmes where status=:st AND programmeID NOT IN (SELECT programmeID from center_programme where centerRegistrationID=:centerID order by programmeID ASC)");
-    //     $query->execute(array('st' => 1, ':centerID' => $ID));
-    //     $data = array();
-    //     while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
-    //         $data[] = $row;
-    //     }
-    //     return $data;
-    // }
+     public function filterTrade($ID)
+    {
+     $query = $this->conn->prepare("SELECT * from programmes where status=:st AND programmeID NOT IN (SELECT programmeID from center_programme where centerRegistrationID=:centerID order by programmeID ASC)");
+         $query->execute(array('st' => 1, ':centerID' => $ID));
+       $data = array();
+      while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
+          $data[] = $row;
+       }
+       return $data;
+    }
 
     public function getCenterProgramme($ID)
     {
@@ -630,6 +645,17 @@ class DBHelper
     {
         $query = $this->conn->prepare("SELECT DISTINCT(courseID) from student_course where academicYearID=:academicYearID AND semisterID=:semisterID");
         $query->execute(array(':academicYearID' => $acadID, ':semisterID' => $semID));
+        $data = array();
+        while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
+            $data[] = $row;
+        }
+        return $data;
+    }
+
+    public function getDistinctCourse1($acadID)
+    {
+        $query = $this->conn->prepare("SELECT DISTINCT(courseID) from student_course where academicYearID=:academicYearID ");
+        $query->execute(array(':academicYearID' => $acadID));
         $data = array();
         while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
             $data[] = $row;
@@ -941,24 +967,21 @@ WHERE
         return $examScore;
  }*/
 
-    public function getTermGrade($academicYearID, $courseID, $regNumber, $examCategoryID)
-    {
-
-        $query = $this->conn->prepare("SELECT examScore from exam_result where regNumber=:rNumber and academicYearID=:sem and courseID=:cid and examCategoryID=:ecatID");
-        $query->execute(array(':rNumber' => $regNumber, ':sem' => $academicYearID, ':cid' => $courseID, ':ecatID' => $examCategoryID));
-        $row = $query->fetch(PDO::FETCH_ASSOC);
-        $score = $row['examScore'];
-        $examScore = "";
-        //$score=$this->getRows('exam_result',array('where'=>array('regNumber'=>$regNumber,'semesterSettingID'=>$semesterID,'courseID'=>$courseID,'examCategoryID'=>$examCategoryID),' order_by'=>'regNumber ASC'));
-
-        if (!empty($score)) {
-            $examScore = $score;
-        } else {
-            $examScore = "";
-        }
-        return $examScore;
-    }
-
+ public function getTermGrade($academicYearID, $courseID, $regNumber, $examCategoryID)
+ {
+     $query = $this->conn->prepare("SELECT examScore FROM exam_result WHERE regNumber=:rNumber AND academicYearID=:sem AND courseID=:cid AND examCategoryID=:ecatID");
+     $query->execute(array(':rNumber' => $regNumber, ':sem' => $academicYearID, ':cid' => $courseID, ':ecatID' => $examCategoryID));
+ 
+     if ($query->rowCount() > 0) {
+         $row = $query->fetch(PDO::FETCH_ASSOC);
+         $examScore = $row['examScore'];
+     } else {
+         $examScore = ""; // No result found, set to an empty string or any appropriate default value
+     }
+ 
+     return $examScore;
+ }
+ 
 
     public function getstudentTermGrade( $courseID, $regNumber, $examCategoryID)
     {
@@ -1508,6 +1531,10 @@ WHERE
         return $data;
     }
 
+
+
+   
+
     public function getSemesterAllocationCourse($centerID, $semID)
     {
         $query = $this->conn->prepare("SELECT DISTINCT
@@ -1580,7 +1607,7 @@ WHERE
     public function getCourseInstructor($deptID, $semID)
     {
         $query = $this->conn->prepare("SELECT DISTINCT
-    cp.courseID,courseCode,courseName,programmeLevelID,classNumber,centerProgrammeCourseID,staffID,programmeID
+    cp.courseID,courseCode,courseName,programmeLevelID,cp.centerID,classNumber,centerProgrammeCourseID,staffID,programmeID
 FROM
     course c,
     center_programme_course cp    
@@ -1673,7 +1700,7 @@ WHERE
     public function getcourseStudent($stdID,$exam_number,$academicYearID)
     {
        
-        $query = $this->conn->prepare("SELECT DISTINCT(fr.courseID) ,courseName,c.courseCategoryID,courseCategory,courseCode,units ,examScore from course_category  cc, course c,exam_number en, final_result fr where  fr.examNumber =en.examNumber AND c.courseID = fr.courseID and  en.regNumber=:studentID and en.examNumber =:exam_number and fr.academicYearID =:academicYearID and c.courseCategoryID  = cc.courseCategoryID");
+        $query = $this->conn->prepare("SELECT DISTINCT(courseCode) ,c.courseID,courseName,c.courseCategoryID,courseCategory,courseCode,units ,examScore from course_category  cc, course c,exam_number en, final_result fr where  fr.examNumber =en.examNumber AND c.courseID = fr.courseID and  en.regNumber=:studentID and en.examNumber =:exam_number and fr.academicYearID =:academicYearID and c.courseCategoryID  = cc.courseCategoryID ORDER BY courseCode ASC");
 
         $query->execute(array(':studentID' => $stdID,':exam_number' => $exam_number,':academicYearID' => $academicYearID,));
         $data = array();
@@ -1930,10 +1957,74 @@ ORDER BY semesterSettingID DESC");
         }
     }
 
+
+    public function getCourseInfoo($centerProgrammeCourseID)
+    {
+        try
+        {
+            $query=$this->conn->prepare("SELECT DISTINCT c.courseID,courseCode,courseName,courseTypeID,programmeLevelID,programmeID,classNumber,staffID,academicYearID,centerID,cp.centerProgrammeCourseID FROM center_programme_course cp,course c where c.courseID=cp.courseID and centerProgrammeCourseID=:sID");
+            $query->execute(array(':sID'=>$centerProgrammeCourseID));
+
+            $data=array();
+            while($row=$query->fetch(PDO::FETCH_ASSOC))
+            {
+                $data[]=$row;
+            }
+            return $data;
+        }
+        catch (PDOException $ex)
+        {
+            echo "Getting Data Error: ".$ex->getMessage();
+        }
+
+    }
+
+
+    public function getListOfCourse($instractorID,$courseID,$yearID,$levelID ,$centerID)
+    {
+        try
+        {
+            $query=$this->conn->prepare("SELECT DISTINCT c.courseID,courseCode,courseName,courseTypeID,programmeLevelID,programmeID,classNumber,staffID,academicYearID,centerID FROM center_programme_course cp,course c where cp.staffID=:instraID and c.courseID =:courseID and cp.academicYearID = :yID and cp.programmeLevelID = :levelID and  cp.centerID = :centerID ");
+            $query->execute(array(':instraID'=>$instractorID,':courseID'=>$courseID,':yID'=>$yearID,':levelID'=>$levelID,':centerID'=>$centerID));
+
+            $data=array();
+            while($row=$query->fetch(PDO::FETCH_ASSOC))
+            {
+                $data[]=$row;
+            }
+            return $data;
+        }
+        catch (PDOException $ex)
+        {
+            echo "Getting Data Error: ".$ex->getMessage();
+        }
+
+    }
+
+    public function getCourseInf($centerProgrammeCourseID)
+    {
+        try
+        {
+            $query=$this->conn->prepare("SELECT DISTINCT c.courseID,courseCode,courseName,courseTypeID,programmeLevelID,programmeID,classNumber,staffID,academicYearID,centerID FROM center_programme_course cp,course c where c.courseID=cp.courseID and centerProgrammeCourseID=:sID");
+            $query->execute(array(':sID'=>$centerProgrammeCourseID));
+
+            $data=array();
+            while($row=$query->fetch(PDO::FETCH_ASSOC))
+            {
+                $data[]=$row;
+            }
+            return $data;
+        }
+        catch (PDOException $ex)
+        {
+            echo "Getting Data Error: ".$ex->getMessage();
+        }
+
+    }
     public function getCourseInfo($centerProgrammeCourseID,$programmeID)
     {
         try {
-            $query = $this->conn->prepare("SELECT DISTINCT c.courseID,courseCode,courseName,courseTypeID,programmeLevelID,cp.programmeID,classNumber,staffID,academicYearID,centerID FROM center_programme_course cp,course c ,programmes pr where c.courseID=cp.courseID and  pr.programmeID =cp.programmeID and  cp.centerID=:sID and cp.programmeID =:pID");
+            $query = $this->conn->prepare("SELECT DISTINCT c.courseID,c.courseName,c.courseID,courseCode,courseTypeID,programmeLevelID,cp.programmeID,classNumber,staffID,academicYearID,centerID,cp.centerProgrammeCourseID FROM center_programme_course cp,course c ,programmes pr where c.courseID=cp.courseID and  pr.programmeID =cp.programmeID and  cp.centerID=:sID and cp.programmeID =:pID");
             $query->execute(array(':sID' => $centerProgrammeCourseID,':pID' => $programmeID));
 
             $data = array();
@@ -2023,12 +2114,29 @@ ORDER BY semesterSettingID DESC");
         }
     }
 
+
+    public function getSemesterProgrammeCourse1($programmeID, $academicYearID)
+    {
+        try {
+            $query = $this->conn->prepare("SELECT DISTINCT (courseID),staffID, academicYearID,programmeID,programmeLevelID,centerID FROM center_programme_course where programmeID=:pgID and academicYearID=:sID");
+            $query->execute(array('pgID' => $programmeID, ':sID' => $academicYearID));
+            $data = array();
+            while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
+                $data[] = $row;
+            }
+            return $data;
+        } catch (PDOException $ex) {
+            echo "Getting Data Error: " . $ex->getMessage();
+        }
+    }
+
+
     public function getSemesterPublishCourse($semesterID)
     {
         try {
             /*$query=$this->conn->prepare("SELECT courseID,batchID,studyYear,courseStatus FROM course c,student_course sc,courseprogramme cp where c.courseID=sc.courseID and c.courseID=sc.courseID and programmeID=:pgID and semesterSettingID=:sID and batchID=:bid");
             $query->execute(array('pgID'=>$programmeID,':sID'=>$semesterID,':bid'=>$batchID));*/
-            $query = $this->conn->prepare("SELECT DISTINCT (courseID),batchID,studyYear FROM courseprogramme where semesterSettingID=:sID");
+            $query = $this->conn->prepare("SELECT DISTINCT (courseID),studyYear FROM courseprogramme where semesterSettingID=:sID");
             $query->execute(array(':sID' => $semesterID));
             $data = array();
             while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
@@ -2040,11 +2148,31 @@ ORDER BY semesterSettingID DESC");
         }
     }
 
-    public function getSemesterProgrammeCourseStudy($programmeID, $semesterID, $batchID, $stuID)
+
+
+    public function getSemesterPublishCourse1($academicYearID)
+    {
+        try {
+            /*$query=$this->conn->prepare("SELECT courseID,batchID,studyYear,courseStatus FROM course c,student_course sc,courseprogramme cp where c.courseID=sc.courseID and c.courseID=sc.courseID and programmeID=:pgID and semesterSettingID=:sID and batchID=:bid");
+            $query->execute(array('pgID'=>$programmeID,':sID'=>$semesterID,':bid'=>$batchID));*/
+            $query = $this->conn->prepare("SELECT DISTINCT(cp.courseID),staffID, cp.academicYearID,cp.programmeID,cp.programmeLevelID,centerID FROM center_programme_course  cc ,courseprogramme cp where 
+            cc.academicYearID =cc.academicYearID and cc.academicYearID=:yID");
+            $query->execute(array(':yID' =>  $academicYearID));
+            $data = array();
+            while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
+                $data[] = $row;
+            }
+            return $data;
+        } catch (PDOException $ex) {
+            echo "Getting Data Error: " . $ex->getMessage();
+        }
+    }
+
+    public function getSemesterProgrammeCourseStudy($programmeID, $semesterID, $stuID)
     {
         try {
             $query = $this->conn->prepare("SELECT courseID,courseProgrammeID,batchID FROM courseprogramme where programmeID=:pgID and semesterSettingID=:sID and batchID=:bid and studyYear=:study");
-            $query->execute(array('pgID' => $programmeID, ':sID' => $semesterID, ':bid' => $batchID, ':study' => $stuID));
+            $query->execute(array('pgID' => $programmeID, ':sID' => $semesterID,  ':study' => $stuID));
             $data = array();
             while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
                 $data[] = $row;
@@ -2059,7 +2187,7 @@ ORDER BY semesterSettingID DESC");
     public function getSemesterInstructorCourse($courseID, $semesterID)
     {
         try {
-            $query = $this->conn->prepare("SELECT courseID,courseProgrammeID,batchID FROM courseprogramme where semesterSettingID=:sID and courseID=:cid");
+            $query = $this->conn->prepare("SELECT courseID,courseProgrammeID FROM courseprogramme where semesterSettingID=:sID and courseID=:cid");
             $query->execute(array(':sID' => $semesterID, ':cid' => $courseID));
             $data = array();
             while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
@@ -2092,6 +2220,22 @@ ORDER BY semesterSettingID DESC");
         try {
             $query = $this->conn->prepare("SELECT COUNT(regNumber) as studentNumber FROM student_programme  where academicYearID=:acadID and  programmeLevelID=:levelID and centerID=:center and programmeID=:pID and currentStatus=:st");
             $query->execute(array(':acadID' => $academicYearID, ':levelID' => $programmeLevelID, ':center' => $centerID, ':pID' => $progID, ':st' => 1));
+            $row = $query->fetch(PDO::FETCH_ASSOC);
+            $number = $row['studentNumber'];
+            return $number;
+        } catch (PDOException $ex) {
+            echo "Getting Data Error: " . $ex->getMessage();
+        }
+    }
+
+
+    
+
+    public function getstudentSum($centerID, $academicYearID, $programmeLevelID, $progID)
+    {
+        try {
+            $query = $this->conn->prepare("SELECT COUNT(regNumber) as studentNumber FROM student_programme  where academicYearID=:acadID and  programmeLevelID=:levelID and centerID=:center and programmeID=:pID ");
+            $query->execute(array(':acadID' => $academicYearID, ':levelID' => $programmeLevelID, ':center' => $centerID, ':pID' => $progID));
             $row = $query->fetch(PDO::FETCH_ASSOC);
             $number = $row['studentNumber'];
             return $number;
@@ -3000,11 +3144,11 @@ WHERE
         }
     }
 
-    public function getStudentCourseInfo($cid, $semID, $batchID)
+    public function getStudentCourseInfo($cid)
     {
         try {
-            $query = $this->conn->prepare("SELECT regNumber,courseStatus from student_course sc,student s where s.registrationNumber=sc.regNumber and s.batchID=:bid and courseID=:courseID and  semesterSettingID=:sem");
-            $query->execute(array(':bid' => $batchID, ':courseID' => $cid, ':sem' => $semID));
+            $query = $this->conn->prepare("SELECT regNumber from student_course sc,student s where s.registrationNumber=sc.regNumber and courseID=:courseID ");
+            $query->execute(array( ':courseID' => $cid));
             $data = array();
             while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
                 $data[] = $row;
@@ -3031,17 +3175,25 @@ WHERE
     }
 
     public function checkStatus($courseID, $academicYearID, $column)
-    {
-        try {
-            $query = $this->conn->prepare("SELECT $column as status from exam_result where courseID=:cid and academicYearID=:acadID");
-            $query->execute(array(':cid' => $courseID, ':acadID' => $academicYearID));
+{
+    try {
+        $query = $this->conn->prepare("SELECT $column as status from exam_result where courseID=:cid and academicYearID=:acadID");
+        $query->execute(array(':cid' => $courseID, ':acadID' => $academicYearID));
+        
+        if ($query) {
             $row = $query->fetch(PDO::FETCH_ASSOC);
-            $status = $row['status'];
-            return $status;
-        } catch (PDOException $ex) {
-            echo "Getting Data Error for checkStatus: " . $ex->getMessage();
+            if ($row && isset($row['status'])) {
+                $status = $row['status'];
+                return $status;
+            } 
+        } else {
+            echo "Query execution failed.";
         }
+    } catch (PDOException $ex) {
+        echo "Getting Data Error for checkStatus: " . $ex->getMessage();
     }
+}
+
 
     public function getTotalMarks($courseID, $semesterID)
     {
@@ -3062,11 +3214,11 @@ WHERE
 
 
 
-    public function checkExamResultStatus($courseID, $semesterID)
+    public function checkExamResultStatus($courseID, $academicYearID)
     {
         try {
             $query = $this->conn->prepare("SELECT examScore from exam_result where courseID=:cid and academicYearID=:sem");
-            $query->execute(array(':cid' => $courseID, ':sem' => $semesterID));
+            $query->execute(array(':cid' => $courseID, ':sem' => $academicYearID));
             while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
                 $exam_score = $row['examScore'];
             }
@@ -3096,7 +3248,7 @@ WHERE
         }
     }
 
-    public function checkFinalResultStatus($courseID, $semesterID, $batchID)
+    public function  checkFinalResultStatus($courseID, $semesterID, $batchID)
     {
         try {
             $query = $this->conn->prepare("SELECT examScore from final_result where courseID=:cid and semesterSettingID=:sem and batchID=:bid");
@@ -3113,11 +3265,29 @@ WHERE
         }
     }
 
+
+    
+    public function  checkFinalResultStatus1($courseID,  $academicYearID)
+    {
+        try {
+            $query = $this->conn->prepare("SELECT examScore from final_result where courseID=:cid and academicYearID=:yr");
+            $query->execute(array(':cid' => $courseID, ':yr' =>  $academicYearID));
+            while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
+                $exam_score = $row['examScore'];
+            }
+            if (!empty($exam_score))
+                return true;
+            else
+                return false;
+        } catch (PDOException $ex) {
+            echo "Getting Data Error: " . $ex->getMessage();
+        }
+    }
     public function approveGraduatedList($programmeID, $studyYear, $academicYearID)
     {
         try {
-            $query = $this->conn->prepare("SELECT registrationNumber,firstName,middleName,lastName,gender from student s, student_study_year sy where 
-        s.registrationNumber=sy.regNumber and programmeID=:pid  and statusID=:st and sy.academicYearID=:acadID and studyYear=:styear");
+            $query = $this->conn->prepare("SELECT registrationNumber,firstName,middleName,lastName,gender from student s, student_study_year sy,student_programme sp where 
+        s.registrationNumber=sy.regNumber and sp.programmeID=:pid  and statusID=:st and sy.academicYearID=:acadID and studyYear=:styear");
             $query->execute(array('pid' => $programmeID, ':st' => 1, ':acadID' => $academicYearID, ':styear' => $studyYear));
             $data = array();
             while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
@@ -3150,6 +3320,82 @@ WHERE
         try {
             $query = $this->conn->prepare("SELECT registrationNumber,studentPicture,firstName,middleName,lastName,gender,date_format(graduationDate,'%d-%m-%Y') as gdate from student s, graduate_list gl where s.registrationNumber=gl.regNumber and gl.regNumber=:reg and statusID=:st");
             $query->execute(array('reg' => $regNumber, ':st' => 2));
+            $data = array();
+            while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
+                $data[] = $row;
+            }
+            return $data;
+        } catch (PDOException $ex) {
+            echo "Getting Data Error: " . $ex->getMessage();
+        }
+    }
+
+    public function transcriptList1($regNumber)
+    {
+        try {
+            $query = $this->conn->prepare("SELECT 
+            sp.regNumber,
+            st.firstName,
+            COUNT(sp.academicYearID) AS count_academicYearID,
+            MAX(sp.academicYearID) AS last_academicYear,
+            YEAR(CURDATE()) - MAX(ay.academicYear) AS year_difference,
+            MAX(sp.programmeLevelID) AS last_programmeLevel
+        FROM
+            student_programme sp
+        JOIN
+            academic_year ay ON sp.academicYearID = ay.academicYearID
+        JOIN
+            student st ON sp.regNumber = st.registrationNumber
+        WHERE
+            sp.regNumber IN (
+                SELECT regNumber
+                FROM student_programme
+                GROUP BY regNumber
+                HAVING COUNT(regNumber) IN (2, 3)
+            )
+            AND st.registrationNumber = :reg
+        GROUP BY
+            sp.regNumber,
+            st.firstName
+        HAVING
+            year_difference >= 1
+            AND last_programmeLevel = 3;
+            
+            ");
+            $query->execute(array('reg' => $regNumber));
+            $data = array();
+            while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
+                $data[] = $row;
+            }
+            return $data;
+        } catch (PDOException $ex) {
+            echo "Getting Data Error: " . $ex->getMessage();
+        }
+    }
+
+
+    public function UpdateGraduate()
+    {
+        try {
+            $query = $this->conn->prepare("UPDATE student st JOIN ( SELECT sp.regNumber
+                    FROM student_programme sp
+                    JOIN academic_year ay ON sp.academicYearID = ay.academicYearID
+                    JOIN student st ON sp.regNumber = st.registrationNumber
+                    WHERE sp.regNumber IN (
+                        SELECT regNumber
+                        FROM student_programme
+                        GROUP BY regNumber
+                        HAVING COUNT(regNumber) IN (2, 3)
+                    )
+                    AND YEAR(CURDATE()) - ay.academicYear >= 2
+                    AND st.statusID = 1
+                    GROUP BY sp.regNumber, st.firstName
+                    ) AS eligible_students
+                    ON st.registrationNumber = eligible_students.regNumber
+                    SET st.statusID = 2;
+            
+            ");
+            $query->execute();
             $data = array();
             while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
                 $data[] = $row;
@@ -3227,12 +3473,12 @@ WHERE
         }
     }
 
-    public function getSemesterBatchCourse($semesterID, $courseID, $batchID, $instructorID)
+    public function getSemesterBatchCourse($semesterID, $courseID,  $instructorID)
     {
         try {
             $query = $this->conn->prepare("SELECT courseID,batchID FROM instructor_course ic,instructor i
                where i.instructorID=ic.instructorID and ic.instructorID=:instructor and semesterSettingID=:sID and courseID=:cID and batchID=:bID");
-            $query->execute(array(':instructor' => $instructorID, ':sID' => $semesterID, ':cID' => $courseID, ':bID' => $batchID));
+            $query->execute(array(':instructor' => $instructorID, ':sID' => $semesterID, ':cID' => $courseID));
 
             /* $query=$this->conn->prepare("SELECT courseID,courseProgrammeID,batchID,cp.instructorID,courseGradeID,passMarkID FROM courseprogramme cp
             where semesterSettingID=:sID and courseID=:cID and batchID=:bID");
@@ -3247,6 +3493,26 @@ WHERE
         }
     }
 
+    public function getSemesterBatchCourses($semesterID, $courseID,  $instructorID,$academicy)
+    {
+        try {
+            $query = $this->conn->prepare("SELECT courseID,i.centerID,ic.programmeLevelID ,ic.programmeID FROM center_programme_course ic,instructor i,semester_setting ss where i.instructorID=ic.staffID and ic.staffID=:instructor
+          and semesterSettingID=:sID and courseID=:cID and ss.academicYearID = :yrID;");
+          
+          $query->execute(array(':instructor' => $instructorID, ':sID' => $semesterID, ':cID' => $courseID ,':yrID' => $academicy));
+
+            /* $query=$this->conn->prepare("SELECT courseID,courseProgrammeID,batchID,cp.instructorID,courseGradeID,passMarkID FROM courseprogramme cp
+            where semesterSettingID=:sID and courseID=:cID and batchID=:bID");
+            $query->execute(array(':sID'=>$semesterID,':cID'=>$courseID,':bID'=>$batchID));*/
+            $data = array();
+            while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
+                $data[] = $row;
+            }
+            return $data;
+        } catch (PDOException $ex) {
+            echo "Getting Data Error: " . $ex->getMessage();
+        }
+    }
 
     public function isExamNumberExist($examNumber, $semesterID)
     {
@@ -3503,7 +3769,7 @@ WHERE
                 $query = $this->conn->prepare("SELECT DISTINCT(s.registrationNumber),studyYear from student s,student_study_year sy where s.registrationNumber = sy.regNumber and sy.academicYearID=:acadID");
                 $query->execute(array(':acadID' => $academicYearID));
             } else {
-                $query = $this->conn->prepare("SELECT DISTINCT(s.registrationNumber),studyYear from student s,student_study_year sy where s.registrationNumber = sy.regNumber and s.programmeID=:progID  and sy.academicYearID=:acadID");
+                $query = $this->conn->prepare("SELECT DISTINCT(s.registrationNumber),studyYear from student s,student_study_year sy ,student_programme sp where s.registrationNumber = sy.regNumber and s.registrationNumber = sp.regNumber  and sp.programmeID=:progID  and sy.academicYearID=:acadID");
                 $query->execute(array(':progID' => $programmeID, ':acadID' => $academicYearID));
             }
             $data = array();
@@ -3582,7 +3848,8 @@ WHERE
             middleName,
             lastName,
             gender,
-            programmeID
+            programmeID,
+            sp.programmeLevelID
         FROM
             student s,
             student_status st,
@@ -4009,7 +4276,7 @@ WHERE
     public function getInstructorList($roleID, $departmentID)
     {
         if ($roleID == 4) {
-            $query = $this->conn->prepare("SELECT instructorID,instructorName,salutation,title,officeNumber,email,phoneNumber,departmentID,instructorStatus,instructorImage,employmentStatus,gender FROM instructor WHERE departmentID=:deptID");
+            $query = $this->conn->prepare("SELECT instructorID,employmentStatusID,titleID,instructorName,salutation officeNumber,email,phoneNumber,departmentID,instructorStatus,instructorImage,gender FROM instructor WHERE departmentID=:deptID");
             $query->execute(array(':deptID' => $departmentID));
         } else if ($roleID == 9) {
             $query = $this->conn->prepare("SELECT instructorID,instructorName,salutation,title,officeNumber,email,phoneNumber,i.departmentID,instructorStatus,instructorImage,employmentStatus,gender FROM instructor i,schools s,departments d where s.schoolID=d.schoolID and d.departmentID=i.departmentID AND  s.schoolID=:deptID");
@@ -4238,23 +4505,25 @@ WHERE
         return $marks;
     }
 
-    public function searchLecturer($search_text)
-    {
-        try {
-            $query = $this->conn->prepare("SELECT *
-            FROM instructor 
-            WHERE (firstName LIKE :search OR lastName LIKE :search)");
-            $query->execute(array(':search' => '%' . $search_text . '%'));
+  public function searchLecturer($search_text,$centerID,$DeptID)
+{
+    try {
+        $query = $this->conn->prepare("SELECT *
+        FROM instructor 
+        WHERE (firstName LIKE :search OR lastName LIKE :search )  and centerID = :cID and  departmentID = :dID ;");
+        $query->execute(array(':search' => '%' . $search_text . '%',':cID' => $centerID,':dID' => $DeptID));
 
-            $data = array();
-            while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
-                $data[] = $row;
-            }
-            return $data;
-        } catch (PDOException $exception) {
-            echo "Getting Data error: " . $exception->getMessage();
+        $data = array();
+        while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
+            $data[] = $row;
         }
+        return $data;
+    } catch (PDOException $exception) {
+        echo "Getting Data error: " . $exception->getMessage();
     }
+}
+
+    
 
 
 
@@ -4425,7 +4694,7 @@ WHERE
         AND sc.courseID=:cid
         AND sc.semesterSettingID=:sid
         AND s.batchID=:bid");
-            $query->execute(array(':cid' => $courseID, ':sid' => $semesterID, ':bid' => $batchID));
+            $query->execute(array(':cid' => $courseID));
             $data = array();
             while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
                 $data[] = $row;

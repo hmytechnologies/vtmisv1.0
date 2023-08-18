@@ -108,7 +108,7 @@
                         } else {
                             $searchStudent = $db->my_simple_crypt($_REQUEST['search_student'], 'd');
                         }
-                        $studentID = $db->getRows('student', array('where' => array('registrationNumber' => $searchStudent), ' order_by' => ' studentID ASC'));
+                        $studentID = $db->getRows('student', array('where' => array('registrationNumber' => $searchStudent), ' order_by' => ' registrationNumber ASC'));
                         if (!empty($studentID)) {
                             ?>
                             <div class="box box-solid box-success">
@@ -134,6 +134,14 @@
                                         <?php
                                         $count = 0;
                                         foreach ($studentID as $std) {
+                                            $levelID = $db->getRows('student_programme', array('where' => array('regNumber' => $searchStudent), ' order_by' => ' regNumber ASC'));
+                                            foreach ($levelID as $lv) {
+
+                                                $programmeID = $lv['programmeID'];
+                                                $programmeLevelID = $lv['programmeLevelID'];
+                                               
+
+                                            }
                                             $count++;
                                             $studentID = $std['studentID'];
                                             $fname = $std['firstName'];
@@ -141,14 +149,14 @@
                                             $lname = $std['lastName'];
                                             $gender = $std['gender'];
                                             $regNumber = $std['registrationNumber'];
-                                            $programmeID = $std['programmeID'];
+                                            
                                             $statusID = $std['statusID'];
-                                            $batchID = $std['batchID'];
+                                            $academicYearID = $std['academicYearID'];
                                             $name = "$fname $mname $lname";
 
 
                                             echo "<tr><td>$name</td><td>$regNumber</td><td>$gender</td>";
-                                            $programmeLevelID = $db->getData("programmes", "programmeLevelID", "programmeID", $programmeID);
+                                            // $programmeLevelID = $db->getData("programmes", "programmeLevelID", "programmeID", $programmeID);
                                             $level = $db->getRows('programme_level', array('where' => array('programmeLevelID' => $programmeLevelID), ' order_by' => ' programmeLevelCode ASC'));
                                             if (!empty($level)) {
                                                 foreach ($level as $lvl) {
@@ -178,8 +186,8 @@
                                                 $studentStudyYear = "None";
                                                 $studyAcademicYearID = "";
                                             }
-                                            echo "<td>" . $studentStudyYear . "</td>";
-                                            echo "<td>" . $db->getData("batch", "batchName", "batchID", $batchID) . "</td>";
+                                            echo "<td>" . $db->getData("academic_year", "academicYear", "academicYearID", $academicYearID); "</td>";
+                                            // echo "<td>" . $db->getData("batch", "batchName", "batchID", $batchID) . "</td>";
                                             $status = $db->getRows('status', array('where' => array('statusID' => $statusID), ' order_by' => 'status_value ASC'));
                                             if (!empty($status)) {
                                                 foreach ($status as $st) {

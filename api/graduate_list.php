@@ -41,8 +41,8 @@ if(!empty($student))
                 $prj=$db->decrypt($db->getGrade($semesterID,$courseID,$regNumber,5));
                 $pt=$db->decrypt($db->getGrade($semesterID,$courseID,$regNumber,6));
 
-                $passCourseMark=$db->getExamCategoryMark(1,$regNumber,$studyYear);
-                $passFinalMark=$db->getExamCategoryMark(2,$regNumber,$studyYear);
+                $passCourseMark=$db->getExamCategoryMark(1,$regNumber);
+                $passFinalMark=$db->getExamCategoryMark(2,$regNumber);
                 $tmarks=$db->calculateTotal($cwk,$sfe,$sup,$spc,$prj,$pt);
                 $tunits+=$units;
                 if(!empty($sup))

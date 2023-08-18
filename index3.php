@@ -1,9 +1,11 @@
 <?php 
   require_once("session.php");
   require_once("DB.php");
+  
   $auth_user = new DBHelper();
+
   $userID = $_SESSION['user_session'];
-  $departmentID=$_SESSION['department_session'];
+   $departmentID=$_SESSION['department_session'];
 
 
   //main role
@@ -58,6 +60,7 @@ if($login==0)
       $status=$auth_user->getData("instructor","status","userID",$userID);
       if($status==0)
       {
+
           header("Location:index2.php?sz=instructor_form");
           exit();
       }
