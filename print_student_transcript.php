@@ -6,7 +6,7 @@ if($_REQUEST['action']=="getPDF") {
     if (isset($_POST['level'])) {
          
         include 'DB.php';
-        $db=new DBHelper();
+        $db=new DBHelper(); 
         
         $reg = $_POST['regNumber'];
         $studentPicture = $db->getRows('student',array('where'=>array('registrationNumber'=>$reg),' order_by'=>' studentID ASC'));
@@ -1705,7 +1705,7 @@ $averagePerformanceGeneral = ($sumGeneralMarks2 + $sumGeneralMarks) / 8;
             $pdf->SetFont('Arial','B',8);
             $pdf->Cell(100,6,"                                                CORE SUBJECT - AVERAGE PERFORMANCE: ".$Coregrade);
             $pdf->Cell(100,6,"                                                                                            GENERAL SUBJECT - AVERAGE PERFORMANCE: ".$Generalgrade);
-            $pdf->Ln(8);
+            $pdf->Ln(8.5);
             $pdf->Cell(100,6,"                                                          ...................................");
             $pdf->Cell(100,6,"                                                                                                                              ...................................");
             

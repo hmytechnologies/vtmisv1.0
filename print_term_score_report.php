@@ -206,7 +206,7 @@ if($_REQUEST['action']=="getPDF") {
                     if($gender=="M") $mgender++;
                     else $fgender++;
 
-                    $pdf->setFont('Arial', '', 10);
+                    $pdf->setFont('Arial', '', 8);
                     $pdf->Cell(10, 6, $count, 1);
                     $pdf->Cell(35, 6, $regNumber, 1, 0, 'C');
                     $pdf->Cell(60, 6, $name, 1, 0);
