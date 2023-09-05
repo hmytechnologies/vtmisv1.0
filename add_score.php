@@ -39,6 +39,8 @@ $db = new DBHelper();
 
 <div class="container">
     <h4>Add Result for <span class="text-danger">
+    <!-- cid=' . $db->encrypt($courseID) . '&acadID=' . $db->encrypt($academicYearID) . '&lvlID=' .
+     $db->encrypt($programmeLevelID) . '&pid=' . $db->encrypt($programmeID) -->
             <?php
             $courseID = $db->decrypt($_REQUEST['cid']);
             $academicYearID = $db->decrypt($_REQUEST['acadID']);

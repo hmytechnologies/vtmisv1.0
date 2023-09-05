@@ -22,7 +22,10 @@
         $searchInstructor = $_POST['search_instructor'];
 
         //$instructor = $db->getRows('instructor', array('where' => array('firstName' => $searchInstructor), ' order_by' => ' instructorID ASC'));
-        $instructor = $db->searchLecturer($searchInstructor);
+        $centerID = $db->getData("instructor","centerID","userID",$_SESSION['user_session']);
+        $departmentID = $db->getData("instructor","departmentID","userID",$_SESSION['user_session']);
+        // $db->getData("departments","departmentName","departmentID",$departmentID);
+        $instructor = $db->searchLecturer($searchInstructor, $centerID, $departmentID);
         ?>
             <div class="box box-solid box-primary">
                 <div class="box-header with-border text-center">
@@ -59,13 +62,19 @@
                                 else
                                     $status = "Not Active";
 
-                                $schooID=$db->getData("departments","schoolID","departmentID",$inst['departmentID']);
-                                $schoolCode=$db->getData("schools","schoolCode","schoolID",$schooID);
+                                    
+                                    // $centerID = $db->getData("instructor","centerID","userID",$_SESSION['user_session']);
+                                  
+
+
+                                echo $schooID=$db->getData("departments","departmentName","departmentID",$inst['departmentID']);
+                                echo $schoolCode=$db->getData("center_registration","centerName","centerRegistrationID",$inst['centerID']);
+
                                 ?>
                                 <tr>
                                     <td><?php echo $count; ?></td>
                                     <td><?php echo $name ?></td>
-                                    <td><?php echo $inst['title']; ?></td>
+                                    <td><?php echo $db->getData("instructor_title", "title","titleID",$inst['titleID']); ?></td>
 <!--                                    <td><?php /*echo $inst['phoneNumber']; */?></td>
 -->                                    <td><?php echo $inst['email']; ?></td>
                                     <td><?php echo $schoolCode;?></td>

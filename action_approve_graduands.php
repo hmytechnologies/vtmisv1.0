@@ -9,7 +9,9 @@ try {
     if (isset($_REQUEST['action_type']) && !empty($_REQUEST['action_type'])) {
         if ($_REQUEST['action_type'] == 'add') {
             $academicYearID=$_POST['academicYearID'];
+            $admissionYearID=$_POST['admissionYearID'];
             $graduationDate=$_POST['graduationDate'];
+           
             if (!empty($_POST['regNumber'])) {
                 $count = 0;
                 foreach ($_POST['regNumber'] as $regNumber => $reg) {

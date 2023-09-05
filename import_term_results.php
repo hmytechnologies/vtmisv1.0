@@ -42,10 +42,10 @@ $db = new DBHelper();
     <?php
     $centerProgrammeCourseID = $db->decrypt($_REQUEST['cid']);
 
-    $course = $db->getCourseInfo($centerProgrammeCourseID);
+    $course = $db->getCourseInfoo($centerProgrammeCourseID);
 
     foreach ($course as $std) {
-        $count++;
+        // $count++;
         $courseID = $std['courseID'];
         $courseCode = $std['courseCode'];
         $courseName = $std['courseName'];

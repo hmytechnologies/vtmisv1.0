@@ -91,15 +91,31 @@ $userId = $_SESSION['user_session'];
         foreach($center_program_course as $ii)
       {
         $programmeLevelID=$ii['programmeLevelID'];
+       
         $programmeID=$ii['programmeID'];
         $academicYearID=$ii['academicYearID'];
         }
+        
+
+
+        $semester=$db->getRows("semester_setting",array('where'=>array('academicYearID'=>$academicYearID),'order_by semesterName ASC'));
+        if(!empty($semester))
+        {
+        foreach($semester as $sm)
+        {
+            
+            $semesterSettingID=$sm['semesterSettingID'];
+        }
+   
+        $courseprogramme = $db->getInstructorAcademicCourse($academicYearID,$instructorID);
+
     }
+}
    
   
      
 
-$courseprogramme = $db->getInstructorAcademicCourse($academicYearID,$instructorID);
+
 if(!empty($courseprogramme))
 {
 ?>
@@ -136,6 +152,7 @@ if(!empty($courseprogramme))
             $classNumber = $std['classNumber'];
             $programmeID = $std['programmeID'];
             $programmeLevelID = $std['programmeLevelID'];
+            // $lv = $db->getData('programme_level','programmeLevel','programmeLevelID',$programmeLevelID);
 
      $course = $db->getRows('course',array('where'=>array('courseID'=>$courseID),'order_by'=>'courseID ASC'));
      if(!empty($course))
@@ -143,13 +160,15 @@ if(!empty($courseprogramme))
          foreach($course as $c)
          {
              $courseCode=$c['courseCode'];
+             $courseid = $c['courseID'];
              $courseName=$c['courseName'];
              $courseTypeID=$c['courseTypeID'];
              $units=$c['units'];
              $nhours=$c['numberOfHours'];
-             $courseOutline=$c['courseOutline'];
+            //  $courseOutline=$c['courseOutline'];
              $totalHours+=$nhours;
          }
+         
      }
      $userId = $_SESSION['user_session'];
      $instructor = $db->getRows('instructor',array('where'=>array('userID'=>$userId),'order_by'=>'instructorID ASC'));
@@ -169,9 +188,11 @@ if(!empty($courseprogramme))
       $studentNumber=$db->getStudentCourseSum($centerID,$academicYearID,$programmeLevelID,$programmeID);
      if($studentNumber>0)
      {
+
+    
         $viewButton = '
 	   <div class="btn-group">
-	         <a href="index3.php?sp=student_list&id='.$db->encrypt($courseID).'&sid='.$db->encrypt($semesterSettingID).'&bid='.$db->encrypt($batchID).'"class="glyphicon glyphicon-eye-open"></a>
+	         <a href="index3.php?sp=student_list&id='.$db->encrypt($courseid).'&programmeID='.$db->encrypt($programmeID).'&centerID='.$db->encrypt($centerID).'&year='.$db->encrypt($academicYearID).'&level='.$db->encrypt($programmeLevelID).'&instID='.$db->encrypt($instructorID).'&sid='.$db->encrypt($semesterSettingID).'"class="glyphicon glyphicon-eye-open"></a>
 	   </div>';
      }
      else 
@@ -211,7 +232,7 @@ if(!empty($courseprogramme))
   <?php }?>
    </tbody>
 <tr>
-    <th colspan="5" style="font-size:16px;">Total Number of Hours per Week</th><th style="font-size:16px;"><?php echo $totalHours;?></th>
+    <th colspan="5" style="font-size:16px;" >Total Number of Hours per Week</th><th style="font-size:16px;"><?php echo $totalHours;?></th>
 
     </tr>
  </table>
@@ -224,7 +245,7 @@ else
     ?>
     <h4 class="text-danger">No Subject Found<?php  echo $center_program_course; 
           
-          echo  $programmeLevel;
+        //   echo   $lv;
     
     ?></h4>
     <?php 
@@ -237,7 +258,7 @@ else
 <!-- End of Current Semester -->
 
  <!-- Previous Semester -->       
-        <div id="previous" class="tab-pane fade">
+        <div id="previous" class="tab-pane fade in active ">
             
             <div class="row">
             <form name="" method="post" action="">
@@ -272,15 +293,15 @@ else
  <?php 
  if(isset($_POST['doFind'])=="Find Records")
  {
-     $academicYearID=$_POST['academicYearID'];
+      $academicYearID=$_POST['academicYearID'];
      $semester=$db->getRows("semester_setting",array('where'=>array('academicYearID'=>$academicYearID),'order_by semesterName ASC'));
      if(!empty($semester))
      {
      foreach($semester as $sm)
      {
-         $semisterID=$sm['semesterID'];
+        //  $semesterSettingID=$sm[''];
         $academicYearID=$sm['academicYearID'];
-         $semesterName=$sm['semesterName'];
+        //  $semesterName=$sm['semesterName'];
          $semesterSettingID=$sm['semesterSettingID'];
      }
 
@@ -294,12 +315,13 @@ else
               $instructorID=$i['instructorID'];
               $centerID=$i['centerID'];
               $departmentID=$i['departmentID'];
-             $instructorName=$db->getData("instructor","instructorName","instructorID",$instructorID);
+ $instructorName=$db->getData("instructor","instructorName","instructorID",$instructorID);
          }
      }
      
  
-     $courseprogramme = $db->getInstructorCourse($departmentID,$semesterSettingID);
+    //  $courseprogramme = $db->getInstructorCours($departmentID,$semesterSettingID, $academicYearID, $instructorID);
+     $courseprogramme = $db->getInstructorAcademicCourse($academicYearID,$instructorID);
      if(!empty($courseprogramme))
      {
          $count = 0; 
@@ -314,7 +336,7 @@ else
  		 <div class="box box-solid box-primary">
 
              <div class="box-header with-border text-center">
-                 <h3 class="box-title">List of Assigned Courses for <?php echo $semesterName; echo' ';echo  $academicYearID?></h3>
+             <h3 class="box-title">List of Assigned Courses for <?php echo $db->getData('academic_year','academicYear','academicYearID',$academicYearID);?></h3>
              </div>
 
           <!-- /.box-header -->
@@ -394,13 +416,15 @@ else
        $academicYearID=$ii['academicYearID'];
        }
    }
+   
      $studentNumber=$db->getStudentCourseSum( $centerID, $academicYearID, $programmeLevelID,$programmeID);
      
      if($studentNumber>0)
      {
          $viewButton = '
 	   <div class="btn-group">
-	         <a href="index3.php?sp=student_list&id='.$db->encrypt($courseID).'&sid='.$db->encrypt($semisterID).'&bid='.$db->encrypt($batchID).'"class="glyphicon glyphicon-eye-open" title="View Students"></a>
+   
+       <a href="index3.php?sp=student_list&id='.$db->encrypt($courseid).'&programmeID='.$db->encrypt($programmeID).'&centerID='.$db->encrypt($centerID).'&year='.$db->encrypt($academicYearID).'&level='.$db->encrypt($programmeLevelID).'&instID='.$db->encrypt($instructorID).'&sid='.$db->encrypt($semesterSettingID).'"class="glyphicon glyphicon-eye-open"></a>
 	   </div>';
      }
      else
@@ -441,6 +465,7 @@ else
          ?>
          <h4 class="text-danger">No Course Found</h4>
          <?php 
+         
      }
  }
  }

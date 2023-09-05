@@ -61,15 +61,22 @@
             <div class="row">
                 <div class="col-md-8">
                     <div class="pull-left">
-                        <h3>List of Instructors in
+                        <h3>List of Instructors in ,
                             <?php
+
+                            // echo  $_SESSION['user_session'] ;
                             if($_SESSION['main_role_session']==4)
                             {
-                                echo $db->getData("departments","departmentName","departmentID",$_SESSION['department_session']);
+
+                                $departmentID = $db->getData("instructor","departmentID","userID",$_SESSION['user_session']);
+                                echo $db->getData("departments","departmentName","departmentID",$departmentID);
                             }
                             else if($_SESSION['main_role_session']==9)
+
                             {
-                                echo $db->getData("schools","schoolName","schoolID",$_SESSION['department_session']);
+
+                                $centerID = $db->getData("instructor","centerID","userID",$_SESSION['user_session']);
+                                echo $db->getData("center_registration","centerName","centerRegistrationID",$centerID);
                             }
                             ?>
                         </h3>
@@ -105,11 +112,13 @@
                         $db = new DBHelper();
                         if($_SESSION['role_session']==4)
                         {
-                            $instructor=$db->getInstructorList($_SESSION['role_session'],$_SESSION['department_session']);
+                            $departmentID = $db->getData("instructor","departmentID","userID",$_SESSION['user_session']);
+                          $roleID = $db->getData("userroles","roleID","userID",$_SESSION['user_session']);
+                            $instructor=$db->getInstructorList($roleID, $departmentID);
                         }
                         else if($_SESSION['role_session']==9)
                         {
-                            $instructor=$db->getInstructorList($_SESSION['role_session'],$_SESSION['department_session']);
+                            $instructor=$db->getInstructorList($_SESSION['role_session'], $departmentID);
                         }
                         //$instructor = $db->getRows('instructor',array('order_by'=>'employmentStatus DESC'));
                         ?>
@@ -145,12 +154,12 @@
                                     <td><?php echo $count; ?></td>
                                     <td><?php echo $name;?></td>
                                     <td><?php echo $inst['gender'];?></td>
-                                    <td><?php echo $inst['title'];?></td>
+                                    <td><?php echo $db->getData("instructor_title", "title","titleID",$inst['titleID']); ?></td>
                                     <td><?php echo $inst['phoneNumber']; ?></td>
                                     <td><?php echo $inst['email']; ?></td>
                                     <td><?php echo $db->getData("departments", "departmentName","departmentID",$inst['departmentID']); ?></td>
                                     <td><?php echo $inst['officeNumber'];?></td>
-                                    <td><?php echo $inst['employmentStatus']; ?></td>
+                                    <td><?php echo $db->getData("instructor_emp", "empType","empID",$inst['employmentStatusID']); ?></td>
                                     <td><?php echo $status; ?></td>
                                     <td>
                  <a href="index3.php?sp=view_instructor&id=<?php echo $db->my_simple_crypt($inst['instructorID'],'e');?>" class="glyphicon glyphicon-eye-open"></a></td><td>

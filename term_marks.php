@@ -231,6 +231,8 @@ $instructorID = $db->getData("instructor", "instructorID", "userID", $_SESSION['
                                     $staffID = $std['staffID'];
                                     $cpcourseID = $std['centerProgrammeCourseID'];
 
+                                    // echo  $cpcourseID;
+
                                     $studentNumber = $db->getStudentCourseSum($_SESSION['department_session'], $academicYearID, $programmeLevelID, $programmeID);
 
                                     $addButton = '
@@ -245,7 +247,7 @@ $instructorID = $db->getData("instructor", "instructorID", "userID", $_SESSION['
 
                                     $viewButton = '
                                     <div class="btn-group">
-                                        <a href="index3.php?sp=view_term_score&cid='.$db->encrypt($cpcourseID).'&termID='.$db->encrypt($examCategoryID).'&centerID='.$db->encrypt($centerID).'" class="glyphicon glyphicon-eye-open"></a>
+                                        <a href="index3.php?sp=view_term_score&cid='.$db->encrypt($cpcourseID).'&staffid='.$db->encrypt($instructorID).'&lvid='.$db->encrypt($programmeLevelID).'&termID='.$db->encrypt($examCategoryID).'&centerID='.$db->encrypt($centerID).'" class="glyphicon glyphicon-eye-open"></a>
                                 </div>';
 
                                 ?>

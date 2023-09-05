@@ -49,7 +49,8 @@ $db = new DBHelper(); ?>
         ?>
         <input type="text" hidden name="centerID" id="centerIDD" value="<?php echo $centerID; ?>">
         <?php 
-             $userId = $_SESSION['user_session'];
+            //  $userId = $_SESSION['user_session'];
+            // echo $userId;
             $instructor = $db->getRows('instructor',array('where'=>array('userID'=>$userId),'order_by'=>'instructorID ASC'));
 
             if(!empty($instructor))
@@ -110,7 +111,7 @@ $db = new DBHelper(); ?>
             <select name="programmeID" class="form-control" required="">
                 <?php
                 if ($_SESSION['main_role_session'] == 7) {
-                    $programmes = $db->getRows('programmes', array('order_by' => 'programmeName ASC'));
+                   echo  $programmes = $db->getRows('programmes', array('order_by' => 'programmeName ASC'));
                 } else {
                     $programmes = $db->getCenterMappingProgrammeList($centerID);
                 }
@@ -161,10 +162,11 @@ $db = new DBHelper(); ?>
     <div class="col-md-12">
         <?php
         if ((isset($_POST['doFind']) == "Find Records") || (isset($_REQUEST['action']) == "getRecords")) {
+          
             if (isset($_POST['doFind']) == 'Find Records') {
-                $academicYearID = $_POST['academicYearID'];
-                $programmeID = $_POST['programmeID'];
-                $programmeLevelID = $_POST['programmeLevelID'];
+               $academicYearID = $_POST['academicYearID'];
+                 $programmeID = $_POST['programmeID'];
+                 $programmeLevelID = $_POST['programmeLevelID'];
             } else if ($_REQUEST['action'] == 'getRecords') {
                 $academicYearID = $db->my_simple_crypt($_REQUEST['acaid'], 'd');
             }
@@ -183,9 +185,9 @@ $db = new DBHelper(); ?>
                 }
             }
 
-
+            
             // $courseData = $db->getCenterMappingCourseList($_SESSION['department_session'], $academicYearID, $programmeID, $programmeLevelID);
-            $courseData = $db->getCenterMappingCourseList( $userId, $academicYearID, $programmeID, $programmeLevelID);
+            $courseData = $db->getCenterMappingCourseList(  $centerID, $academicYearID, $programmeID, $programmeLevelID);
             if (!empty($courseData)) {
         ?>
                 <h4 class="text-danger">List of Course <?php

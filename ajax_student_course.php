@@ -2,12 +2,12 @@
 include("DB.php");
 $db=new DBHelper();
 $academicYearID=$_POST['academicYearID'];
-$semisterID=$_POST['semisterID'];
+// $semisterID=$_POST['semisterID'];
 
 if($academicYearID)
 {
  //$course = $db->getRows('student_course',array('where'=>array('academic_year_id'=>$academicYearID,'semister_id'=>$semisterID),'order_by'=>'course_id DESC'));
-  $course = $db->getDistinctCourse($academicYearID,$semisterID);
+  $course = $db->getDistinctCourse1($academicYearID);
 
  if(!empty($course))
  {

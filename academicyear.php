@@ -152,22 +152,19 @@ else
 <div class="modal-body">
 <div class="form-group">
 <?php
-$academic_year = $db->getRows('academic_year',array('where'=>array('status'=>1),'order_by'=>'status DESC'));
-if(!empty($academic_year))
-{
-    foreach($academic_year as $acyear)
-    {
-        $academicYear=$acyear['academicYear'];
+$academic_year = $db->getRows('academic_year', array('where' => array('status' => 1), 'order_by' => 'status DESC'));
+if (!empty($academic_year)) {
+    foreach ($academic_year as $acyear) {
+        $academicYear = $acyear['academicYear'];
     }
+} else {
+    $academicYear = date('Y') . "/" . date('Y');
 }
-else
-{
-    $academicYear=date('Y')."/".date('Y');
-}
-$ayear=explode("/",$academicYear);
-$year=$ayear[1];
 
+$ayear = explode("/", $academicYear);
+$year = isset($ayear[1]) ? $ayear[1] : date('Y'); 
 ?>
+
 <label for="academicYear">Academic Year</label>
 <input type="text" id="academic_year" name="academic_year" value="<?php echo $year;?>" class="form-control" />
 </div><span class="help-block" id="error"></span>

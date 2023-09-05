@@ -615,12 +615,12 @@
                 if(!empty($studentStatus))
                 {
                     ?>
-                    <h4><span class="text-danger" id="titleheader">
+                    <h4><span class="text-danger" id="titleheader myTab">
                 List of <?php echo $db->getData("status","statusValue","statusID",$statusID);?>
             Students  in <?php echo $db->getData("academic_year","academicYear","academicYearID",$academicYearID);?>
                 </span></h4>
                     <hr>
-                    <table  id="thirdtab" class="display nowrap">
+                    <table  id="thirdtab" class="display nowrap table table-striped">
                         <thead>
                         <tr>
                             <th>No.</th>
@@ -645,6 +645,7 @@
                             $semesterSettingID=$st['semesterSettingID'];
                             $name="$fname $mname $lname";
                             $regNumber=$st['registrationNumber'];
+                            $programmeLevelID=$st['programmeLevelID'];
                             ?>
                             <tr>
                                 <td><?php echo $count; ?></td>
@@ -652,7 +653,7 @@
                                 <td><?php echo $st['gender']; ?></td>
                                 <td><?php echo $st['registrationNumber']; ?></td>
                                 <td><?php echo $db->getData("programmes","programmeName","programmeID",$programmeID); ?></td>
-                                <td></td>
+                                <td><?php echo $db->getData("programme_level","programmeLevel","programmeLevelID",$programmeLevelID); ?></td>
                             </tr>
                             <?php
                         }

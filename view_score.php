@@ -208,8 +208,8 @@ $db = new DBHelper();
             ?>
         </div>
         <div class="col-lg-3">
-            <a href='print_exam_score.php?action=getPDF&cid=<?php echo $db->encrypt($courseID); ?>&aid=<?php echo $db->encrypt($academicYearID); ?>&lid=<?php echo $db->encrypt($programmeLevelID) ;?>' target='_blank'> <button type="button" class="btn btn-primary pull-right form-control" style="margin-right: 5px;">
-                    <i class="fa fa-download"></i>Print Report
+            <a href='print_exam_score.php?action=getPDF&cid=<?php echo $db->encrypt($courseID);?>&proid=<?php echo $db->encrypt($programmeID); ?>&aid=<?php echo $db->encrypt($academicYearID); ?>&lid=<?php echo $db->encrypt($programmeLevelID) ;?>' target='_blank'> <button type="button" class="btn btn-primary pull-right form-control" style="margin-right: 5px;">
+                    <i class="fa fa-download"></i>Print Report 
                 </button></a>
         </div>
     </div>

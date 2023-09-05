@@ -63,6 +63,7 @@
                                     <select name="programmeID" class="form-control chosen-select" required="">
 
                                         <?php
+                                        //  $programmes = $db->getRows('programmes', array('order_by' => 'programmeName ASC'));
                                         $programmes = $db->filterTrade($centerRegistrationID);
                                         //$programmes=$db->getRows('programmes',array('order by programmeName ASC'));
                                         if (!empty($programmes)) {

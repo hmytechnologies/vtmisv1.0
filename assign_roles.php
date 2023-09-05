@@ -116,6 +116,7 @@ $(document).ready(function () {
             </div>
         </div>
         </tfoot>
+        </form>
     </div>
 </div>
 

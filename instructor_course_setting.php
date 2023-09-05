@@ -135,8 +135,8 @@
               else
                 //   $centerID=$_SESSION['department_session'];\
 
-
-                $userId = $_SESSION['user_session'];
+$_SESSION['user_session'];
+                                    $userId =  $_SESSION['user_session'];
                                     $instructor = $db->getRows('instructor',array('where'=>array('userID'=>$userId),'order_by'=>'instructorID ASC'));
                             
                                     if(!empty($instructor))
@@ -386,7 +386,7 @@
                      $units=$cv['units'];
                      $courseTypeID=$cv['courseTypeID'];
                      $nhours=$cv['numberOfHours'];
-                     $courseOutline=$cv['courseOutline'];
+                    //  $courseOutline=$cv['courseOutline'];
                      $totalHours+=$nhours;
 
                      $studentNumber=$db->getStudentCourseSum($centerID,$academicYearID,$programmeLevelID,$programmeID);

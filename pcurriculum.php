@@ -186,7 +186,7 @@
                             { 
                                 $cCode=$c['courseCode'];  
                                 $cName=$c['courseName'];
-                                $courseOutline=$c['courseOutline'];
+                                // $courseOutline=$c['courseOutline'];
                                 $courseTypeID=$c['courseTypeID'];
                               }
                       }

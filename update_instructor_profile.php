@@ -1,4 +1,4 @@
-<?php
+ <?php
 // 
 $instructor = $db->getRows('instructor',array('where'=>array('userID'=>$userID),'order by'=>'firstName ASC'));
 if(!empty($instructor)) {

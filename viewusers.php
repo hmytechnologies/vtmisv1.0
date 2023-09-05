@@ -274,7 +274,7 @@ if(!empty($_REQUEST['msg']))
                                  </div>
                              </div>
 
-                             <div class="center">
+                          
                                  <div class="row">
                                      <div class="col-lg-12">
                                          <div class="form-group">
@@ -296,6 +296,7 @@ if(!empty($_REQUEST['msg']))
                                          </div>
                                      </div>
                                  </div>
+                              
 
                                  <div class="row">
                                      <div class="col-lg-12">
@@ -322,15 +323,30 @@ if(!empty($_REQUEST['msg']))
                              </div>
 
 
+
                              <div class="row">
-                                 <div class="col-lg-12">
-                                     <div class="form-group">
-                                         <label for="email">User Role</label>
-                                         <select name="roleID" id="role" class="form-control" required>
-                                         </select>
-                                     </div>
-                                 </div>
-                             </div>
+                                        <div class="col-lg-12">
+                                            <div class="form-group">
+                                                <label for="">User Role</label>
+                                                <select name="roleID" id="role" class="form-control" required>
+                                                    <?php
+                                                    $roles = $db->getRows('roles',array('order_by'=>'roleID ASC'));
+                                                    if(!empty($roles)){
+                                                        ?>
+                                                        <option value="">Select Here</option>
+                                                        <?php
+                                                        $count = 0; foreach($roles as $role){ $count++;
+                                                            $roleName=$role['roleName'];
+                                                            $roleID=$role['roleID'];
+                                                            if($roleID!=2){
+                                                            ?>
+                                                            <option value="<?php echo $roleID;?>"><?php echo $roleName;?></option>
+                                                        <?php }}}?>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                    </div>
 
 
                          </div>

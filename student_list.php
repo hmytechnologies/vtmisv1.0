@@ -52,23 +52,32 @@
 <?php $db=new DBHelper();
 ?>
 <?php
-$courseProgrammeID=$db->decrypt($_REQUEST['cid']);
+ $corsID=$db->decrypt($_REQUEST['id']);
+ $instractorID=$db->decrypt($_REQUEST['instID']); 
 
+  $yearID=$db->decrypt($_REQUEST['year']);
+  $levelID=$db->decrypt($_REQUEST['level']);
 
-$course=$db->getCourseInfo($courseProgrammeID);
+ $cID=$db->decrypt($_REQUEST['centerID']);
+
+ $proID=$db->decrypt($_REQUEST['programmeID']);
+ 
+
+$course=$db->getListOfCourse($instractorID,$corsID,$yearID,$levelID, $cID);
 
 foreach ($course as $std) {
-    $count++;
-    $courseID = $std['courseID'];
-    $courseCode = $std['courseCode'];
-    $courseName = $std['courseName'];
-    $courseTypeID = $std['courseTypeID'];
-    $programmeLevelID = $std['programmeLevelID'];
-    $programmeID = $std['programmeID'];
-    $staffID = $std['staffID'];
-    $academicYearID=$std['academicYearID'];
+    //  $count++;
+     $courseID = $std['courseID'];
+     $courseCode = $std['courseCode'];
+     $courseName = $std['courseName'];
+     $courseTypeID = $std['courseTypeID'];
+     $programmeLevelID = $std['programmeLevelID'];
+     $programmeID = $std['programmeID'];
+     $staffID = $std['staffID'];
+     $academicYearID=$std['academicYearID'];
 }
-$studentNumber=$db->getStudentCourseSum($courseID,$academicYearID,$programmeID,$programmeLevelID);
+// $studentNumber=$db->getStudentCourseSum($cID,$yearID,$programmeID,$levelID);
+ $studentNumber = $db->getStudentCourseSum($_SESSION['department_session'], $yearID,  $levelID,$programmeID);
 ?>
     <div class="col-md-12">
         <div class="box box-solid box-primary">
@@ -93,10 +102,10 @@ $studentNumber=$db->getStudentCourseSum($courseID,$academicYearID,$programmeID,$
                         <td><?php echo $courseName;?></td>
                         <td><?php echo $courseCode;?></td>
                         <td><?php echo $db->getData("course_type","courseType","courseTypeID",$courseTypeID);?></td>
-                        <td><?php echo $db->getData("programme_level", "programmeLevel", "programmeLevelID", $programmeLevelID); ?></td>
-                        <td><?php echo $db->getData("programmes", "programmeName", "programmeID", $programmeID);?></td>
+                        <td><?php echo $db->getData("programme_level", "programmeLevel", "programmeLevelID", $levelID); ?></td>
+                        <td><?php echo $db->getData("programmes", "programmeName", "programmeID", $proID);?></td>
                         <td><?php echo $studentNumber;?></td>
-                        <td><?php echo $db->getData("academic_year","academicYear","academicYearID",$academicYearID);?></td>
+                        <td><?php echo $db->getData("academic_year","academicYear","academicYearID",$yearID);?></td>
                     </tr>
                     </tbody>
                 </table>
@@ -129,12 +138,13 @@ if(!empty($course))
     <th>Name</th>
     <th>Gender</th>
       <th>Email</th>
+      <th>Program</th>
       <th>Center Registered </th>
      </tr>
   </thead>
   <tbody>
 <?php 
-$getStudentCourse=$db->getStudentCourseInfo($courseID,$semesterSettingID);
+$getStudentCourse=$db->getStudentCourseInfo($courseID);
 if(!empty($getStudentCourse))
 {
     $count = 0; 
@@ -145,6 +155,7 @@ if(!empty($getStudentCourse))
         $student = $db->getRows('student',array('where'=>array('registrationNumber'=>$regNumber),'order_by'=>'studentID ASC'));
         
         if(!empty($student)){
+            
         foreach($student as $std){ 
         $studentID=$std['studentID'];
         $fname=$std['firstName'];
@@ -152,12 +163,24 @@ if(!empty($getStudentCourse))
         $lname=$std['lastName'];
         $gender=$std['gender'];
         $dob=$std['dateOfBirth'];
-        $programmeID=$std['programmeID'];
         $name="$fname $mname $lname";
         $registrationNumber=$std['registrationNumber'];
         $email=$std['email'];
-        echo "<tr><td>$count</td><td>$regNumber</td><td>$name</td><td>$gender</td><td>".$db->getData("programmes","programmeName","programmeID",$programmeID)."</td><td>$email</td></tr>";
+        // $programmeID=$std['programmeID'];
+        // $std = $db->getRows(' student_programme',array('where'=>array('regNumber'=>$registrationNumber),'order_by'=>'regNumber ASC'));
+
+        //     if(!empty($std)){
+        //             foreach($std as $Pro){
+        //                 $centerID =$Pro['centerID'];
+        //                 $programmeID=$Pro['programmeID'];
+
+        //              }
+        //         }
+       
+       
+        echo "<tr><td>$count</td><td>$regNumber</td><td>$name</td><td>$gender</td><td>$email</td><td>".$db->getData("programmes","programmeName","programmeID", $proID)."</td><td>".$db->getData("center_registration","centerName","centerRegistrationID", $db->decrypt($_REQUEST['centerID']))."</td></tr>";
         }
+
         }
     }
 }

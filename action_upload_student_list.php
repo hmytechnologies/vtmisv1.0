@@ -8,6 +8,8 @@ try {
     $tblName = 'users';
     $tblUserRole='userroles';
     $tblStudent='student';
+
+    $tblStudentyear='student_study_year';
     
     if(isset($_REQUEST['action_type']) && !empty($_REQUEST['action_type'])){
         if($_REQUEST['action_type'] == 'add'){
@@ -54,7 +56,7 @@ try {
 
 
                         //add users first
-                        echo $userData = array(
+                        $userData = array(
                             'userName' => $username,
                             'password' => $password,
                             'firstName' => $fname,
@@ -107,7 +109,39 @@ try {
                             } else {
                                 $boolStatus = false;
                             }
-                        } else {
+
+
+                            $programmeLevelID= $_POST['programmeLevelID'];
+                            $level = $db->getData("programme_level","programmeLevelID","programmeLevelID",$programmeLevelID);
+
+                            if($level == 1 || $level == 2  ){
+                                $studentstudyYear = 3;
+
+                            }else{
+
+                                $studentstudyYear = 2;
+                            }
+
+
+                            $yearname = $db->getData("academic_year","academicYear","academicYearID",$academicYearID);
+                            $studentyearData = array(
+                               
+                                'regNumber' => strtoupper(trim($regNumber)),
+                                'studyYear'=> $studentstudyYear,
+                                /*'dateOfBirth' => $dob, */
+
+                                'academicYearID' => $academicYearID,
+                                'studyYearStatus' => 1,
+                                
+                            );
+
+
+
+
+
+
+                            $insert = $db->insert($tblStudentyear, $studentyearData);
+                    } else {
                             $boolStatus = false;
                         }
 

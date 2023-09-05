@@ -63,9 +63,18 @@
                       $lname=$std['lastName'];
                       $gender=$std['gender'];
                       $regNumber=$std['registrationNumber'];
-                      $programmeID=$std['programmeID'];
+                      $levelID = $db->getRows('student_programme', array('where' => array('regNumber' => $searchStudent), ' order_by' => ' regNumber ASC'));
+                      foreach ($levelID as $lv) {
+
+                          $programmeID = $lv['programmeID'];
+                          $programmeLevelID = $lv['programmeLevelID'];
+                         
+
+                      }
                       $statusID=$std['statusID'];
-                      $batchID=$std['batchID'];
+                      $academicYearID = $std['academicYearID'];
+
+                      $academicYearID = $db->getData("academic_year", "academicYear", "academicYearID", $academicYearID);
                       $name="$fname $mname $lname";
 
                      
@@ -82,7 +91,7 @@
                       
                      echo "<tr><td>$name</td><td>$regNumber</td><td>$gender</td><td>";
 
-                     $programmeLevelID=$db->getData("programmes","programmeLevelID","programmeID",$programmeID);
+                    //  $programmeLevelID=$db->getData("programmes","programmeLevelID","programmeID",$programmeID);
                      $level= $db->getRows('programme_level',array('where'=>array('programmeLevelID'=>$programmeLevelID),' order_by'=>' programmeLevelCode ASC'));
 		                if(!empty($level))
 		                {
@@ -104,7 +113,7 @@
 
 		                echo "$programmeDuration</td><td>";
 		                
-		                
+                    echo "$academicYearID </td><td>";
 		                $study_year= $db->getRows('student_study_year',array('where'=>array('regNumber'=>$regNumber,'academicYearID'=>$academicYearID),' order_by'=>'regNumber ASC'));
 		                if(!empty($study_year))
 		                {
@@ -115,7 +124,7 @@
 		                }
 		                echo $studyYear."</td><td>";
 		                
-		                echo $db->getData("batch","batchName","batchID",$batchID)."</td><td>";
+		               
 		                $status= $db->getRows('status',array('where'=>array('statusID'=>$statusID),' order_by'=>'status_value ASC'));
 		                if(!empty($status))
 		                {

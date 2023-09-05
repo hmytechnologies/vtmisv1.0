@@ -3,22 +3,22 @@
     ?>
     <?php
     $courseID=$db->decrypt($_REQUEST['id']);
-    $semesterSettingID=$db->decrypt($_REQUEST['sid']);
-    $batchID=$db->decrypt($_REQUEST['bid']);
-    $instructorID=$db->decrypt($_REQUEST['instID']);
+     $semesterSettingID=$db->decrypt($_REQUEST['sid']);
+    $academic=$db->decrypt($_REQUEST['ac']);
+     $instructorID=$db->decrypt($_REQUEST['instID']);
 
     $today=date("Y-m-d");
     $sm=$db->readSemesterSetting($today);
     foreach ($sm as $s) {
-        $semisterID=$s['semesterID'];
+        // $semisterID=$s['semesterID'];
         $academicYearID=$s['academicYearID'];
-        $semesterName=$s['semesterName'];
+        // $semesterName=$s['semesterName'];
         $currentSemesterSettingID=$s['semesterSettingID'];
     }
 
     ?>
     <?php
-    $courseprogramme = $db->getSemesterBatchCourse($semesterSettingID, $courseID,$batchID,$instructorID);
+    $courseprogramme = $db->getSemesterBatchCourses($semesterSettingID, $courseID,$instructorID,$academic);
     if (!empty($courseprogramme)) {
         ?>
         <div class="col-md-12">
@@ -36,7 +36,6 @@
                             <th>Credits</th>
                             <th>Hours</th>
                             <th>No.of Students</th>
-                            <th>Batch</th>
                             <!--<th>Course Marks</th>
                             <th>Pass Mark</th>-->
                         </tr>
@@ -48,7 +47,10 @@
                         foreach ($courseprogramme as $std) {
                             $count++;
                             $courseID = $std['courseID'];
-                            $batchID = $std['batchID'];
+                            $programmeLevelID = $std['programmeLevelID'];
+                            $progID = $std['programmeID'];
+                            $centerID = $std['centerID'];
+                           
 
                             $course = $db->getRows('course', array('where' => array('courseID' => $courseID), 'order_by' => 'courseID ASC'));
                             if (!empty($course)) {
@@ -61,8 +63,8 @@
                                     $totalHours += $nhours;
                                 }
                             }
-
-                            $studentNumber = $db->getStudentCourseSum($courseID, $semesterSettingID, $batchID);
+                          
+                            $studentNumber = $db->getStudentCourseSum($centerID,$academic , $programmeLevelID, $progID);
                             ?>
 
                             <tr>
@@ -72,7 +74,7 @@
                                 <td><?php echo $units; ?></td>
                                 <td><?php echo $nhours; ?></td>
                                 <td><?php echo $studentNumber; ?></td>
-                                <td><?php echo $db->getData("batch", "batchName", "batchID", $batchID); ?></td>
+                               
                                 <!--<td><?php /*echo $db->getData("course_grade", "courseGrade", "courseGradeID", $std['courseGradeID']); */?></td>
                                 <td><?php /*echo $db->getData("pass_mark", "passMark", "passMarkID", $std['passMarkID']); */?></td>-->
                             </tr>
@@ -91,7 +93,7 @@
     <br>
     <br>
         <?php
-        $markConfiguration = $db->getRows("assessment_configuration",array('where'=>array('semesterSettingID'=>$semesterSettingID,'courseID'=>$courseID,'batchID'=>$batchID,'instructorID'=>$instructorID),'order by dueDate DESC'));
+        $markConfiguration = $db->getRows("assessment_configuration",array('where'=>array('semesterSettingID'=>$semesterSettingID,'courseID'=>$courseID,'instructorID'=>$instructorID),'order by dueDate DESC'));
         if (!empty($markConfiguration)) {
         ?>
          <div class="col-md-12">
@@ -125,7 +127,7 @@
 
                      $viewButton = '
 <button type="button" class="btn btn-primary" style="margin-right: 5px;">
-<a href="index3.php?sp=add_marks&id=' . $db->encrypt($courseID) . '&sid=' . $db->encrypt($semesterSettingID) . '&bid=' . $db->encrypt($batchID) . '"></a><i class="fa fa-plus"></i>
+<a href="index3.php?sp=add_marks&id=' . $db->encrypt($courseID) . '&sid=' . $db->encrypt($semesterSettingID) .'"></a><i class="fa fa-plus"></i>
 ';
                      ?>
 
@@ -145,7 +147,7 @@
                                  echo "No";
                              else {
                                  ?>
-                                 <a href="action_marks_configuration.php?action_type=drop&id=<?php echo $db->encrypt($courseID);?>&sid=<?php echo $db->encrypt($semesterSettingID);?>&bid=<?php echo $db->encrypt($batchID);?>&instID=<?php echo $db->encrypt($instructorID);?>&assID=<?php echo $db->encrypt($std['assessmentConfigurationID']); ?>">
+                                 <a href="action_marks_configuration.php?action_type=drop&id=<?php echo $db->encrypt($courseID);?>&sid=<?php echo $db->encrypt($semesterSettingID);?>&instID=<?php echo $db->encrypt($instructorID);?>&assID=<?php echo $db->encrypt($std['assessmentConfigurationID']); ?>">
                                      <button type="button" class="btn btn-primary" style="margin-right: 5px;"><i
                                                  class="fa fa-trash"></i></button>
                                  </a>
@@ -275,7 +277,6 @@
                                          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                                          <input type="hidden" name="action_type" value="edit"/>
                                          <input type="hidden" name="assessmentConfigurationID" value="<?php echo $std['assessmentConfigurationID'];?>">
-                                         <input type="hidden" name="batchID" value="<?php echo $batchID; ?>">
                                          <input type="hidden" name="semesterSettingID" value="<?php echo $semesterSettingID; ?>">
                                          <input type="hidden" name="courseID" value="<?php echo $courseID; ?>">
                                          <input type="hidden" name="instructorID" value="<?php echo $instructorID; ?>">
@@ -309,16 +310,18 @@
      </div>
  </div>
         <?php
-        } else {
+       } else {
             ?>
             <h4 class="text-danger">No Marks Configuration</h4>
             <?php
+            
         }
-        if($totalMarks==100) {
-        }else
-        {
-            ?>
-            <script type="text/javascript">
+      
+        // if($totalMarks==100) {
+        // }else
+        // {
+        //     ?>
+        <!--    <script type="text/javascript">
                 $(document).ready(function () {
                     $("#exam_date").datepicker({
                         dateFormat:"yy-mm-dd",
@@ -326,11 +329,11 @@
                         changeYear:true,
                     });
                 });
-            </script>
-        <?php
-        if($currentSemesterSettingID==$semesterSettingID) {
-        ?>
-            <form name="" method="post" action="action_marks_configuration.php">
+            </script> -->
+ <?php
+        //if($currentSemesterSettingID==$semesterSettingID) {
+        ?> 
+            <!-- <form name="" method="post" action="action_marks_configuration.php">
                 <div class="row">
                     <div class="col-lg-2">
                         <div class="form-group">
@@ -402,7 +405,7 @@
                     <div class="col-lg-6"></div>
                     <div class="col-lg-3">
                         <input type="hidden" name="action_type" value="add"/>
-                        <input type="hidden" name="batchID" value="<?php echo $batchID; ?>">
+                    
                         <input type="hidden" name="semesterSettingID" value="<?php echo $semesterSettingID; ?>">
                         <input type="hidden" name="courseID" value="<?php echo $courseID; ?>">
                         <input type="hidden" name="instructorID" value="<?php echo $instructorID; ?>">
@@ -412,13 +415,13 @@
                         <input type="reset" value="Cancel" class="btn btn-primary form-control"/>
                     </div>
                 </div>
-            </form>
-            <?php
-        }
+            </form> -->
+            <!-- <?php
+       // }}
             ?>
             <?php
-        }
-        ?>
+        
+        ?> -->
 
     <br><br>
     <div class="row">

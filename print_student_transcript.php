@@ -220,14 +220,10 @@ if($_REQUEST['action']=="getPDF") {
              $pdf->SetFont('Arial', 'B',8);  
              $countInner= (int) 0; 
              if(  $countLevel == 1){
-
-
                 $sumCoreMarks = 0;
                 $countCoreSubjects = 0;
                 $sumGeneralMarks = 0;
                 $countGeneralSubjects = 0;
-
-
 
                 # code...
                 //$selectedLevelsID ;
@@ -236,21 +232,21 @@ if($_REQUEST['action']=="getPDF") {
                 // $pdf->cell(width,height,text,border,endline,align);
                 $pdf->Cell(210, 7,  $levelName .'  '.$academicYearName , 1, 1, 'C');
     
-                $pdf->SetFont('Arial', 'B', 10);
-                
+              
+                $pdf->SetFont('Arial', 'B',8);  
                 $pdf->SetX(($pdf->GetPageWidth() - 210) / 2);
-                    
+                  
                     $pdf->Cell(20, 7, 'Code', 1, 0, 'C');
                     $pdf->Cell(140, 7, 'Subjects', 1, 0, 'C');
                     $pdf->Cell(50, 7, 'Average Performance', 1, 1, 'C');
     
     
-    
+                    $pdf->SetFont('Arial', 'B',8);  
                 $pdf->SetX(($pdf->GetPageWidth() - 210) / 2); 
-                    $pdf->SetFont('Arial', 'B',8);            
-                    $pdf->Cell(20, 7, '', 1, 0, 'C');
+                             
+                    $pdf->Cell(20, 7,  1, 0, 'C');
                     $pdf->Cell(140, 7, 'CORE  SUBJECT:  ', 1, 0, 'C');
-                    $pdf->Cell(50, 7, ' ', 1, 1, 'C');
+                    $pdf->Cell(50., 7, ' ', 1, 1, 'C');
                // echo $academicYearID;
                  
                     $examNumber= $db->getRows('exam_number',array('where'=>array('regNumber'=> $regNum,'academicYearID'=> $academicYearID),'order_by'=>'regNumber ASC'));
@@ -264,11 +260,10 @@ if($_REQUEST['action']=="getPDF") {
                     }
 
                    $Std = $db->getcourseStudent($regN, $exam_nr ,$academicYearID);
-                //    $sumCoreMarks = 0;
-                //       $countCoreSubjects = 0;
 
                    foreach ($Std as $cs) {
-                   
+                    # code...
+                  
 
                     
                     $examScore =  $cs['examScore'];
@@ -319,40 +314,25 @@ if($_REQUEST['action']=="getPDF") {
 
                          
                         if($courseCategory=='Core Subjects'){
-                            $pdf->SetFont('Arial', 'B'); 
+                            $pdf->SetFont('Arial', 'B',8);  
                             $pdf->SetX(($pdf->GetPageWidth() - 210) / 2);
+                              
                            $pdf->Cell(20, 7, $courseCode, 1, 0, 'C');
                            $pdf->Cell(140, 7, $courseName, 1, 0, 'L');
                            $pdf->Cell(50, 7, $grade, 1, 1, 'C');
-
-                           $sumCoreMarks += $totalMarks;
-                              // Increment the count of general subjects
-                              $countCoreSubjects++;
                        }
 
                        
                          
                 }
-            }
+                 }
 
-
-               
-
-
-                if($levelName == 'Level I'){
-                    $pdf->SetX(43.5); 
-                    $pdf->SetFont('Arial', 'B',8);                   
-                        $pdf->Cell(20, 7, '', 1, 0, 'C');
-                        $pdf->Cell(140, 7, 'Industrial Practical Training  ', 1, 0, 'L');
-                        $pdf->Cell(50, 7, ' ', 1, 1, 'C');
-                }
-  
-                $pdf->SetX(43.5); 
+                $pdf->SetX(($pdf->GetPageWidth() - 210) / 2); 
                 $pdf->SetFont('Arial', 'B',8);                   
                     $pdf->Cell(20, 7, '', 1, 0, 'C');
                     $pdf->Cell(140, 7, 'GENERAL  SUBJECT:  ', 1, 0, 'C');
                     $pdf->Cell(50, 7, ' ', 1, 1, 'C');
-
+               // echo $academicYearID;
                  
                     $examNumber= $db->getRows('exam_number',array('where'=>array('regNumber'=> $regNum,'academicYearID'=> $academicYearID),'order_by'=>'regNumber ASC'));
                     if(is_array($examNumber) || is_object($examNumber) ){
@@ -365,8 +345,7 @@ if($_REQUEST['action']=="getPDF") {
                     }
 
                    $Std = $db->getcourseStudent($regN, $exam_nr ,$academicYearID);
-                //    $sumGeneralMarks = 0;
-                //    $countGeneralSubjects = 0;
+
                    foreach ($Std as $cs) {
                     # code...
                   
@@ -421,39 +400,35 @@ if($_REQUEST['action']=="getPDF") {
                          
                         if($courseCategory=='General Subjects'){
                             $pdf->SetX(($pdf->GetPageWidth() - 210) / 2);
-                            $pdf->SetFont('Arial', 'B'); 
                            $pdf->Cell(20, 7, $courseCode, 1, 0, 'C');
                            $pdf->Cell(140, 7, $courseName, 1, 0, 'L');
                            $pdf->Cell(50, 7, $grade, 1, 1, 'C');
-
-                           $sumGeneralMarks += $totalMarks;
-                              // Increment the count of general subjects
-                              $countGeneralSubjects++;
                        }
 
                        
-                       $averagePerformanceCore = ( $sumCoreMarks) / 3;
-                       // echo "Average of core subjects: " . $averagePerformanceCore;
-                       
-                       // Calculate the average of general subjects
-                       $averagePerformanceGeneral = ($sumGeneralMarks) /4 ;
-                       // echo "Average of general subjects: " . $averagePerformanceGeneral;
-
-
-                       
-                       
+                    }  
                 }
-             
-            }
+                $pdf->Ln(5);
+    $pdf->SetFont('Arial','',8);
+    $pdf->Cell(100,6,"                                                CORE SUBJECT - AVERAGE PERFORMANCE");
+    $pdf->Cell(100,6,"                                                                                            GENERAL SUBJECT - AVERAGE PERFORMANCE");
+    $pdf->Ln(8);
+    $pdf->Cell(100,6,"                                                          ...................................");
+    $pdf->Cell(100,6,"                                                                                                                              ...................................");
+    
+    $pdf->Ln(6);
+    $pdf->Cell(100,6,"                                                          EXECUTIVE DIRECTOR");
+    $pdf->Cell(100,6,"                               OFFICIAL STAMP");
+    $pdf->Cell(100,6,"  CENTER MANAGER");
 
 
+
+    $pdf->Ln(7);
+    $pdf->Cell(100,6,"                                                            Grading and Interpretation:  A=100-80 Competent,    B=79-60 Competent,    C=59-50 Competent,    D=49-40 Competent,    F=39-0 Not competent");
+    
                 
     
                 
-                
-                
-             
-
                 
                 
              }
@@ -603,13 +578,7 @@ if($_REQUEST['action']=="getPDF") {
                     }
                 }
                     // echo "Sum of general subjects: " . $sumCoreMarks;
-                    if($levelName == 'Level I'){
-                        // $pdf->SetX(43.5); 
-                        $pdf->SetFont('Arial', 'B',8);                   
-                            $pdf->Cell(20, 7, '', 1, 0, 'C');
-                            $pdf->Cell(59.24, 7, 'Industrial Practical Training  ', 1, 0, 'L');
-                            $pdf->Cell(59.24, 7, ' ', 1, 1, 'C');
-                    }
+
                     $pdf->SetXY($marginLeft, 124); // Adjust the Y position as needed for centering
                     $pdf->Cell(20, 6, '', 1, 0, 'C');
                     $pdf->Cell(59.24, 6, 'General Subject', 1, 0, 'C');
@@ -1774,33 +1743,7 @@ $averagePerformanceGeneral = ($sumGeneralMarks2 + $sumGeneralMarks) / 8;
             }
             
             
-           else  {
-
-
-            
-            $pdf->Ln(4.5);
-            $pdf->SetFont('Arial','B',8);
-            $pdf->Cell(100,6,"                                                CORE SUBJECT - AVERAGE PERFORMANCE :  ".$Coregrade);
-            $pdf->Cell(100,6,"                                                                                            GENERAL SUBJECT - AVERAGE PERFORMANCE :  ".$Generalgrade);
-            $pdf->Ln(8);
-            $pdf->Cell(100,6,"                                                          ...................................");
-            $pdf->Cell(100,6,"                                                                                                                              ...................................");
-            
-            $pdf->Ln(6);
-            $pdf->Cell(100,6,"                                                          EXECUTIVE DIRECTOR");
-            $pdf->Cell(100,6,"                               OFFICIAL STAMP");
-            $pdf->Cell(100,6,"  CENTER MANAGER");
-        
-        
-        
-            $pdf->Ln(7);
-            $pdf->Cell(100,6,"                                                            Grading and Interpretation:  A=100-80 Competent,    B=79-60 Competent,    C=59-50 Competent,    D=49-40 Competent,    F=39-0 Not competent");
-            
-                        
-            
-                        
-
-           }
+           
                
       
 
