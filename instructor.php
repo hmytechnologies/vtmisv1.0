@@ -102,7 +102,7 @@
       <th>Title</th>
     <th>Phone</th>
     <th>Email</th>
-      <!-- <th>School</th> -->
+      <th>School</th>
     <th>Department</th>
       <th>Office No.</th>
     <th>Employment Status</th>
@@ -119,8 +119,8 @@ if($inst['instructorStatus']==1)
 else
   $status="Not Active";
 
-$schooID=$db->getData("departments","departmentName","departmentID",$inst['departmentID']);
-// $schoolCode=$db->getData("schools","schoolCode","schoolID",$schooID);
+$schooID=$db->getData("departments","schoolID","departmentID",$inst['departmentID']);
+$schoolCode=$db->getData("schools","schoolCode","schoolID",$schooID);
 
  ?>
             <tr>
@@ -129,7 +129,7 @@ $schooID=$db->getData("departments","departmentName","departmentID",$inst['depar
                 <td><?php echo $db->getData("instructor_title","title","titleID",$inst['titleID']);?></td>
                 <td><?php echo $inst['phoneNumber']; ?></td>
                 <td><?php echo $inst['email']; ?></td>
-                <!-- <td><?php echo $schoolCode;?></td> -->
+                <td><?php echo $schoolCode;?></td>
                 <td><?php echo $db->getData("departments", "departmentCode","departmentID",$inst['departmentID']); ?></td>
                 <td><?php echo $inst['officeNumber'];?></td>
                 <td><?php echo $db->getData("instructor_emp", "empType","empID",$inst['employmentStatusID']); ?></td>
