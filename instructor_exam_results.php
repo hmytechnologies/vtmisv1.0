@@ -12,7 +12,9 @@
 
    
 </script>
-<?php $db=new DBHelper();
+<?php
+session_start();
+$db=new DBHelper();
 $instructorID=$db->getData("instructor","instructorID","userID",$_SESSION['user_session']);
 $instructor=$db->getRows("instructor",array('where'=>array('instructorID'=> $instructorID),'order_by instructorID ASC'));
 
@@ -95,6 +97,7 @@ $course=$db->getRows("center_programme_course",array('where'=>array('staffID'=> 
  <?php 
 // $today=date("Y-m-d");
 // $sm=$db->readSemesterSetting($today);
+// $current_year = $db->getRows("semester_setting", array('where' => array('semesterStatus' => 1)));
 $current_year = $db->getRows("semester_setting", array('where' => array('semesterStatus' => 1)));
 
 foreach ($current_year as $y) {

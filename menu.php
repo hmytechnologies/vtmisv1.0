@@ -10,7 +10,7 @@ $db = new DBHelper();
     </li>
     <?php
     foreach ($_SESSION['roleID'] as $role => $user_role) {
-        if ($user_role == 8 || $user_role == 10) {
+        if ($user_role == 8 || $user_role == 10  ) {
     ?>
             <li class="treeview">
                 <a href="#"><i class="glyphicon glyphicon-th-large"></i><span>Student Management</span> <i class="fa fa-angle-left pull-right"></i></a>
@@ -42,7 +42,7 @@ $db = new DBHelper();
         <ul class="treeview-menu">
             <?php
             foreach ($_SESSION['roleID'] as $role => $user_role) {
-                if ($user_role == 7) {
+                if ($user_role == 7 || $user_role == 1) {
             ?>
                     <!--<li><a href="index3.php?sp=courselist">Annual Subjects</a></li>
                                  <li><a href="index3.php?sp=semester_setting">Annual Settings</a></li>-->
@@ -51,7 +51,7 @@ $db = new DBHelper();
                     <li><a href="index3.php?sp=transfer_student">Promotion Student</a></li>
                 <?php
                 }
-                if ($user_role == 10) {
+                if ($user_role == 10 ) {
                 ?>
                     <!--<li><a href="index3.php?sp=courselist">Term Subjects</a></li>-->
                     <li><a href="index3.php?sp=instructor_course_setting">Course Allocation</a></li>
@@ -59,7 +59,7 @@ $db = new DBHelper();
                     <li><a href="index3.php?sp=pcurricullum">Trade Curricullum</a></li>
                 <?php
                 }
-                if ($user_role == 4) {
+                if ($user_role == 4 ) {
                 ?>
                     <li><a href="index3.php?sp=semester_setting_hod">Academic Settings</a></li>
                     <!--<li><a href="index3.php?sp=courselist">Annual Courses</a></li>-->
@@ -95,8 +95,10 @@ $db = new DBHelper();
         <ul class="treeview-menu">
             <?php
             foreach ($_SESSION['roleID'] as $role => $user_role) {
-                if ($user_role == 7 || $user_role == 9) {
+                if ($user_role == 7 || $user_role == 9  ) {
             ?>
+                    <li><a href="index3.php?sp=search_student_result">Search Student Result</a></li>
+                    <li><a href="index3.php?sp=search_student_terms_result">Search Student Terms Result</a></li>
                     <li><a href="index3.php?sp=addresult">Final Exam Management</a></li>
                     <li><a href="index3.php?sp=term_marks">Term Result Management</a></li>
                     <li><a href="index3.php?sp=internal_marks">Assessment Management</a></li>
@@ -139,7 +141,7 @@ $db = new DBHelper();
 
 <?php
 foreach ($_SESSION['roleID'] as $role => $user_role) {
-    if ($user_role == 6) {
+    if ($user_role == 6 || $user_role == 1) {
 ?>
         <li class="treeview">
             <a href="#"><i class="glyphicon glyphicon-th-large"></i> <span>Finance</span> <i class="fa fa-angle-left pull-right"></i></a>
@@ -154,7 +156,7 @@ foreach ($_SESSION['roleID'] as $role => $user_role) {
         </li>
     <?php
     }
-    if ($user_role == 2) {
+    if ($user_role == 2 || $user_role == 1) {
     ?>
         <li class="treeview">
             <a href="#"><i class="glyphicon glyphicon-th-large"></i> <span>Finance</span> <i class="fa fa-angle-left pull-right"></i></a>
@@ -173,7 +175,7 @@ foreach ($_SESSION['roleID'] as $role => $user_role) {
 
 <?php
 foreach ($_SESSION['roleID'] as $role => $user_role) {
-    if ($user_role == 6) {
+    if ($user_role == 6 || $user_role == 1) {
 ?>
         <li class="treeview">
             <a href="#"><i class="glyphicon glyphicon-th-large"></i> <span>Payment Setting</span> <i class="fa fa-angle-left pull-right"></i></a>
@@ -291,7 +293,7 @@ foreach ($_SESSION['roleID'] as $role => $user_role) {
         <li><a href="index3.php?sp=academic_calendar">Academic Calendar</a></li>
         <?php
         foreach ($_SESSION['roleID'] as $role => $user_role) {
-            if (($user_role == 4) || ($user_role == 9)) { ?>
+            if (($user_role == 4) || ($user_role == 9) || $user_role == 1) { ?>
                 <li><a href="index3.php?sp=staffprofile">My Information</a></li>
                 <li><a href="index3.php?sp=my_lecturer"> Instructor Info</a></li>
             <?php

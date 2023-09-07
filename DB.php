@@ -556,7 +556,9 @@ class DBHelper
 
     public function getFinalResult($examNumber, $regNumber)
     {
-        $query = $this->conn->prepare("SELECT DISTINCT(f.examNumber),examScore,f.academicYearID from final_result f,exam_number ex where f.examNumber = ex.examNumber and ex.regNumber='MWVTC/L2ELE/NS/20/1000'");
+        $query = $this->conn->prepare("SELECT DISTINCT(f.examNumber),f.courseID,examScore,
+        f.academicYearID from final_result f,exam_number ex where f.examNumber = ex.examNumber 
+        and ex.regNumber=:regNumber and f.examNumber = :examNumber");
         $query->execute(array(':examNumber' => $examNumber, ':regNumber' => $regNumber));
         $data = array();
         while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
@@ -1154,6 +1156,24 @@ WHERE
         return $data;
     }
 
+
+    
+    public function getTermCategorySetting1($examCategoryID)
+    {
+        $query = $this->conn->prepare("SELECT DISTINCT
+    *
+FROM
+    exam_category_setting
+WHERE
+        examCategoryID=:cat1 OR examCategoryID=:cat2");
+        $query->execute(array(':cat1' => $examCategoryID));
+        $data = array();
+        while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
+            $data[] = $row;
+        }
+        return $data;
+    }
+
     public function getExamCategoryMaxMark($exam_category, $regNumber)
     {
         $programmeLevelID = $this->getProgrammeLevelID($regNumber);
@@ -1470,7 +1490,7 @@ WHERE
     }
 
     /*public function courseRemarks($cwk,$sfe,$sup,$spc,$prj,$pt)
-    {
+    {checkStatus
         $tmarks=$this->calculateTotal($cwk, $sfe, $sup, $spc, $prj, $pt);
         $grade= $this->calculateGrade($cwk, $sfe, $sup, $spc, $prj, $pt);
         if($grade=="A" || $grade=="B" ||$grade=="C")
@@ -1743,29 +1763,30 @@ ORDER BY academicYearID ASC");
         return $data;
     }
 
-//     public function getSemester($regNumber)
-//     {
-//         $query = $this->conn->prepare("SELECT DISTINCT
-//     (sm.semesterSettingID),
-// FROM
-//     semester_setting sm,
-//     exam_result er,
-//     student_course sc,
-//     student s
-// WHERE
-//     -- sm.semesterSettingID = er.semesterSettingID
-//          s.registrationNumber = er.regNumber
-//         AND s.registrationNumber=sc.regNumber
-//         AND sm.semesterSettingID=sc.semesterSettingID
-//         AND er.regNumber = :regNo
-// ORDER BY semesterSettingID DESC");
-//         $query->execute(array(':regNo' => $regNumber));
-//         $data = array();
-//         while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
-//             $data[] = $row;
-//         }
-//         return $data;
-//     }
+    public function getSemester1($regNumber)
+    {
+        $query = $this->conn->prepare("SELECT DISTINCT
+        (sm.semesterSettingID),examCategoryID,er.academicYearID
+    FROM
+        semester_setting sm,
+        exam_result er,
+        
+        student s
+    WHERE
+      
+             s.registrationNumber = er.regNumber
+           
+            AND sm.academicYearID=er.academicYearID
+            AND er.regNumber =:regNo
+
+                ORDER BY semesterSettingID DESC");
+        $query->execute(array(':regNo' => $regNumber));
+        $data = array();
+        while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
+            $data[] = $row;
+        }
+        return $data;
+    }
 
 
 public function getSemester($regNumber)
@@ -1778,6 +1799,26 @@ public function getSemester($regNumber)
   sc.regNumber = s.registrationNumber and
    exam_category.examCategoryID = er.examCategoryID and sm.academicYearID = er.academicYearID   
     ");
+    $query->execute(array(':regNo' => $regNumber));
+    $data = array();
+    while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
+        $data[] = $row;
+    }
+    return $data;
+}
+
+
+
+public function getFinalNumbers($regNumber)
+{
+    $query = $this->conn->prepare("SELECT DISTINCT
+    (programmeID),en.academicYearID,examNumber
+        FROM
+            exam_number en
+        WHERE
+                en.regNumber =:regNo
+
+                    ORDER BY regNumber DESC");
     $query->execute(array(':regNo' => $regNumber));
     $data = array();
     while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
@@ -2833,14 +2874,69 @@ ORDER BY semesterSettingID DESC");
     }*/
 
     //getExamScore
-    public function getStudentSearchResult($regNumber, $semesterID)
+    public function getStudentSearchResult($regNumber,$semesterSettingID,$academicYear,$examCategoryID)
     {
         try {
-            $query = $this->conn->prepare("SELECT distinct(sc.courseID),er.academicYearID,courseCategory,semesterSettingID from student_course sc,exam_result er,
-            course c ,course_category cc,semester_setting ss
-            where sc.courseID=er.courseID 
-            AND sc.regNumber=er.regNumber and er.regNumber=:rNumber and ss.semesterSettingID=:sem ");
-            $query->execute(array(':rNumber' => $regNumber, ':sem' => $semesterID));
+            $query = $this->conn->prepare("SELECT DISTINCT(examCategoryID) ,
+            er.courseID,examScore,
+            er.examCategoryID,er.academicYearID
+                                    from
+                                   
+                                    exam_result er,semester_setting ss
+                                    where  
+                                    er.regNumber=:rNumber and ss.semesterSettingID=:semi 
+                                    and er.academicYearID = :yearID and  er.examCategoryID =:categoID
+                                    ORDER BY examCategoryID ASC;");
+
+
+
+
+
+
+
+
+
+
+
+            $query->execute(array(':rNumber' => $regNumber,':semi' => $semesterSettingID,':yearID' => $academicYear,':categoID' => $examCategoryID));
+            $data = array();
+            while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
+                $data[] = $row;
+            }
+            return $data;
+        } catch (PDOException $ex) {
+            echo "Getting Data Error: " . $ex->getMessage();
+        }
+    }
+
+   
+
+
+    public function getTeamSearchResult($regNumber)
+    {
+        try {
+           
+
+
+    $query = $this->conn->prepare("SELECT DISTINCT(courseCode) ,er.academicYearID,semesterSettingID,er.courseID,ay.academicYear,examScore,ec.examCategory,courseName,er.examCategoryID,courseCode
+                                    from
+                                    course c , 
+                                    exam_result er ,
+                                    academic_year ay,
+                                    exam_category ec,
+                                    semester_setting ss
+                                    where  
+                                    ay.academicYearID = er.academicYearID and 
+                                    ss.academicYearID = er.academicYearID and
+                                    ec.examCategoryID = er.examCategoryID and 
+                                    c.courseID = er.courseID and
+                                    er.regNumber=:rNumber ORDER BY courseCode ASC;");
+
+
+
+
+
+            $query->execute(array(':rNumber' => $regNumber));
             $data = array();
             while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
                 $data[] = $row;
@@ -2852,16 +2948,16 @@ ORDER BY semesterSettingID DESC");
     }
 
 
-
     // public function getStudentSearchResult($regNumber, $semesterID)
     // {
     //     try {
-    //         $query = $this->conn->prepare("SELECT DISTINCT (er.examCategoryID),er.courseID,semesterSettingID, academic_year.academicYearID,
-    //         exam_category.examCategory,courseCategory FROM academic_year,  exam_result er, student_course sc,
+    //         $query = $this->conn->prepare("SELECT DISTINCT (er.examCategoryID),er.courseID,semesterSettingID, 
+    //         academic_year.academicYearID,
+    //         exam_category.examCategory,courseCategory FROM academic_year,  exam_result er, 
     //          student s,exam_category,semester_setting sm,course c ,course_category cc
     //         WHERE  er.regNumber = :rNumber and  academic_year.academicYearID =er.academicYearID and 
-    //         sc.regNumber = s.registrationNumber and exam_category.examCategoryID = er.examCategoryID and 
-    //         sm.semesterSettingID =:sem and sc.courseID = c.courseID and cc.courseCategoryID = c.courseCategoryID
+    //         er.regNumber = s.registrationNumber and exam_category.examCategoryID = er.examCategoryID and 
+    //         sm.semesterSettingID =:sem and er.courseID = c.courseID and cc.courseCategoryID = c.courseCategoryID
             
             
     //         ");

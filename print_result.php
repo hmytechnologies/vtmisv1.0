@@ -2,22 +2,24 @@
 <script src="js/jquery-1.4.2.min.js"></script>
 <!-- <script src="js/script.js"></script> -->
 
-<script type="text/javascript" src="plugins/jQuery/jQuery-2.1.4.min.js"></script>
 <script type="text/javascript">
     $(document).ready(function() {
-        $("#programID").change(function() {
-            var id = $(this).val();
-            var dataString = 'id=' + id;
+        $("#programmeLevelID").change(function() {
+            var programmeLevelID = $(this).val();
+            var centerID = $("#centerIDD").val();
+            var dataString = 'programmeLevelID=' + programmeLevelID + '&centerID=' + centerID;
             $.ajax({
                 type: "POST",
-                url: "ajax_studyear.php",
+                url: "ajax_programme.php",
                 data: dataString,
                 cache: false,
                 success: function(html) {
-                    $("#studyYear").html(html);
+                    $("#programmeID").html(html);
                 }
             });
+
         });
+
     });
 </script>
 
@@ -105,7 +107,7 @@
                 <div class="row">
                     <div class="col-lg-3">
                         <label for="MiddleName">Center Name</label>
-                        <select name="centerID" class="form-control chosen-select" required="">
+                        <select name="centerID" id="centerIDD" class="form-control chosen-select" required="">
                             <?php
                             $center = $db->getRows('center_registration', array('order_by' => 'centerName ASC'));
                             if (!empty($center)) {

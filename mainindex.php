@@ -512,6 +512,10 @@ $roleID=$_SESSION['roleID'];
             include('student_search_result.php');
             break;
 
+            case 'search_student_terms_result':
+                include('student_search_terms.php');
+                break;
+
         case 'view_score':
             include('view_score.php');
             break;
@@ -832,6 +836,8 @@ $roleID=$_SESSION['roleID'];
             case 'transfer_student':
                 include('transfer_student.php');
                 break;
+
+                
 
         //error page
         case 'error':

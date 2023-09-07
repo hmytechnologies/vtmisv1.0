@@ -119,8 +119,8 @@ if($inst['instructorStatus']==1)
 else
   $status="Not Active";
 
-$schooID=$db->getData("departments","schoolID","departmentID",$inst['departmentID']);
-$schoolCode=$db->getData("schools","schoolCode","schoolID",$schooID);
+// $schooID=$db->getData("departments","schoolID","departmentID",$inst['departmentID']);
+// $schoolCode=$db->getData("schools","schoolCode","schoolID",$schooID);
 
  ?>
             <tr>

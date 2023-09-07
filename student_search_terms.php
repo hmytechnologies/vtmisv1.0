@@ -127,40 +127,35 @@
             <div class="row">
 
                 <?php
-                $final=$db->getFinalNumbers($regNumber);
-                if(!empty($final))
+                $semester=$db->getSemester1($regNumber);
+                if(!empty($semester))
                 {
                     ?>
-                    <div class="col-md-12">
+                    <div class="col-md-9">
                         <?php
                         $totalPoints=0;
                         $totalUnits=0;
-                        foreach($final as $sm)
+                        foreach($semester as $sm)
                         {
-                            $academicYear=$sm['academicYearID'];
-                           $programmeID=$sm['programmeID'];
-                            //  $semesterSettingID=$sm['semesterSettingID'];
-                         $examNumber=$sm['examNumber'];
-                        // echo   $regNumber;
-                            $co = $db->getFinalResult($examNumber, $regNumber);
+                            $semesterSettingID=$sm['semesterSettingID'];
+                             $academicYear=$sm['academicYearID'];
+                            $examCategoryID=$sm['examCategoryID'];
+                            // $semesterName=$sm['examCategory'];
+                            
+                            $co = $db->getStudentSearchResult($regNumber,$semesterSettingID,$academicYear,$examCategoryID);
                             if(!empty($co))
                             {
                                 ?>
 
                                 <div class="box box-solid box-primary">
                                     <div class="box-header with-border text-center">
-                                        <h3 class="box-title">Fainal Exam Result for <?php 
-                                        
-                                        $programmlevel= $db->getRows('student_programme',array('where'=>array('regNumber'=>$regNumber,'programmeID'=>$programmeID,),' order_by'=>' courseName ASC'));
-                                        foreach ($programmlevel as $pl) {
-                                            $programmeLevelID=$sm['programmeLevelID'];
-                                            
-                                        }
-                                         echo $db->getData("programme_level", "programmeLevel", "programmeLevelID", $programmeLevelID);
-                                         echo " ";
-                                         echo $db->getData("academic_year", "academicYear", "academicYearID", $academicYear);
-                                        
-                                        ?></h3>
+                                        <h3 class="box-title">Exam Result for 
+                                    
+                                        <?php echo $db->getData("exam_category", "examCategory", "examCategoryID", $examCategoryID);
+                                        echo " ";
+                                     echo $db->getData("academic_year", "academicYear", "academicYearID", $academicYear); ?>
+                                    
+                                    </h3>
                                     </div>
                                     <!-- /.box-header -->
                                     <div class="box-body table-responsive">
@@ -188,9 +183,15 @@
                                             {
                                                 $count++;
                                                 $courseID=$st['courseID'];
-                                                // $crstatus=$st['courseStatus'];
-
-                                                $coursec= $db->getRows('course',array('where'=>array('courseID'=>$courseID),' order_by'=>' courseName ASC'));
+                                                $courseCategoryID=$st['courseCategoryID'];
+                                                $academicYearID=$st['academicYearID'];
+                                                $academic_year=$st['academic_year'];
+                                                $courseCategoryID=$st['courseCategoryID'];
+                                                // // $crstatus=$st['courseStatus'];
+                                                // ELECT DISTINCT(courseCode) ,er.courseID,courseName,c.courseCategoryID,courseCategory,courseCode,units ,
+                                                // er.examScore,semesterSettingID,cc.courseCategoryID,er.academicYearID 
+                                                //    from 
+                                             $coursec= $db->getRows('course',array('where'=>array('courseID'=>$courseID),' order_by'=>' courseName ASC'));
                                                 if(!empty($coursec))
                                                 {
                                                     ?>
@@ -199,13 +200,17 @@
                                                     foreach($coursec as $c)
                                                     {
                                                     }
-                                                }  
+                                                }
                                                 $courseCode=$c['courseCode'];
                                                 $courseName=$c['courseName'];
                                                 $units=$c['units'];
                                                 $courseCategoryID=$c['courseCategoryID'];
                                                 $courseName=$c['courseName'];
-                                                
+
+                                                /*if($crstatus==1)
+                                                    $cStatus="Core";
+                                                else
+                                                    $cStatus="Elective";*/
                                                 $courseStatus = $db->getRows('course_category', array('where' => array('courseCategoryID' => $courseCategoryID), ' order_by' => ' courseStatusID ASC'));
                                                 foreach ($courseStatus as $cs) {
                                                     $courseCategory = $cs['courseCategory'];
@@ -219,74 +224,47 @@
 
                                                 <tr>
                                                     <?php
-                                                    
-                                                     $term1Score = $db->decrypt($db->getTermGrade($academicYearID, $courseID, $regNumber, 1));
-                                                     $term2Score = $db->decrypt($db->getTermGrade($academicYearID, $courseID, $regNumber, 2));
-                                                     $finalScore = $db->decrypt($db->getFinalTermGrade($academicYearID, $courseID, $examNumber, 3));
-                                                     $suppScore = $db->decrypt($db->getFinalTermGrade($academicYearID, $courseID, $examNumber, 5));
-                                                
+                                                      $termScore = $db->decrypt($db->getTermGrade($academicYear, $courseID, $regNumber, $examCategoryID));
+                                                     
+                                                      $exam_category_marks = $db->getTermCategorySetting();
+                                                      if (!empty($exam_category_marks)) {
+                                                          foreach ($exam_category_marks as $gd) {
+                                                              $mMark = $gd['mMark'];
+                                                              $pMark = $gd['passMark'];
+                                                              $wMark = $gd['wMark'];
+                                                          }
+                                                      }
 
-                                                     $exam_category_marks = $db->getTermCategorySetting();
-                                                     if (!empty($exam_category_marks)) {
-                                                         foreach ($exam_category_marks as $gd) {
-                                                             $mMark = $gd['mMark'];
-                                                             $pMark = $gd['passMark'];
-                                                             $wMark = $gd['wMark'];
-                                                         }
-                                                     }
-                             
-                                                     $term1m = ($term1Score / $mMark) * $wMark;
-                                                     $term2m = ($term2Score / $mMark) * $wMark;
+                                                      $term = ($termScore / $mMark) * $wMark;
+                                                      $totalMark = round($term);
+                                                      $grade = $db->calculateTermGrade($termScore);
 
-                                                     $finalm1 = ($finalScore / 100) * 50;
-                                                     $tMarks = round($term1m + $term2m + $finalm1);
+                                                      if ($totalMark >= 12 && $totalMark <= 25)
+                                                        $remarks = "Pass";
+                                                    else if($totalMark <= 11 && $totalMark > 9)
+                                                        $remarks = "Fair";
+                                                    else 
+                                                        $remarks="Fail";
 
-                                                     if ($tMarks>=35 && $tMarks<40 ) {
-                                                        $addmarks=40-$tMarks;
-                                                    }
-                                                    else
-                                                    {
-                                                        $addmarks=0;
-                                                    
-                                                    }
-
-                                                    $finalScore = $finalScore + $addmarks;
-                                                    $finalm=$finalm1+$addmarks;
-                                                    $totalMarks = round($term1m + $term2m + $finalm);
-                                                    $grade = $db->calculateTermGrade($totalMarks);
-                                                    if ($totalMarks >= 40)
-                                                    $remarks = "Pass";
-                                                
-                                                else 
-                                                    $remarks="Supp";
-                                                    
-
-
-                                                    echo"<td>$count</td><td>$courseCode</td><td>$courseName</td>
-                                                    <td>$status</td><td>$units</td><td>$totalMarks</td><td>$grade</td><td>$remarks</td>";
+                                                    echo"<td>$count</td><td>$courseCode</td><td>$courseName</td><td>$status</td><td>$units</td>
+                                                    <td>$totalMark</td> <td>$grade</td> <td>$remarks</td>";
                                                     $tunits+=$units;
                                                     // $totalPoints+=$units;
                                                     //include("grade.php");
                                                     // getMarksGrade($regNumber,$cwk,$sfe,$sup,$spc,$prj,$pt)
 
-                                //                     $cwk=$db->decrypt($db->getGrade($semesterSettingID,$courseID,$regNumber,1));
-                                //                     $sfe=$db->decrypt($db->getFinalGrade($semesterSettingID,$courseID,$regNumber,2));
-                                //                     $sup=$db->decrypt($db->getGrade($semesterSettingID,$courseID,$regNumber,3));
-                                //                     $spc=$db->decrypt($db->getGrade($semesterSettingID,$courseID,$regNumber,4));
-                                //                     $prj=$db->decrypt($db->getGrade($semesterSettingID,$courseID,$regNumber,5));
-                                //                     $pt=$db->decrypt($db->getGrade($semesterSettingID,$courseID,$regNumber,6));
+                                                    
+                                                  
 
-                                //                     $gradeID=$db->getMarksID($regNumber,$cwk,$sfe,$sup,$spc,$prj,$pt);
-                                //                     $gradePoint=$db->getData("grades","gradePoints","gradeID",$gradeID);
-                                //                     $points=$gradePoint*$units;
-                                //                     $tpoints+=$points;
-
-
-                                //                     echo "<td>".$db->calculateTotal($cwk, $sfe, $sup, $spc, $prj, $pt)."</td>
-                                // <td>".$db->calculateGrade($regNumber,$cwk, $sfe, $sup, $spc, $prj, $pt)."</td>
-                                // <td>".$db->courseRemarks($regNumber,$cwk, $sfe, $sup, $spc, $prj, $pt)."</td>";
+                                                    // echo "<td>".$db->calculateTotal($cwk, $sfe, $sup, $spc, $prj, $pt)."</td>
+                                                    // <td>".$db->calculateGrade($regNumber,$cwk, $sfe, $sup, $spc, $prj, $pt)."</td>
+                                                    // <td>".$db->courseRemarks($regNumber,$cwk, $sfe, $sup, $spc, $prj, $pt)."</td>";
 
                                                     ?>
+
+                                                   
+   
+                                                
                                                     <td>
                                                         <button type="button" class="btn btn-success" data-toggle="modal" data-target="#message<?php echo $courseID;?>">
                                                             <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
@@ -294,7 +272,7 @@
                                                         </button>
 
                                                         <?php
-                                                        $published=$db->checkStatus($courseID,$semesterSettingID,'status',$batchID);
+                                                        $published=$db->checkStatus($courseID,$semesterSettingID,'status');
                                                         if($published==1)
                                                         {
                                                             if($role_session==7) {
@@ -376,7 +354,7 @@
                                                                     <div class="row">
                                                                         <div class="col-lg-1">3</div>
                                                                         <div class="col-lg-3">Supplementary</div>
-                                                                        <div class="col-lg-2">100</div>
+                                                                        <div class="col-lg-2">40</div>
                                                                         <div class="col-lg-2">
                                                                             <?php
                                                                             if($sup>0)
@@ -458,6 +436,10 @@
                                                 <!-- End of Result Details -->
                                                 <?php
                                             }
+
+
+
+                                            
                                             $totalPoints+=$tpoints;
                                             $totalUnits+=$tunits;
                                             ?>
@@ -480,6 +462,7 @@
 
 
                                 <?php
+                                // echo $semesterSettingID;
                             }
                             else
                             {
@@ -491,6 +474,8 @@
 
                             <?php
                         }
+                        
+                       
                         ?>
                     </div>
                     
@@ -502,7 +487,6 @@
                 }
                 ?>
             </div>
-
             <?php
         }
         else
