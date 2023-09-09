@@ -98,7 +98,7 @@ $db = new DBHelper();
                 if ($user_role == 7 || $user_role == 9  ) {
             ?>
                     <li><a href="index3.php?sp=search_student_result">Search Student Result</a></li>
-                    <li><a href="index3.php?sp=search_student_terms_result">Search Student Terms Result</a></li>
+                    <!-- <li><a href="index3.php?sp=search_student_terms_result">Search Student Terms Result</a></li> -->
                     <li><a href="index3.php?sp=addresult">Final Exam Management</a></li>
                     <li><a href="index3.php?sp=term_marks">Term Result Management</a></li>
                     <li><a href="index3.php?sp=internal_marks">Assessment Management</a></li>
