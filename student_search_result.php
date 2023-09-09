@@ -136,10 +136,9 @@
                         $totalPoints=0;
                         $totalUnits=0;
                         foreach($semester as $sm)
-                        {
-                            $semesterSettingID=$sm['semesterSettingID'];
-                             $examNumber=$sm['examNumber'];
-                            $examCategoryID=$sm['examCategoryID'];
+                        { 
+                           
+                            $examNumber=$sm['examNumber'];
                             $academicYear=$sm['academicYearID'];
                             $programmeID=$sm['programmeID'];
                             
