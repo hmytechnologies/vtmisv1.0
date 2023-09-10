@@ -12,7 +12,6 @@
 	</form>
 </div>
 <br><br>
-
     <?php
     $db=new DBhelper();
     if((isset($_POST['doSearch'])=="Search Student"))
@@ -45,7 +44,7 @@
                             <!--  <th>Programme Duration</th> -->
                             <!-- <th>Study Year</th> -->
                             <th>Study Mode</th>
-                            <th>Status</th>
+                            <!-- <th>Status</th> -->
                         </tr>
                         </thead>
                         <tbody>
@@ -95,14 +94,14 @@
 		                	}
 		                }
 
-		                $study_year= $db->getRows('student_study_year',array('where'=>array('regNumber'=>$regNumber,'academicYearID'=>$academicYearID),' order_by'=>'studentID ASC'));
-                            if(!empty($study_year))
-                            {
-                                foreach ($study_year as $sy)
-                                {
-                                    $studyYear=$sy['studyYear'];
-                                }
-                            }
+		                // $study_year= $db->getRows('student_study_year',array('where'=>array('regNumber'=>$regNumber,'academicYearID'=>$academicYearID),' order_by'=>'studentID ASC'));
+                        //     if(!empty($study_year))
+                        //     {
+                        //         foreach ($study_year as $sy)
+                        //         {
+                        //             $studyYear=$sy['studyYear'];
+                        //         }
+                        //     }
                            
 		                $status= $db->getRows('status',array('where'=>array('statusID'=>$statusID),' order_by'=>'status_value ASC'));
 		                if(!empty($status))
@@ -113,7 +112,7 @@
 		                    }
 		                }
 
-                        echo "<td>$programme_level_code</td>";echo "<td>$programmeName</td>";echo "<td>$studyYear</td>"; echo "<td>$status_value</td>";  
+                        echo "<td>$programme_level_code</td>";echo "<td>$programmeName</td>"; echo "<td>$status_value</td>";  
 		                
                     }
                         ?>
@@ -136,9 +135,10 @@
                         $totalPoints=0;
                         $totalUnits=0;
                         foreach($semester as $sm)
-                        { 
-                           
-                            $examNumber=$sm['examNumber'];
+                        {
+                            // $semesterSettingID=$sm['semesterSettingID'];
+                             $examNumber=$sm['examNumber'];
+                            // $examCategoryID=$sm['examCategoryID'];
                             $academicYear=$sm['academicYearID'];
                             $programmeID=$sm['programmeID'];
                             
@@ -207,6 +207,9 @@
                                                 $finalScore = $db->decrypt($db->getFinalTermGrade($academicYear, $courseID, $examnumber, 3));
                                                  $term1Score = $db->decrypt($db->getTermGrade($academicYear, $courseID, $regnumber, 1));
                                                  $term2Score = $db->decrypt($db->getTermGrade($academicYear, $courseID, $regnumber, 2));
+                                                 $suppScore = $db->decrypt($db->getFinalTermGrade($academicYear, $courseID, $examNumber, 5));
+                                                 $special = $db->decrypt($db->getFinalTermGrade($academicYear, $courseID, $examNumber,4));
+
 
                                              $coursec= $db->getRows('course',array('where'=>array('courseID'=>$courseID),' order_by'=>' courseName ASC'));
                                                 if(!empty($coursec))
@@ -261,8 +264,8 @@
 
                                                     $final = ($finalScore / 100) * 50;
                                                     $tMarks = round($term1m + $term2m + $final);
-                                                    $totalTearmMarks = ( $term1m +  $term2m );
-
+                                                    $totalTearmMarks = $db-> calculateTermTotal($term1m, $term2m);
+                                                    // $term1m +  $term2m );
                                                     if ($tMarks>=35 && $tMarks<40 ) {
                                                         $addmarks=40-$tMarks;
                                                     }
@@ -322,6 +325,12 @@
                                                         </button>
 
                                                         <?php
+                                                         $semester_setting= $db->getRows('semester_setting',array('where'=>array('academicYearID'=>$academicYear),' order_by'=>' academicYearID ASC'));
+
+                                                         foreach ($semester_setting as $semi) {
+                                                            $semesterSettingID = $semi['semesterSettingID'];
+                                                            
+                                                        }
                                                         $published=$db->checkStatus($courseID,$semesterSettingID,'status');
                                                         if($published==1)
                                                         {
@@ -363,6 +372,7 @@
                                                             <form name="register" id="register" enctype="multipart/form-data" method="post" action="action_add_exmption.php">
                                                                 <div class="modal-body">
                                                                     <div class="row"  style="background-color:lightgray;">
+                                                                   
                                                                         <div class="col-lg-1"><strong>No</strong></div>
                                                                         <div class="col-lg-3"><strong>Ass.Title</strong></div>
                                                                         <div class="col-lg-2"><strong>Max.Marks</strong></div>
@@ -372,49 +382,65 @@
                                                                     </div>
                                                                     <div class="row">
                                                                         <div class="col-lg-1">1</div>
-                                                                        <div class="col-lg-3">Course Work</div>
+                                                                        <div class="col-lg-3">Course Term 1 work</div>
+                                                                        <div class="col-lg-2">100</div>
+                                                                        <div class="col-lg-2">
+                                                                            <?php
+                                                                            if($term1m > 0)
+                                                                                echo "Yes";
+                                                                            else
+                                                                                echo "No";
+                                                                            ?>
+                                                                        </div>
+                                                                        <div class="col-lg-2"><?php echo  $term1m;?></div>
                                                                         <div class="col-lg-2">25</div>
-                                                                        <div class="col-lg-2">
-                                                                            <?php
-                                                                            if($cwk>0)
-                                                                                echo "Yes";
-                                                                            else
-                                                                                echo "No";
-                                                                            ?>
-                                                                        </div>
-                                                                        <div class="col-lg-2"><?php echo $cwk;?></div>
-                                                                        <div class="col-lg-2"><?php echo $cwk;?></div>
-                                                                    </div>
-                                                                    <div class="row" style="background-color:lightgray;">
-                                                                        <div class="col-lg-1">2</div>
-                                                                        <div class="col-lg-3">Final Exam</div>
-                                                                        <div class="col-lg-2">50</div>
-                                                                        <div class="col-lg-2">
-                                                                            <?php
-                                                                            if($sfe>0)
-                                                                                echo "Yes";
-                                                                            else
-                                                                                echo "No";
-                                                                            ?>
-                                                                        </div>
-                                                                        <div class="col-lg-2"><?php echo $sfe;?></div>
-                                                                        <div class="col-lg-2"><?php echo $sfe;?></div>
                                                                     </div>
 
                                                                     <div class="row">
-                                                                        <div class="col-lg-1">3</div>
-                                                                        <div class="col-lg-3">Supplementary</div>
-                                                                        <div class="col-lg-2">40</div>
+                                                                        <div class="col-lg-1">2</div>
+                                                                        <div class="col-lg-3">Course Term 2 Work</div>
+                                                                        <div class="col-lg-2">100</div>
                                                                         <div class="col-lg-2">
                                                                             <?php
-                                                                            if($sup>0)
+                                                                            if( $term2m >0)
                                                                                 echo "Yes";
                                                                             else
                                                                                 echo "No";
                                                                             ?>
                                                                         </div>
-                                                                        <div class="col-lg-2"><?php echo $sup;?></div>
-                                                                        <div class="col-lg-2"><?php echo $sup;?></div>
+                                                                        <div class="col-lg-2"><?php echo  $term2m;?></div>
+                                                                        <div class="col-lg-2">25</div>
+                                                                    </div>
+                                                                    <div class="row" style="background-color:lightgray;">
+                                                                        <div class="col-lg-1">3</div>
+                                                                        <div class="col-lg-3">Final Exam</div>
+                                                                        <div class="col-lg-2">100</div>
+                                                                        <div class="col-lg-2">
+                                                                            <?php
+                                                                            if( $final>0)
+                                                                                echo "Yes";
+                                                                            else
+                                                                                echo "No";
+                                                                            ?>
+                                                                        </div>
+                                                                        <div class="col-lg-2"><?php echo  $final;?></div>
+                                                                        <div class="col-lg-2">50</div>
+                                                                    </div>
+
+                                                                    <div class="row">
+                                                                        <div class="col-lg-1">4</div>
+                                                                        <div class="col-lg-3">Supplementary</div>
+                                                                        <div class="col-lg-2">100</div>
+                                                                        <div class="col-lg-2">
+                                                                            <?php
+                                                                            if( $suppScore>0)
+                                                                                echo "Yes";
+                                                                            else
+                                                                                echo "No";
+                                                                            ?>
+                                                                        </div>
+                                                                        <div class="col-lg-2"><?php echo  $suppScore;?></div>
+                                                                        <div class="col-lg-2">100</div>
                                                                     </div>
 
                                                                     <div class="row" style="background-color:lightgray;">
@@ -423,54 +449,26 @@
                                                                         <div class="col-lg-2">50</div>
                                                                         <div class="col-lg-2">
                                                                             <?php
-                                                                            if($spc>0)
+                                                                            if($special>0)
                                                                                 echo "Yes";
                                                                             else
                                                                                 echo "No";
                                                                             ?>
                                                                         </div>
-                                                                        <div class="col-lg-2"><?php echo $spc;?></div>
-                                                                        <div class="col-lg-2"><?php echo $spc;?></div>
+                                                                        <div class="col-lg-2"><?php echo $special;?></div>
+                                                                        <div class="col-lg-2">50</div>
                                                                     </div>
 
-                                                                    <div class="row">
-                                                                        <div class="col-lg-1">5</div>
-                                                                        <div class="col-lg-3">Project</div>
-                                                                        <div class="col-lg-2">100</div>
-                                                                        <div class="col-lg-2">
-                                                                            <?php
-                                                                            if($pro>0)
-                                                                                echo "Yes";
-                                                                            else
-                                                                                echo "No";
-                                                                            ?>
-                                                                        </div>
-                                                                        <div class="col-lg-2"><?php echo $prj;?></div>
-                                                                        <div class="col-lg-2"><?php echo $prj;?></div>
-                                                                    </div>
+                                                                   
 
-                                                                    <div class="row" style="background-color:lightgray;">
-                                                                        <div class="col-lg-1">6</div>
-                                                                        <div class="col-lg-3">Field Training</div>
-                                                                        <div class="col-lg-2">100</div>
-                                                                        <div class="col-lg-2">
-                                                                            <?php
-                                                                            if($pt>0)
-                                                                                echo "Yes";
-                                                                            else
-                                                                                echo "No";
-                                                                            ?>
-                                                                        </div>
-                                                                        <div class="col-lg-2"><?php echo $pt;?></div>
-                                                                        <div class="col-lg-2"><?php echo $pt;?></div>
-                                                                    </div>
+                                                                 
 
                                                                     <div class="row">
                                                                         <div class="col-lg-10">
                                                                             <strong><span class="text-danger">Total Marks:</span></strong>
                                                                         </div>
                                                                         <div class="col-lg-2">
-                                                                            <strong><span class="text-danger"><?php echo $db->calculateTotal($cwk, $sfe, $sup, $spc, $prj, $pt);?></span></strong>
+                                                                            <strong><span class="text-danger"><?php echo  round($totalTearmMarks + $final + $suppScore + $special);?></span></strong>
                                                                         </div>
                                                                     </div>
 
@@ -545,4 +543,3 @@
         }
     }
     ?>
-
