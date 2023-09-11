@@ -430,7 +430,8 @@
                                                                                 echo "No";
                                                                             ?>
                                                                         </div>
-                                                                        <div class="col-lg-2"><?php echo  $term1m;?></div>
+                                                                        <div class="col-lg-2"><?php echo  
+                                                                        $term1Score = $db->decrypt($db->getTermGrade($academicYear, $courseID, $regnumber, 1));?></div>
                                                                         <div class="col-lg-2">25</div>
                                                                     </div>
 
