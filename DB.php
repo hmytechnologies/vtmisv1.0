@@ -2955,10 +2955,47 @@ ORDER BY semesterSettingID DESC");
     }
 
 
+    // public function getResults($regNumber,$academicYear,$examNumber)
+    // {
+    //     try {
+    //         $query = $this->conn->prepare("SELECT DISTINCT (en.programmeID),f.academicYearID, c.courseID, f.examNumber,en.regNumber, f.examScore as finalScore ,courseName
+    //         FROM
+               
+    //            final_result f,
+               
+    //            course c,
+    //            exam_number en
+               
+              
+    //         WHERE
+            
+    //         c.courseID = f.courseID and
+           
+               
+    //            en.academicYearID = :yearID  and
+               
+    //             en.regNumber =:rNumber
+    //             and f.examNumber = :examNumber
+    //             and f.examNumber = en.examNumber 
+    //                     ORDER BY en.regNumber DESC");
+
+
+    //         $query->execute(array(':rNumber' => $regNumber,':yearID' => $academicYear,':examNumber' => $examNumber));
+    //         $data = array();
+    //         while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
+    //             $data[] = $row;
+    //         }
+    //         return $data;
+    //     } catch (PDOException $ex) {
+    //         echo "Getting Data Error: " . $ex->getMessage();
+    //     }
+    // }
+
+    
     public function getResults($regNumber,$academicYear,$examNumber)
     {
         try {
-            $query = $this->conn->prepare("SELECT DISTINCT (en.programmeID),f.academicYearID, c.courseID, f.examNumber,en.regNumber, f.examScore as finalScore ,courseName
+            $query = $this->conn->prepare("SELECT DISTINCT (en.programmeID),f.academicYearID, c.courseID, f.examNumber,en.regNumber,courseName
             FROM
                
                final_result f,

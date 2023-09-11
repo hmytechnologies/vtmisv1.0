@@ -136,9 +136,9 @@
                         $totalUnits=0;
                         foreach($semester as $sm)
                         {
-                            // $semesterSettingID=$sm['semesterSettingID'];
+                            
                              $examNumber=$sm['examNumber'];
-                            // $examCategoryID=$sm['examCategoryID'];
+                            
                             $academicYear=$sm['academicYearID'];
                             $programmeID=$sm['programmeID'];
                             
@@ -152,11 +152,10 @@
                                         <h3 class="box-title">Exam Result for 
                                     
                                         <?php
-                                //    echo $academicYear;
-                                //   echo  $regNumber;
+                                
                                 $programmlevel= $db->getRows('student_programme',array('where'=>array('regNumber'=>$regNumber,'academicYearID'=>$academicYear),' order_by'=>' courseName ASC'));
 
-                                    // $programmlevel= $db->getstudentLevel($regNumber,$academicYear);
+                                    
                                     foreach ($programmlevel as $pl) {
                                         $pro=$pl['programmeLevelID'];
                                        $programID=$pl['programmeID'];
@@ -173,7 +172,7 @@
                                     </div>
                                     <!-- /.box-header -->
                                     <div class="box-body table-responsive">
-                                        <table  id="" class="table table-striped table-bordered table-condensed">
+                                        <table  id="example" class="table table-striped table-bordered table-condensed">
                                             <thead>
                                             <tr>
                                                 <th>No.</th>
@@ -199,7 +198,7 @@
                                             {
                                                 $count++;
                                                  $courseID=$st['courseID'];
-                                                // echo $courseCategoryID=$st['courseCategoryID'];
+                                
                                                  $academicYear=$st['academicYearID'];
                                                  $regnumber=$st['regNumber'];
                                                  $examnumber=$st['examNumber'];
@@ -219,16 +218,17 @@
                                                     $i=1;
                                                     foreach($coursec as $c)
                                                     {
+                                                        $courseCode=$c['courseCode'];
+                                                        $courseName=$c['courseName'];
+                                                        $units=$c['units'];
+                                                        $courseCategoryID=$c['courseCategoryID'];
+                                                        $courseName=$c['courseName'];
                                                     }
                                                 }
 
 
 
-                                                $courseCode=$c['courseCode'];
-                                                $courseName=$c['courseName'];
-                                                $units=$c['units'];
-                                                $courseCategoryID=$c['courseCategoryID'];
-                                                $courseName=$c['courseName'];
+                                                
 
                                                 /*if($crstatus==1)
                                                     $cStatus="Core";
@@ -301,7 +301,7 @@
                                                     <td>$units</td>
                                                     <td>$remarks</td>
                                                     ";
-                                                $tunits+=$units;
+                                              //  $tunits+=$units;
                                                     // $totalPoints+=$units;
                                                     //include("grade.php");
                                                     // getMarksGrade($regNumber,$cwk,$sfe,$sup,$spc,$prj,$pt)
@@ -382,7 +382,7 @@
                                                                     </div>
                                                                     <div class="row">
                                                                         <div class="col-lg-1">1</div>
-                                                                        <div class="col-lg-3">Course Term 1 work</div>
+                                                                        <div class="col-lg-3"> Term 1 work</div>
                                                                         <div class="col-lg-2">100</div>
                                                                         <div class="col-lg-2">
                                                                             <?php
@@ -398,7 +398,7 @@
 
                                                                     <div class="row">
                                                                         <div class="col-lg-1">2</div>
-                                                                        <div class="col-lg-3">Course Term 2 Work</div>
+                                                                        <div class="col-lg-3">Term 2 Work</div>
                                                                         <div class="col-lg-2">100</div>
                                                                         <div class="col-lg-2">
                                                                             <?php
@@ -488,20 +488,20 @@
 
 
                                             
-                                            $totalPoints+=$tpoints;
-                                            $totalUnits+=$tunits;
+                                            // $totalPoints+=$tpoints;
+                                            // $totalUnits+=$tunits;
                                             ?>
-                                            <tr>
+                                            <!-- <tr> -->
                                                 <!-- <td colspan="2" align="left" style="font-size: 20px;">
-                                                    <strong><span class="text-danger">Total Credits:<?php echo $tunits;?></span></strong>
+                                                    <strong><span class="text-danger">Total Credits:<#?php echo $tunits;?></span></strong>
                                                 </td>
                                                 <td colspan="2" align="left" style="font-size: 20px;">
-                                                    <strong><span class="text-danger">Total Points:<?php echo $tpoints;?></span></strong>
+                                                    <strong><span class="text-danger">Total Points:<#?php echo $tpoints;?></span></strong>
                                                 </td>
                                                 <td colspan="3" align="left" style="font-size: 20px;">
-                                                    <strong><span class="text-danger">GPA:<?php echo $db->getGPA($tpoints, $tunits);?></span></strong>
+                                                    <strong><span class="text-danger">GPA:<#?php echo $db->getGPA($tpoints, $tunits);?></span></strong>
                                                 </td> -->
-                                            </tr>
+                                                <!-- </tr> -->
                                             </tbody>
                                         </table>
                                     </div>
