@@ -1,3 +1,41 @@
+<script type="text/javascript">
+  $(document).ready(function () {
+            $('#exampleexample1').dataTable(
+                {
+                    paging: true,
+                    dom: 'Blfrtip',
+                    buttons:[
+                        {
+                            extend:'excel',
+                            footer:false,
+                            /*exportOptions:{
+                                columns:[0,1,2,3]
+                            }*/
+                        },
+                        ,
+                        {
+                            extend: 'print',
+                            title: 'List of Records',
+                            footer: false,
+                            exportOptions: {
+                                columns: [0, 1, 2, 3]
+                            }
+                        },
+                        {
+                            extend: 'pdfHtml5',
+                            title: 'List of Records',
+                            footer: true,
+                           /* exportOptions: {
+                                columns: [0, 1, 2, 3,5,6]
+                            }*/
+                            orientation: 'landscape',
+                        }
+
+                        ]
+                });
+          });
+</script>
+
 <h4 class="text-info">View Student Result Searching Student</h4>
 <div class="form-group">
 <form name="" method="post" action="">
@@ -33,7 +71,7 @@
                 </div>
                 <!-- /.box-header -->
                 <div class="box-body">
-                    <table class="table table-striped table-bordered table-condensed">
+                    <table id='example' class="table table-striped table-bordered table-condensed">
                         <thead>
                         <tr>
                             <th>Student Name</th>
@@ -172,7 +210,7 @@
                                     </div>
                                     <!-- /.box-header -->
                                     <div class="box-body table-responsive">
-                                        <table  id="example" class="table table-striped table-bordered table-condensed">
+                                        <table  id="exampleexample1" class="table table-striped table-bordered table-condensed">
                                             <thead>
                                             <tr>
                                                 <th>No.</th>
@@ -392,7 +430,8 @@
                                                                                 echo "No";
                                                                             ?>
                                                                         </div>
-                                                                        <div class="col-lg-2"><?php echo  $term1m;?></div>
+                                                                        <div class="col-lg-2"><?php echo  
+                                                                        $term1Score = $db->decrypt($db->getTermGrade($academicYear, $courseID, $regnumber, 1));?></div>
                                                                         <div class="col-lg-2">25</div>
                                                                     </div>
 
