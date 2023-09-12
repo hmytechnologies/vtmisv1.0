@@ -11,7 +11,8 @@
                     {
                         type: 'GET',
                         url: 'api/graduate_list.php',
-                        data:{programmeID:programmeID,academicYearID:admissionYearID},
+                        
+                         data: {programmeID: programmeID, academicYearID: admissionYearID},
                         "serverSide" : true,
                         cache: false/*,
                         success: function(html) {
