@@ -1,40 +1,8 @@
-<script type="text/javascript">
-  $(document).ready(function () {
-            $('#exampleexample1').dataTable(
-                {
-                    paging: true,
-                    dom: 'Blfrtip',
-                    buttons:[
-                        {
-                            extend:'excel',
-                            footer:false,
-                            /*exportOptions:{
-                                columns:[0,1,2,3]
-                            }*/
-                        },
-                        ,
-                        {
-                            extend: 'print',
-                            title: 'List of Records',
-                            footer: false,
-                            exportOptions: {
-                                columns: [0, 1, 2, 3]
-                            }
-                        },
-                        {
-                            extend: 'pdfHtml5',
-                            title: 'List of Records',
-                            footer: true,
-                           /* exportOptions: {
-                                columns: [0, 1, 2, 3,5,6]
-                            }*/
-                            orientation: 'landscape',
-                        }
 
-                        ]
-                });
-          });
-</script>
+<script type="text/javascript" src="plugins/jQuery/jQuery-2.1.4.min.js"></script>
+
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script src="js/jquery-1.4.2.min.js"></script>
 
 <h4 class="text-info">View Student Result Searching Student</h4>
 <div class="form-group">
@@ -71,7 +39,7 @@
                 </div>
                 <!-- /.box-header -->
                 <div class="box-body">
-                    <table id='example' class="table table-striped table-bordered table-condensed">
+                    <table id='' class="table table-striped table-bordered table-condensed">
                         <thead>
                         <tr>
                             <th>Student Name</th>
@@ -79,10 +47,9 @@
                             <th>Gender</th>
                             <th>Level</th>
                             <th>Programme Name</th>
-                            <!--  <th>Programme Duration</th> -->
-                            <!-- <th>Study Year</th> -->
+                           
                             <th>Study Mode</th>
-                            <!-- <th>Status</th> -->
+                          
                         </tr>
                         </thead>
                         <tbody>
@@ -164,64 +131,61 @@
             <div class="row">
 
                 <?php
-                $semester=$db->getSemester1($regNumber);
+                $semester=$db->getSemesters($regNumber);
                 if(!empty($semester))
                 {
                     ?>
-                    <div class="col-md-12">
+                    <div class="col-md-9">
                         <?php
                         $totalPoints=0;
                         $totalUnits=0;
                         foreach($semester as $sm)
                         {
-                            
-                             $examNumber=$sm['examNumber'];
+                            $examNumber=$sm['examNumber'];
                             
                             $academicYear=$sm['academicYearID'];
                             $programmeID=$sm['programmeID'];
-                            
-                            $co = $db->getResults($regNumber,$academicYear,$examNumber);
-                            if(!empty($co))
+
+                            $course = $db->getResults($regNumber,$academicYear,$examNumber);
+                            if(!empty($course))
                             {
                                 ?>
 
                                 <div class="box box-solid box-primary">
                                     <div class="box-header with-border text-center">
-                                        <h3 class="box-title">Exam Result for 
-                                    
-                                        <?php
-                                
-                                $programmlevel= $db->getRows('student_programme',array('where'=>array('regNumber'=>$regNumber,'academicYearID'=>$academicYear),' order_by'=>' courseName ASC'));
+                                        <h3 class="box-title">Exam Result for <?php
+                                        
+                                        $programmlevel= $db->getRows('student_programme',array('where'=>array('regNumber'=>$regNumber,'academicYearID'=>$academicYear),' order_by'=>' courseName ASC'));
 
                                     
-                                    foreach ($programmlevel as $pl) {
-                                        $pro=$pl['programmeLevelID'];
-                                       $programID=$pl['programmeID'];
-                                       
+                                        foreach ($programmlevel as $pl) {
+                                            $pro=$pl['programmeLevelID'];
+                                           $programID=$pl['programmeID'];
+                                           
+                                            
+                                        }
+                                        echo $db->getData("programme_level", "programmeLevel", "programmeLevelID", $pro); 
+                                         echo " ";
+                                        echo $db->getData("programmes", "programmeName", "programmeID", $programID); 
+                                        echo " ";
+                                         echo $db->getData("academic_year", "academicYear", "academicYearID", $academicYear); ?>
                                         
-                                    }
-                                    echo $db->getData("programme_level", "programmeLevel", "programmeLevelID", $pro); 
-                                     echo " ";
-                                    echo $db->getData("programmes", "programmeName", "programmeID", $programID); 
-                                    echo " ";
-                                     echo $db->getData("academic_year", "academicYear", "academicYearID", $academicYear); ?>
-                                    
-                                    </h3>
+                                        </h3>
                                     </div>
                                     <!-- /.box-header -->
                                     <div class="box-body table-responsive">
-                                        <table  id="exampleexample1" class="table table-striped table-bordered table-condensed">
+                                        <table  id="example" class="table table-striped table-bordered table-condensed">
                                             <thead>
-                                            <tr>
+                                            <tr> 
                                                 <th>No.</th>
                                                 <th>Course Code</th>
                                                 <th>Course Name</th>
                                                 <th>Category</th>
+                                                <th>Units</th>
                                                 <th>CA(CWK)</th>
                                                 <th>FE(SE)</th>
                                                 <th>Total</th>
                                                 <th>Grade</th>
-                                                <th>Units</th>
                                                 <th>Remarks</th>
                                                 <th>Action</th>
                                             </tr>
@@ -232,7 +196,7 @@
                                             $i=1;
                                             $tunits=0;
                                             $tpoints=0;
-                                            foreach($co as $st)
+                                            foreach($course as $st)
                                             {
                                                 $count++;
                                                  $courseID=$st['courseID'];
@@ -241,53 +205,63 @@
                                                  $regnumber=$st['regNumber'];
                                                  $examnumber=$st['examNumber'];
 
-                                                $finalScore = $db->decrypt($db->getFinalTermGrade($academicYear, $courseID, $examnumber, 3));
-                                                 $term1Score = $db->decrypt($db->getTermGrade($academicYear, $courseID, $regnumber, 1));
-                                                 $term2Score = $db->decrypt($db->getTermGrade($academicYear, $courseID, $regnumber, 2));
-                                                 $suppScore = $db->decrypt($db->getFinalTermGrade($academicYear, $courseID, $examNumber, 5));
-                                                 $special = $db->decrypt($db->getFinalTermGrade($academicYear, $courseID, $examNumber,4));
-
-
-                                             $coursec= $db->getRows('course',array('where'=>array('courseID'=>$courseID),' order_by'=>' courseName ASC'));
-                                                if(!empty($coursec))
+                                                $coursec= $db->getRows('course',array('where'=>array('courseID'=>$courseID),' order_by'=>' courseName ASC'));
+                                                    if(!empty($coursec))
                                                 {
-                                                    ?>
-                                                    <?php
-                                                    $i=1;
-                                                    foreach($coursec as $c)
-                                                    {
-                                                        $courseCode=$c['courseCode'];
-                                                        $courseName=$c['courseName'];
-                                                        $units=$c['units'];
-                                                        $courseCategoryID=$c['courseCategoryID'];
-                                                        $courseName=$c['courseName'];
-                                                    }
-                                                }
-
-
-
-                                                
+                                                ?>
+                                            <?php
+                                                     $i=1;
+                                                     foreach($coursec as $c)
+                                                     {
+                                                     }
+                                                 }
+                                                       $coursecode=$c['courseCode'];
+                                                         $coursename=$c['courseName'];
+                                                         $units=$c['units'];
+                                                         $courseCategoryID=$c['courseCategoryID'];
+                                                        
 
                                                 /*if($crstatus==1)
                                                     $cStatus="Core";
                                                 else
                                                     $cStatus="Elective";*/
-                                                $courseStatus = $db->getRows('course_category', array('where' => array('courseCategoryID' => $courseCategoryID), ' order_by' => ' courseStatusID ASC'));
-                                                foreach ($courseStatus as $cs) {
-                                                    $courseCategory = $cs['courseCategory'];
-                                                    $courseCategory = $cs['courseCategoryID'];
-                                                    if ($courseCategory == 1)
-                                                        $status = "Core Subjects";
-                                                    else
-                                                        $status = "General Subjects";
-                                                }
+
+
+                                                     $courseStatus = $db->getRows('course_category', array('where' => array('courseCategoryID' => $courseCategoryID), ' order_by' => ' courseStatusID ASC'));
+                                                     foreach ($courseStatus as $cs) {
+                                                         $courseCategory = $cs['courseCategory'];
+                                                         $courseCategory = $cs['courseCategoryID'];
+                                                         if ($courseCategory == 1)
+                                                             $status = "Core Subjects";
+                                                         else
+                                                             $status = "General Subjects";
+                                                     }
+                                                
                                                 ?>
 
                                                 <tr>
-                                                    <?php
-                                                    
+                                                <?php
+                                                    echo"<td>$count</td><td>$coursecode</td><td>$coursename</td><td>$status</td><td>$units</td>";
+                                                     $tunits+=$units;
+                                                     $totalPoints+=$units;
+                                                    //include("grade.php");
+                                                    // getMarksGrade($regNumber,$cwk,$sfe,$sup,$spc,$prj,$pt)
 
-                                                   
+
+
+                                                    $finalScore = $db->decrypt($db->getFinalTermGrade($academicYear, $courseID, $examnumber, 3));
+                                                    $term1Score = $db->decrypt($db->getTermGrade($academicYear, $courseID, $regnumber, 1));
+                                                    $term2Score = $db->decrypt($db->getTermGrade($academicYear, $courseID, $regnumber, 2));
+                                                    $suppScore = $db->decrypt($db->getFinalTermGrade($academicYear, $courseID, $examNumber, 5));
+                                                    $special = $db->decrypt($db->getFinalTermGrade($academicYear, $courseID, $examNumber,4));
+
+                                                    // $cwk=$db->decrypt($db->getGrade($semesterSettingID,$courseID,$regNumber,1));
+                                                    // $sfe=$db->decrypt($db->getFinalGrade($semesterSettingID,$courseID,$regNumber,2));
+                                                    // $sup=$db->decrypt($db->getFinalTermGrade($academicYear, $courseID, $examNumber, 5));
+                                                    // $spc=$db->decrypt($db->getFinalTermGrade($academicYear, $courseID, $examNumber,4));
+                                                    // $prj=$db->decrypt($db->getGrade($semesterSettingID,$courseID,$regNumber,5));
+                                                    // $pt=$db->decrypt($db->getGrade($semesterSettingID,$courseID,$regNumber,6));
+
                                                     $exam_category_marks = $db->getTermCategorySetting();
                                                     if (!empty($exam_category_marks)) {
                                                         foreach ($exam_category_marks as $gd) {
@@ -297,7 +271,7 @@
                                                         }
                                                     }
 
-                                                   $term1m = ($term1Score / $mMark) * $wMark;
+                                                    $term1m = ($term1Score / $mMark) * $wMark;
                                                     $term2m = ($term2Score / $mMark) * $wMark;
 
                                                     $final = ($finalScore / 100) * 50;
@@ -319,44 +293,41 @@
                                                      $finalResult=$final+$addmarks;
 
 
-                                                     $totalMarks = round($term1m + $term2m + $finalResult);
+                                                     $totalMarks = round($totalTearmMarks + $finalResult);
                                                      $grade = $db->calculateTermGrade($totalMarks);
                                                 
-                                                     if ( $totalMarks >= 40 )
-                                                     $remarks = "Pass";
-                                                 
-                                                        else 
-                                                        $remarks="Supp";
-                                                        
-                                                    echo"<td>$count</td>
-                                                    <td>$courseCode</td>
-                                                    <td>$courseName</td>
-                                                    <td>$status</td>
-                                                    <td>$totalTearmMarks</td>
-                                                    <td>$final</td>
-                                                    <td>$totalMarks</td>
-                                                    <td>$grade</td>
-                                                    <td>$units</td>
-                                                    <td>$remarks</td>
-                                                    ";
-                                              //  $tunits+=$units;
-                                                    // $totalPoints+=$units;
-                                                    //include("grade.php");
-                                                    // getMarksGrade($regNumber,$cwk,$sfe,$sup,$spc,$prj,$pt)
+                                               
+                                                    if ( $totalMarks >= 40 )
+                                                    $remarks = "Pass";
+                                                
+                                                       else 
+                                                       $remarks="Supp";
+
 
                                                     
-                                                  
+
+                                                    // $gradeID=$db->getMarksID($regNumber,$cwk,$sfe,$sup,$spc,$prj,$pt);
+                                                    // $gradePoint=$db->getData("grades","gradePoints","gradeID",$gradeID);
+                                                    // $points=$gradePoint*$units;
+                                                    // $tpoints+=$points;
+
 
                                                     // echo "<td>".$db->calculateTotal($cwk, $sfe, $sup, $spc, $prj, $pt)."</td>
                                                     // <td>".$db->calculateGrade($regNumber,$cwk, $sfe, $sup, $spc, $prj, $pt)."</td>
                                                     // <td>".$db->courseRemarks($regNumber,$cwk, $sfe, $sup, $spc, $prj, $pt)."</td>";
 
-                                                    ?>
+                                                    // echo"<td>$count</td><td>$courseCode</td><td>$courseName</td><td>$status</td><td>$units</td>";
 
-                                                   
-   
-                                                
-                                                    <td>
+                                                    echo"
+                                                    <td>$totalTearmMarks</td>
+                                                    <td>$final</td>
+                                                    <td>$totalMarks</td>
+                                                    <td>$grade</td>
+                                                    <td>$remarks</td>
+                                                    ";
+
+                                                    ?>
+                                                 <td>
                                                         <button type="button" class="btn btn-success" data-toggle="modal" data-target="#message<?php echo $courseID;?>">
                                                             <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
                                                             <span><strong></strong></span>
@@ -396,7 +367,6 @@
                                                 </tr>
 
 
-
                                                 <!-- Result Details -->
                                                 <div id="message<?php echo $courseID;?>" class="modal fade" role="dialog">
                                                     <div class="modal-dialog">
@@ -408,9 +378,9 @@
                                                                 <h4 class="modal-title">Details of <?php echo $courseCode."-".$courseName;?></h4>
                                                             </div>
                                                             <form name="register" id="register" enctype="multipart/form-data" method="post" action="action_add_exmption.php">
+                                                               
                                                                 <div class="modal-body">
                                                                     <div class="row"  style="background-color:lightgray;">
-                                                                   
                                                                         <div class="col-lg-1"><strong>No</strong></div>
                                                                         <div class="col-lg-3"><strong>Ass.Title</strong></div>
                                                                         <div class="col-lg-2"><strong>Max.Marks</strong></div>
@@ -420,75 +390,76 @@
                                                                     </div>
                                                                     <div class="row">
                                                                         <div class="col-lg-1">1</div>
-                                                                        <div class="col-lg-3"> Term 1 work</div>
+                                                                        <div class="col-lg-3">Tearm 1</div>
                                                                         <div class="col-lg-2">100</div>
                                                                         <div class="col-lg-2">
                                                                             <?php
-                                                                            if($term1m > 0)
+                                                                            if($cwk>0)
                                                                                 echo "Yes";
                                                                             else
                                                                                 echo "No";
                                                                             ?>
                                                                         </div>
-                                                                        <div class="col-lg-2"><?php echo  
-                                                                        $term1Score = $db->decrypt($db->getTermGrade($academicYear, $courseID, $regnumber, 1));?></div>
+                                                                        <div class="col-lg-2"><?php echo $term1Score;?></div>
                                                                         <div class="col-lg-2">25</div>
                                                                     </div>
 
+
                                                                     <div class="row">
                                                                         <div class="col-lg-1">2</div>
-                                                                        <div class="col-lg-3">Term 2 Work</div>
+                                                                        <div class="col-lg-3">Tearm 2</div>
                                                                         <div class="col-lg-2">100</div>
                                                                         <div class="col-lg-2">
                                                                             <?php
-                                                                            if( $term2m >0)
+                                                                            if($cwk>0)
                                                                                 echo "Yes";
                                                                             else
                                                                                 echo "No";
                                                                             ?>
                                                                         </div>
-                                                                        <div class="col-lg-2"><?php echo  $term2m;?></div>
+                                                                        <div class="col-lg-2"><?php echo $term2Score;?></div>
                                                                         <div class="col-lg-2">25</div>
                                                                     </div>
+
                                                                     <div class="row" style="background-color:lightgray;">
-                                                                        <div class="col-lg-1">3</div>
+                                                                        <div class="col-lg-1">2</div>
                                                                         <div class="col-lg-3">Final Exam</div>
                                                                         <div class="col-lg-2">100</div>
                                                                         <div class="col-lg-2">
                                                                             <?php
-                                                                            if( $final>0)
+                                                                            if($sfe>0)
                                                                                 echo "Yes";
                                                                             else
                                                                                 echo "No";
                                                                             ?>
                                                                         </div>
-                                                                        <div class="col-lg-2"><?php echo  $final;?></div>
+                                                                        <div class="col-lg-2"><?php echo $finalScore;?></div>
                                                                         <div class="col-lg-2">50</div>
                                                                     </div>
 
                                                                     <div class="row">
-                                                                        <div class="col-lg-1">4</div>
+                                                                        <div class="col-lg-1">3</div>
                                                                         <div class="col-lg-3">Supplementary</div>
                                                                         <div class="col-lg-2">100</div>
                                                                         <div class="col-lg-2">
                                                                             <?php
-                                                                            if( $suppScore>0)
+                                                                            if($sup>0)
                                                                                 echo "Yes";
                                                                             else
                                                                                 echo "No";
                                                                             ?>
                                                                         </div>
-                                                                        <div class="col-lg-2"><?php echo  $suppScore;?></div>
+                                                                        <div class="col-lg-2"><?php echo $suppScore;?></div>
                                                                         <div class="col-lg-2">100</div>
                                                                     </div>
 
                                                                     <div class="row" style="background-color:lightgray;">
                                                                         <div class="col-lg-1">4</div>
                                                                         <div class="col-lg-3">Special Exam</div>
-                                                                        <div class="col-lg-2">50</div>
+                                                                        <div class="col-lg-2">100</div>
                                                                         <div class="col-lg-2">
                                                                             <?php
-                                                                            if($special>0)
+                                                                            if($spc>0)
                                                                                 echo "Yes";
                                                                             else
                                                                                 echo "No";
@@ -498,16 +469,44 @@
                                                                         <div class="col-lg-2">50</div>
                                                                     </div>
 
-                                                                   
+                                                                    <!-- <div class="row">
+                                                                        <div class="col-lg-1">5</div>
+                                                                        <div class="col-lg-3">Project</div>
+                                                                        <div class="col-lg-2">100</div>
+                                                                        <div class="col-lg-2">
+                                                                            <#?php
+                                                                            if($pro>0)
+                                                                                echo "Yes";
+                                                                            else
+                                                                                echo "No";
+                                                                            ?>
+                                                                        </div>
+                                                                        <div class="col-lg-2"><#?php echo $prj;?></div>
+                                                                        <div class="col-lg-2"><#?php echo $prj;?></div>
+                                                                    </div> -->
 
-                                                                 
+                                                                    <!-- <div class="row" style="background-color:lightgray;">
+                                                                        <div class="col-lg-1">6</div>
+                                                                        <div class="col-lg-3">Field Training</div>
+                                                                        <div class="col-lg-2">100</div>
+                                                                        <div class="col-lg-2">
+                                                                            <#?php
+                                                                            if($pt>0)
+                                                                                echo "Yes";
+                                                                            else
+                                                                                echo "No";
+                                                                            ?>
+                                                                        </div>
+                                                                        <div class="col-lg-2"><#?php echo $pt;?></div>
+                                                                        <div class="col-lg-2"><#?php echo $pt;?></div>
+                                                                    </div> -->
 
                                                                     <div class="row">
                                                                         <div class="col-lg-10">
                                                                             <strong><span class="text-danger">Total Marks:</span></strong>
                                                                         </div>
                                                                         <div class="col-lg-2">
-                                                                            <strong><span class="text-danger"><?php echo  round($totalTearmMarks + $final + $suppScore + $special);?></span></strong>
+                                                                            <strong><span class="text-danger"><?php echo round($totalTearmMarks + $finalResult + $suppScore + $special);;?></span></strong>
                                                                         </div>
                                                                     </div>
 
@@ -523,24 +522,20 @@
                                                 <!-- End of Result Details -->
                                                 <?php
                                             }
-
-
-
-                                            
-                                            // $totalPoints+=$tpoints;
-                                            // $totalUnits+=$tunits;
+                                            $totalPoints+=$tpoints;
+                                            $totalUnits+=$tunits;
                                             ?>
-                                            <!-- <tr> -->
-                                                <!-- <td colspan="2" align="left" style="font-size: 20px;">
-                                                    <strong><span class="text-danger">Total Credits:<#?php echo $tunits;?></span></strong>
+                                            <!-- <tr>
+                                                <td colspan="2" align="left" style="font-size: 20px;">
+                                                    <strong><span class="text-danger">Total Credits:<?php echo $tunits;?></span></strong>
                                                 </td>
                                                 <td colspan="2" align="left" style="font-size: 20px;">
-                                                    <strong><span class="text-danger">Total Points:<#?php echo $tpoints;?></span></strong>
+                                                    <strong><span class="text-danger">Total Points:<?php echo $tpoints;?></span></strong>
                                                 </td>
                                                 <td colspan="3" align="left" style="font-size: 20px;">
-                                                    <strong><span class="text-danger">GPA:<#?php echo $db->getGPA($tpoints, $tunits);?></span></strong>
-                                                </td> -->
-                                                <!-- </tr> -->
+                                                    <strong><span class="text-danger">GPA:<?php echo $db->getGPA($tpoints, $tunits);?></span></strong>
+                                                </td>
+                                            </tr> -->
                                             </tbody>
                                         </table>
                                     </div>
@@ -549,7 +544,6 @@
 
 
                                 <?php
-                                // echo $semesterSettingID;
                             }
                             else
                             {
@@ -561,11 +555,34 @@
 
                             <?php
                         }
-                        
-                       
                         ?>
                     </div>
-                    
+                    <div class="col-md-3">
+                        <div class="box box-solid box-primary">
+                            <div class="box-header with-border text-center">
+                                <h3 class="box-title">Perfomance</h3>
+                            </div>
+                            <!-- /.box-header -->
+                            <div class="box-body table-responsive">
+                                <table  id="" class="table table-striped table-bordered table-condensed">
+                                    <thead>
+                                    <tr><th>Total Credits: </th><td style="font-size: 18px;"><strong><span class="text-danger"><?php echo $totalUnits;?></span></strong></td></tr>
+                                    <tr><th>Total Points</th><td style="font-size: 18px;"><strong><span class="text-danger"><?php echo $totalPoints;?></span></strong></td></tr>
+                                    <tr><th>Overall GPA</th><td style="font-size: 18px;"><strong><span class="text-danger"><?php echo $db->convert_gpa($db->getGPA($totalPoints,$totalUnits));?></span></strong></td></tr>
+                                    <!-- <tr><th>Remarks</th> <#?php $gpa=$db->convert_gpa($db->getGPA($totalPoints,$totalUnits));?>
+                                        <td style="font-size:18px;"><strong><span class="text-danger"><#?php echo $db->getGPARemarks($regNumber,$gpa);?></span></strong></td></tr> -->
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+
+
+
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
                     <?php
                 }
                 else

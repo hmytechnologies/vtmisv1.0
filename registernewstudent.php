@@ -1,42 +1,44 @@
- <script type="text/javascript">
- $(document).ready(function () {
- $("#studentdata").DataTable({
-		"ajax": "api/studentdata.php",
-             "dom": 'Blfrtip',
-             "scrollX":true,
-             "paging":true,
-             "buttons":[
-                     {
-                         extend:'excel',
-                         title: 'List of all Users',
-                         footer:false,
-                         exportOptions:{
-                             columns: [0, 1, 2, 3,5,6,7]
-                         }
-                     },
-                     ,
-                     {
-                         extend: 'print',
-                         title: 'List of all Users',
-                         footer: false,
-                         exportOptions: {
-                             columns: [0, 1, 2, 3,5,6,7]
-                         }
-                     },
-                     {
-                         extend: 'pdfHtml5',
-                         title: 'List of all Users',
-                         footer: true,
-                        exportOptions: {
-                             columns: [0, 1, 2, 3,5,6,7]
-                         },
-                         
-                     }
+<script type="text/javascript" src="plugins/jQuery/jQuery-2.1.4.min.js"></script>
 
-                     ],
-		"order": []
-	});
- });
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script src="js/jquery-1.4.2.min.js"></script>
+ <script type="text/javascript">
+$(document).ready(function () {
+    $("#studentdata").DataTable({
+        "ajax": "api/studentdata.php",
+        "dom": 'Blfrtip',
+        "scrollX": true,
+        "paging": true,
+        "buttons": [
+            {
+                extend: 'excel',
+                title: 'List of all Student',
+                footer: false,
+                exportOptions: {
+                    columns: [0, 1, 2, 3, 5, 6, 7]
+                }
+            },
+            {
+                extend: 'print',
+                title: 'List of all Student',
+                footer: false,
+                exportOptions: {
+                    columns: [0, 1, 2, 3, 5, 6, 7]
+                }
+            },
+            {
+                extend: 'pdfHtml5',
+                title: 'List of all Student',
+                footer: true,
+                exportOptions: {
+                    columns: [0, 1, 2, 3, 5, 6, 7]
+                }
+            }
+        ],
+        "order": []
+    });
+});
+
 </script>
 
 <?php $db=new DBHelper();?>

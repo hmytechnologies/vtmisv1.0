@@ -7,9 +7,12 @@ $output = array('data' => array());
 $academicYearID=$_GET['academicYearID'];
 $programmeID=$_GET['programmeID'];
 
+
+
 $duration=$db->getData("programmes","programmeDuration","programmeID",$programmeID);
 
-$student=$db->graduateList($programmeID,$duration,$academicYearID);
+// $student=$db->graduateList($programmeID,$duration,$academicYearID);
+$student=$db->getRows("student",array('where'=>array('statusID'=>2,'academicYearID'=>$academicYearID)));
 if(!empty($student))
 {
     foreach($student as $st) {
@@ -20,7 +23,20 @@ if(!empty($student))
         $lname = $st['lastName'];
         $name = "$fname $mname $lname";
 
+        
+
         $course=$db->getStudentCourseCredit($regNumber);
+
+        $course=$db->getRows("courseprogramme",array('where'=>array('programmeID'=>$programmeID,'academicYearID'=>$academicYearID)));
+
+$gradePoint=$db->getData("grades","gradePoints","gradeID",$gradeID);
+
+        $semester_setting= $db->getRows('semester_setting',array('where'=>array('academicYearID'=>$academicYearID),' order_by'=>' academicYearID ASC'));
+
+        foreach ($semester_setting as $semi) {
+           $semesterSettingID = $semi['semesterSettingID'];
+           
+       }
         $tunits=0;
         $tpoints=0;
         /*$countpass=0;
@@ -29,17 +45,18 @@ if(!empty($student))
         $creditsFail=0;*/
         foreach ($course as $cs) {
             $courseID=$cs['courseID'];
-            $units=$cs['units'];
-            $semesterID=$cs['semesterSettingID'];
-            $student_course=$db->getStudentExamCourse($regNumber,$semesterID,$courseID);
+            $units=$db->getData("grades","units","courseID",$courseID);
+            // $units=$cs['units'];
+            // $semesterSettingID=$cs['semesterSettingID'];
+            $student_course=$db->getStudentExamCourse($regNumber,$semesterSettingID,$courseID);
             if(!empty($student_course))
             {
-                $cwk=$db->decrypt($db->getGrade($semesterID,$courseID,$regNumber,1));
-                $sfe=$db->decrypt($db->getFinalGrade($semesterID,$courseID,$regNumber,2));
-                $sup=$db->decrypt($db->getGrade($semesterID,$courseID,$regNumber,3));
-                $spc=$db->decrypt($db->getFinalGrade($semesterID,$courseID,$regNumber,4));
-                $prj=$db->decrypt($db->getGrade($semesterID,$courseID,$regNumber,5));
-                $pt=$db->decrypt($db->getGrade($semesterID,$courseID,$regNumber,6));
+                $cwk=$db->decrypt($db->getGrade($semesterSettingID,$courseID,$regNumber,1));
+                $sfe=$db->decrypt($db->getFinalGrade($semesterSettingID,$courseID,$regNumber,2));
+                $sup=$db->decrypt($db->getGrade($semesterSettingID,$courseID,$regNumber,3));
+                $spc=$db->decrypt($db->getFinalGrade($semesterSettingID,$courseID,$regNumber,4));
+                $prj=$db->decrypt($db->getGrade($semesterSettingID,$courseID,$regNumber,5));
+                $pt=$db->decrypt($db->getGrade($semesterSettingID,$courseID,$regNumber,6));
 
                 $passCourseMark=$db->getExamCategoryMark(1,$regNumber);
                 $passFinalMark=$db->getExamCategoryMark(2,$regNumber);
