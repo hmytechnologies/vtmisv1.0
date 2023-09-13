@@ -59,7 +59,7 @@ if(isset($_POST['doFind'])=="View Records") {
     if (!empty($studentID)) {
         foreach ($studentID as $std) {
             $regNumber = $std['registrationNumber'];
-            $batchID=$std['batchID'];
+            // $batchID=$std['batchID'];
             $course = $db->getStudentCourse($regNumber,$semesterSettingID);
             if (!empty($course)) {
                 ?>
