@@ -375,7 +375,7 @@
                                                         <div class="modal-content">
                                                             <div class="modal-header">
                                                                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                                                <h4 class="modal-title">Details of <?php echo $courseCode."-".$courseName;?></h4>
+                                                                <h4 class="modal-title">Details of <?php echo $coursecode."-".$coursename;?></h4>
                                                             </div>
                                                             <form name="register" id="register" enctype="multipart/form-data" method="post" action="action_add_exmption.php">
                                                                
@@ -394,7 +394,7 @@
                                                                         <div class="col-lg-2">100</div>
                                                                         <div class="col-lg-2">
                                                                             <?php
-                                                                            if($cwk>0)
+                                                                            if($term1Score>0)
                                                                                 echo "Yes";
                                                                             else
                                                                                 echo "No";
@@ -411,7 +411,7 @@
                                                                         <div class="col-lg-2">100</div>
                                                                         <div class="col-lg-2">
                                                                             <?php
-                                                                            if($cwk>0)
+                                                                            if($term2Score>0)
                                                                                 echo "Yes";
                                                                             else
                                                                                 echo "No";
@@ -427,7 +427,7 @@
                                                                         <div class="col-lg-2">100</div>
                                                                         <div class="col-lg-2">
                                                                             <?php
-                                                                            if($sfe>0)
+                                                                            if($finalScore>0)
                                                                                 echo "Yes";
                                                                             else
                                                                                 echo "No";
@@ -443,7 +443,7 @@
                                                                         <div class="col-lg-2">100</div>
                                                                         <div class="col-lg-2">
                                                                             <?php
-                                                                            if($sup>0)
+                                                                            if($suppScore>0)
                                                                                 echo "Yes";
                                                                             else
                                                                                 echo "No";
@@ -459,7 +459,7 @@
                                                                         <div class="col-lg-2">100</div>
                                                                         <div class="col-lg-2">
                                                                             <?php
-                                                                            if($spc>0)
+                                                                            if($special>0)
                                                                                 echo "Yes";
                                                                             else
                                                                                 echo "No";
@@ -527,13 +527,13 @@
                                             ?>
                                             <!-- <tr>
                                                 <td colspan="2" align="left" style="font-size: 20px;">
-                                                    <strong><span class="text-danger">Total Credits:<?php echo $tunits;?></span></strong>
+                                                    <strong><span class="text-danger">Total Credits:<#?php echo $tunits;?></span></strong>
                                                 </td>
                                                 <td colspan="2" align="left" style="font-size: 20px;">
-                                                    <strong><span class="text-danger">Total Points:<?php echo $tpoints;?></span></strong>
+                                                    <strong><span class="text-danger">Total Points:<#?php echo $tpoints;?></span></strong>
                                                 </td>
                                                 <td colspan="3" align="left" style="font-size: 20px;">
-                                                    <strong><span class="text-danger">GPA:<?php echo $db->getGPA($tpoints, $tunits);?></span></strong>
+                                                    <strong><span class="text-danger">GPA:<#?php echo $db->            getGPA($tpoints, $tunits);?></span></strong>
                                                 </td>
                                             </tr> -->
                                             </tbody>
