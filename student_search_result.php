@@ -20,6 +20,7 @@
 <br><br>
     <?php
     $db=new DBhelper();
+    error_reporting(E_ALL);
     if((isset($_POST['doSearch'])=="Search Student"))
     {
         $searchStudent=$_POST['search_student'];
@@ -174,7 +175,7 @@
                                     </div>
                                     <!-- /.box-header -->
                                     <div class="box-body table-responsive">
-                                        <table  id="example" class="table table-striped table-bordered table-condensed">
+                                        <table  id=" " class="table table-striped table-bordered table-condensed">
                                             <thead>
                                             <tr> 
                                                 <th>No.</th>
@@ -221,11 +222,7 @@
                                                          $courseCategoryID=$c['courseCategoryID'];
                                                         
 
-                                                /*if($crstatus==1)
-                                                    $cStatus="Core";
-                                                else
-                                                    $cStatus="Elective";*/
-
+                                
 
                                                      $courseStatus = $db->getRows('course_category', array('where' => array('courseCategoryID' => $courseCategoryID), ' order_by' => ' courseStatusID ASC'));
                                                      foreach ($courseStatus as $cs) {
@@ -240,12 +237,12 @@
                                                 ?>
 
                                                 <tr>
+                                                <tr>
                                                 <?php
-                                                    echo"<td>$count</td><td>$coursecode</td><td>$coursename</td><td>$status</td><td>$units</td>";
-                                                     $tunits+=$units;
-                                                     $totalPoints+=$units;
-                                                    //include("grade.php");
-                                                    // getMarksGrade($regNumber,$cwk,$sfe,$sup,$spc,$prj,$pt)
+                                                echo "<td>$count</td><td>$coursecode</td><td>$coursename</td><td>$status</td><td>$units</td>";
+                                                $tunits += $units;
+                                                $totalPoints += $units;
+                                                   
 
 
 
@@ -303,30 +300,22 @@
                                                        else 
                                                        $remarks="Supp";
 
-
-                                                    
-
-                                                    // $gradeID=$db->getMarksID($regNumber,$cwk,$sfe,$sup,$spc,$prj,$pt);
-                                                    // $gradePoint=$db->getData("grades","gradePoints","gradeID",$gradeID);
-                                                    // $points=$gradePoint*$units;
-                                                    // $tpoints+=$points;
-
-
-                                                    // echo "<td>".$db->calculateTotal($cwk, $sfe, $sup, $spc, $prj, $pt)."</td>
-                                                    // <td>".$db->calculateGrade($regNumber,$cwk, $sfe, $sup, $spc, $prj, $pt)."</td>
-                                                    // <td>".$db->courseRemarks($regNumber,$cwk, $sfe, $sup, $spc, $prj, $pt)."</td>";
-
-                                                    // echo"<td>$count</td><td>$courseCode</td><td>$courseName</td><td>$status</td><td>$units</td>";
-
-                                                    echo"
-                                                    <td>$totalTearmMarks</td>
-                                                    <td>$final</td>
-                                                    <td>$totalMarks</td>
-                                                    <td>$grade</td>
-                                                    <td>$remarks</td>
-                                                    ";
+                                                    // echo"
+                                                    // <td>$totalTearmMarks</td>
+                                                    // <td>$final</td>
+                                                    // <td>$totalMarks</td>
+                                                    // <td>$grade</td>
+                                                    // <td>$remarks</td>
+                                                    // ";
 
                                                     ?>
+
+                                                <td><?php echo $totalTearmMarks; ?></td>
+                                                <td><?php echo $final; ?></td>
+                                                <td><?php echo $totalMarks; ?></td>
+                                                <td><?php echo $grade; ?></td>
+                                                <td><?php echo $remarks; ?></td>
+
                                                  <td>
                                                         <button type="button" class="btn btn-success" data-toggle="modal" data-target="#message<?php echo $courseID;?>">
                                                             <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
@@ -368,7 +357,7 @@
 
 
                                                 <!-- Result Details -->
-                                                <div id="message<?php echo $courseID;?>" class="modal fade" role="dialog">
+                                                <div id="message<?php echo $courseID; ?>" class="modal fade" role="dialog">
                                                     <div class="modal-dialog">
 
                                                         <!-- Modal content-->
@@ -522,40 +511,22 @@
                                                 <!-- End of Result Details -->
                                                 <?php
                                             }
-                                            $totalPoints+=$tpoints;
-                                            $totalUnits+=$tunits;
+                                            $totalPoints += $tpoints;
+                                            $totalUnits += $tunits;
                                             ?>
-                                            <!-- <tr>
-                                                <td colspan="2" align="left" style="font-size: 20px;">
-                                                    <strong><span class="text-danger">Total Credits:<#?php echo $tunits;?></span></strong>
-                                                </td>
-                                                <td colspan="2" align="left" style="font-size: 20px;">
-                                                    <strong><span class="text-danger">Total Points:<#?php echo $tpoints;?></span></strong>
-                                                </td>
-                                                <td colspan="3" align="left" style="font-size: 20px;">
-                                                    <strong><span class="text-danger">GPA:<#?php echo $db->            getGPA($tpoints, $tunits);?></span></strong>
-                                                </td>
-                                            </tr> -->
-                                            </tbody>
-                                        </table>
-                                    </div>
+                                        </tbody>
+                                    </table>
                                 </div>
-
-
-
-                                <?php
-                            }
-                            else
-                            {
-                                ?>
-                                <h4 class="text-danger">No Result(s) found......</h4>
-                                <?php
-                            }
+                            </div>
+    
+                            <?php
+                        } else {
                             ?>
-
+                            <h4 class="text-danger">No Result(s) found......</h4>
                             <?php
                         }
-                        ?>
+                    }
+                    ?>
                     </div>
                     <div class="col-md-3">
                         <div class="box box-solid box-primary">
