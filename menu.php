@@ -42,7 +42,7 @@ $db = new DBHelper();
         <ul class="treeview-menu">
             <?php
             foreach ($_SESSION['roleID'] as $role => $user_role) {
-                if ($user_role == 7 || $user_role == 1) {
+                if ($user_role == 7 ) {
             ?>
                     <!--<li><a href="index3.php?sp=courselist">Annual Subjects</a></li>
                                  <li><a href="index3.php?sp=semester_setting">Annual Settings</a></li>-->
