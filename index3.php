@@ -7,6 +7,8 @@
   $userID = $_SESSION['user_session'];
    $departmentID=$_SESSION['department_session'];
 
+  
+
 
   //main role
 $main_role = $auth_user->getRows("userroles", array('where' => array('userID' => $userID,'status'=>1)));
@@ -43,6 +45,7 @@ if($login==0)
 }
 
   $role_session=$_SESSION['role_session'];
+
   if($mroleID==2)
   {
       $studentID=$auth_user->getData("student","studentID","userID",$userID);

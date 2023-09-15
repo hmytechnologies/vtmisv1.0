@@ -1781,7 +1781,7 @@ ORDER BY academicYearID ASC");
     public function getSemesters($regNumber)
     {
         $query = $this->conn->prepare("SELECT DISTINCT
-        (programmeID),en.academicYearID,examNumber
+        (programmeID),en.academicYearID,examNumber,er.regNumber             
             FROM
                 exam_number en,
                

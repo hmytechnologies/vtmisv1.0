@@ -20,7 +20,8 @@
 <br><br>
     <?php
     $db=new DBhelper();
-    error_reporting(E_ALL);
+     error_reporting(E_ALL);
+    
     if((isset($_POST['doSearch'])=="Search Student"))
     {
         $searchStudent=$_POST['search_student'];
@@ -58,16 +59,16 @@
                         $count = 0;
                         foreach($studentID as $std)
                         {
-                                 $count++;
-                      $studentID=$std['studentID'];
-                      $fname=$std['firstName'];
-                      $mname=$std['middleName'];
-                      $lname=$std['lastName'];
-                      $gender=$std['gender'];
-                      $regNumber=$std['registrationNumber'];
-                      $statusID=$std['statusID'];
-                      $academicYearID=$std['academicYearID'];
-                      $name="$fname $mname $lname";
+                                $count++;
+                                $studentID=$std['studentID'];
+                                $fname=$std['firstName'];
+                                $mname=$std['middleName'];
+                                $lname=$std['lastName'];
+                                $gender=$std['gender'];
+                                $regNumber=$std['registrationNumber'];
+                                $statusID=$std['statusID'];
+                                $academicYearID=$std['academicYearID'];
+                                $name="$fname $mname $lname";
 
                       
                      echo "<tr><td>$name</td><td>$regNumber</td><td>$gender</td>";
@@ -133,6 +134,7 @@
 
                 <?php
                 $semester=$db->getSemesters($regNumber);
+                //var_dump($semester);
                 if(!empty($semester))
                 {
                     ?>
@@ -148,6 +150,7 @@
                             $programmeID=$sm['programmeID'];
 
                             $course = $db->getResults($regNumber,$academicYear,$examNumber);
+                            
                             if(!empty($course))
                             {
                                 ?>
@@ -165,8 +168,11 @@
                                            
                                             
                                         }
+                                        
+                                        
                                         echo $db->getData("programme_level", "programmeLevel", "programmeLevelID", $pro); 
                                          echo " ";
+                                         
                                         echo $db->getData("programmes", "programmeName", "programmeID", $programID); 
                                         echo " ";
                                          echo $db->getData("academic_year", "academicYear", "academicYearID", $academicYear); ?>
@@ -330,6 +336,8 @@
                                                             
                                                         }
                                                         $published=$db->checkStatus($courseID,$semesterSettingID,'status');
+                                                        // $role =$_SESSION['role_session'];
+                                                        
                                                         if($published==1)
                                                         {
                                                             if($role_session==7) {
