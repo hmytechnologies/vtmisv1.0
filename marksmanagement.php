@@ -69,7 +69,7 @@ error_reporting(E_ALL | E_STRICT);
                                         <th>Level</th>
                                         <th>Trade</th>
                                         <th>No.of Students</th>
-                                        <th>Exam List</th>
+                                        <!-- <th>Exam List</th> -->
                                         <th>Post Results</th>
                                         <th>Bulk Post</th>
                                         <th>View Results</th>
@@ -158,7 +158,7 @@ error_reporting(E_ALL | E_STRICT);
                                             <td><?php echo $db->getData('programme_level', 'programmeLevel', 'programmeLevelID', $programmeLevelID); ?></td>
                                             <td><?php echo $db->getData('programmes', 'programmeName', 'programmeID', $programmeID); ?></td>
                                             <td><?php echo $studentNumber; ?></td>
-                                            <td>Exam List</td>
+                                            <!-- <td>Exam List</td> -->
                                             <td><?php echo $addButton; ?></td>
                                             <td><?php echo $excelButton; ?></td>
                                             <td><?php echo $viewButton; ?></td>

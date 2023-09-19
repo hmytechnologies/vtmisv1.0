@@ -248,11 +248,11 @@
                         <div class="box-body table-responsive no-padding">
 
                             <div class="row">
-                                <div class="pull-right">
+                                <!-- <div class="pull-right">
                                     <div class="col-lg-12">
                                         <button class="btn btn-primary pull-right form-control" style="margin-right: 5px;" data-toggle="modal" data-target="#add_new_atype_modal"><i class="fa fa-download"></i>Print Report</button>
                                     </div>
-                                </div>
+                                </div> -->
                             </div>
                             <!--End -->
                             <table id="example" class="table table-hover table-bordered" cellspacing="0" width="100%" rules="groups">
@@ -360,13 +360,13 @@
                             <!--reports-->
                             <div class="row">
                                 <div class="col-lg-3">
-                                    <a href='print_term_report_grade.php?action=getPDF&pid=<?php echo $programmeID; ?>&lid=<?php echo $levelID; ?>&aid=<?php echo $academicYearID; ?>&cid=<?php echo $centerID; ?>' target='_blank'> <button type="button" class="btn btn-primary pull-right form-control" style="margin-right: 5px;">
+                                    <a href='final_report_grade.php?action=getPDF&pid=<?php echo $programmeID; ?>&lid=<?php echo $levelID; ?>&aid=<?php echo $academicYearID; ?>&cid=<?php echo $centerID; ?>' target='_blank'> <button type="button" class="btn btn-primary pull-right form-control" style="margin-right: 5px;">
                                             <i class="fa fa-download"></i>Print Grade Report
                                         </button></a>
                                 </div>
                                 <div class="col-lg-3">
                                     <!-- <button class="btn btn-primary pull-right form-control" style="margin-right: 5px;" data-toggle="modal" data-target="#add_new_atype_modal"><i class="fa fa-download"></i>Print Report in PDF</button> -->
-                                    <a href='print_term_report_pdf.php?action=getPDF&pid=<?php echo $programmeID; ?>&lid=<?php echo $levelID; ?>&aid=<?php echo $academicYearID; ?>&cid=<?php echo $centerID; ?>' target='_blank'> <button type="button" class="btn btn-primary pull-right form-control" style="margin-right: 5px;">
+                                    <a href='print_final_exam_report.php?action=getPDF&pid=<?php echo $programmeID; ?>&lid=<?php echo $levelID; ?>&aid=<?php echo $academicYearID; ?>&cid=<?php echo $centerID; ?>' target='_blank'> <button type="button" class="btn btn-primary pull-right form-control" style="margin-right: 5px;">
                                             <i class="fa fa-download"></i>Print PDF Report
                                         </button></a>
                                 </div>

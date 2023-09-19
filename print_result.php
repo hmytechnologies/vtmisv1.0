@@ -171,17 +171,23 @@
                     <div class="col-lg-2">
                         <label for="FirstName">Term Name</label>
                         <select name="examCategoryID" class="form-control" id="examCategoryID">
-                            <?php
-                            $term = $db->getRows("exam_category", array('order by examCategoryID ASC'));
-                            if (!empty($term)) {
-                                echo "<option value=''>Please Select Here</option>";
-                                foreach ($term as $trm) {
-                                    $examCategory = $trm['examCategory'];
-                                    $examCategoryID = $trm['examCategoryID'];
-                                    echo "<option value='$examCategoryID'>$examCategory</option>";
+                                <?php
+                                // $term = $db->getRows("exam_category", array('order by examCategoryID ASC'));
+   
+                                $term =$db->getAllTerm();
+                                if (!empty($term)) {
+                                    echo "<option value=''>Please Select Here</option>";
+                                    foreach ($term as $trm) {
+                                        $examCategory = $trm['examCategory'];
+                                        $examCategoryID = $trm['examCategoryID'];
+                                        // Check if the examCategoryID is 1 or 2, and select it if true.
+                                      
+                                        echo "<option value='$examCategoryID' $selected>$examCategory</option>";
+                                    }
                                 }
-                            }
-                            ?>
+                                ?>
+                            </select>
+
                         </select>
                     </div>
 
@@ -276,9 +282,9 @@
 
                         <div class="row">
                             <div class="pull-right">
-                                <div class="col-lg-12">
+                                <!-- <div class="col-lg-12">
                                     <button class="btn btn-primary pull-right form-control" style="margin-right: 5px;" data-toggle="modal" data-target="#add_new_atype_modal"><i class="fa fa-download"></i>Print Report</button>
-                                </div>
+                                </div> -->
                             </div>
                         </div>
                         <!--End -->
@@ -352,13 +358,13 @@
 
                         <div class="row">
                                 <div class="col-lg-3">
-                                    <a href='print_term_score_report.php?action=getPDF&termID=<?php echo $examCategoryID; ?>&aid=<?php echo $academicYearID; ?>&cid=<?php echo $centerID; ?>&lid=<?php echo $levelID;?>&pid=<?php echo $programmeID; ?>' target='_blank'> <button type="button" class="btn btn-primary pull-right form-control" style="margin-right: 5px;">
+                                    <a href='term_grade.php?action=getPDF&termID=<?php echo $examCategoryID; ?>&aid=<?php echo $academicYearID; ?>&cid=<?php echo $centerID; ?>&lid=<?php echo $levelID;?>&pid=<?php echo $programmeID; ?>' target='_blank'> <button type="button" class="btn btn-primary pull-right form-control" style="margin-right: 5px;">
                                             <i class="fa fa-download"></i>Print Grade Report
                                         </button></a>
                                 </div>
                                 <div class="col-lg-3">
                                     <!-- <button class="btn btn-primary pull-right form-control" style="margin-right: 5px;" data-toggle="modal" data-target="#add_new_atype_modal"><i class="fa fa-download"></i>Print Report in PDF</button> -->
-                                    <a href='print_term_score_report.php?action=getPDF&termID=<?php echo $examCategoryID; ?>&aid=<?php echo $academicYearID; ?>&cid=<?php echo $centerID; ?>&lid=<?php echo $levelID;?>&pid=<?php echo $programmeID; ?>' target='_blank'> <button type="button" class="btn btn-primary pull-right form-control" style="margin-right: 5px;">
+                                    <a href='print_term_report.php?action=getPDF&termID=<?php echo $examCategoryID; ?>&aid=<?php echo $academicYearID; ?>&cid=<?php echo $centerID; ?>&lid=<?php echo $levelID;?>&pid=<?php echo $programmeID; ?>' target='_blank'> <button type="button" class="btn btn-primary pull-right form-control" style="margin-right: 5px;">
                                             <i class="fa fa-download"></i>Print PDF Report
                                         </button></a>
                                 </div>

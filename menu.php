@@ -101,7 +101,8 @@ $db = new DBHelper();
                     <!-- <li><a href="index3.php?sp=search_student_terms_result">Search Student Terms Result</a></li> -->
                     <li><a href="index3.php?sp=addresult">Final Exam Management</a></li>
                     <li><a href="index3.php?sp=term_marks">Term Result Management</a></li>
-                    <li><a href="index3.php?sp=internal_marks">Assessment Management</a></li>
+                    <li><a href="index3.php?sp=dropcourse">Drop Course</a></li>
+                    <!-- <li><a href="index3.php?sp=internal_marks">Assessment Management</a></li> -->
                     <li><a href="index3.php?sp=supp_special">Supp/Special Results</a></li>
                     <li><a href="index3.php?sp=publish">Publish Results</a></li>
                     <li><a href="index3.php?sp=approve_graduands">Approve Graduands</a></li>
