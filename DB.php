@@ -249,7 +249,7 @@ class DBHelper
         // old user information.... 
         $cnd['userID'] = $old['createdBy'];
         $cond['where'] = $cnd;
-        $cond['select'] = "username";
+        $cond['select '] = "username";
         $user = $this->getRows("users", $cond);
 
         $indcation = "($table) Created: { " . $user['username'] . " in " . date("D, d M Y H:i:s", strtotime($old['modifiedDate'])) . " }, <br>";
@@ -1140,6 +1140,35 @@ WHERE
         return $gradeOutput;
     }
 
+    public function getAllTerm()
+    {
+        $query = $this->conn->prepare("SELECT * FROM exam_category WHERE examCategoryID IN (:cat1,:cat2) ");
+        $query->execute(array(':cat1' => 1, ':cat2' => 2));
+        $data = array();
+        while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
+            $data[] = $row;
+        }
+        return $data;
+    }
+
+
+
+    public function dropCourse($programmeID, $academicYearID)
+    {
+        $query = $this->conn->prepare("SELECT DISTINCT course.courseName,final_result.courseID,finalResultID,examScore,examCategoryID,
+        final_result.examNumber,final_result.academicYearID,regNumber
+        FROM final_result
+        INNER JOIN course ON final_result.courseID = course.courseID
+        INNER JOIN exam_number ON final_result.examNumber = exam_number.examNumber
+        INNER JOIN programmes ON exam_number.programmeID = programmes.programmeID
+        WHERE final_result.academicYearID = :academic AND programmes.programmeID =:pro");
+        $query->execute(array(':pro' => $programmeID, ':academic' => $academicYearID));
+        $data = array();
+        while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
+            $data[] = $row;
+        }
+        return $data;
+    }
 
     public function getTermCategorySetting()
     {
@@ -4898,8 +4927,8 @@ WHERE
     public function getStudentNumber($academicYearID, $programmeLevelID, $progID)
     {
         try {
-            $query = $this->conn->prepare("SELECT COUNT(regNumber) as studentNumber FROM student_programme  where academicYearID=:acadID and programmeLevelID=:levelID and programmeID=:pid and currentStatus=:st");
-            $query->execute(array(':acadID' => $academicYearID, ':levelID' => $programmeLevelID, ':pid' => $progID, ':st' => 1));
+            $query = $this->conn->prepare("SELECT COUNT(regNumber) as studentNumber FROM student_programme  where academicYearID=:acadID and programmeLevelID=:levelID and programmeID=:pid ");
+            $query->execute(array(':acadID' => $academicYearID, ':levelID' => $programmeLevelID, ':pid' => $progID));
             $row = $query->fetch(PDO::FETCH_ASSOC);
             $number = $row['studentNumber'];
             return $number;
@@ -5072,20 +5101,47 @@ WHERE
         return $d;
     }
 
+    // private function system_logs($log_data)
+    // {
+    //     $file = "logs";
+    //     // create directory/folder uploads. 
+    //     if (!file_exists($file)) mkdir($file, 0777, true);
+
+    //     // user existence
+    //    /*  $cnd['userCode'] = $_SESSION['user_session'];
+    //     $cond['where'] = $cnd;
+    //     $cond['select'] = "roleCode";
+    //     $cond['return_type'] = "single";
+    //     $user = $this->getRows("userroles", $cond)['roleCode']; */
+    //     // end of find...
+    //     $file .= "/userlog";
+    //     file_put_contents($file . '.log', $log_data . "\n", FILE_APPEND);
+    // }
     private function system_logs($log_data)
     {
         $file = "logs";
-        // create directory/folder uploads. 
-        if (!file_exists($file)) mkdir($file, 0777, true);
-
+    
+        // create directory/folder uploads.
+        try {
+            if (!file_exists($file)) mkdir($file, 0777, true);
+        } catch (Exception $e) {
+            // Handle the permission denied error here.
+            // For example, you could log the error to a file or send an email notification.
+            echo $e->getMessage();
+            return;
+        }
+    
         // user existence
-       /*  $cnd['userCode'] = $_SESSION['user_session'];
+        /* $cnd['userCode'] = $_SESSION['user_session'];
         $cond['where'] = $cnd;
         $cond['select'] = "roleCode";
         $cond['return_type'] = "single";
         $user = $this->getRows("userroles", $cond)['roleCode']; */
         // end of find...
+    
         $file .= "/userlog";
         file_put_contents($file . '.log', $log_data . "\n", FILE_APPEND);
     }
+    
+    
 }

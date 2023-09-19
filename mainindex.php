@@ -486,6 +486,10 @@ $roleID=$_SESSION['roleID'];
         case 'register_course':
             include('register_course.php');
             break;
+            
+        case 'dropcourse':
+                include('coursedropping.php');
+                break;
 
 
         case 'supp_special':

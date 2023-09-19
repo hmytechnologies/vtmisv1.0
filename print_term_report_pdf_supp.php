@@ -91,7 +91,7 @@ if($_REQUEST['action']=="getPDF") {
     //Arial bold 15
     $pdf->Ln(35);
     $pdf->setFont('Arial', '', 14);
-    $pdf->Text(10, 53, 'Exam Results - '. $db->getData("programmes", "programmeName", "programmeID", $programmeID)."-".$db->getData("programme_level", "programmeLevel", "programmeLevelID", $levelID)." ". $db->getData("academic_year", "academicYear", "academicYearID", $academicYearID)."-Second Round");
+    $pdf->Text(10, 53, ' Supplement Exam Results - '. $db->getData("programmes", "programmeName", "programmeID", $programmeID)."-".$db->getData("programme_level", "programmeLevel", "programmeLevelID", $levelID)." ". $db->getData("academic_year", "academicYear", "academicYearID", $academicYearID)."-Second Round");
     $pdf->Line(10,55,280,55);
 
     $header = array('No', 'Exam Number','Name','Sex');

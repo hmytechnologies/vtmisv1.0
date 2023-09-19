@@ -9,7 +9,7 @@ if(isset($_REQUEST['action_type']) && !empty($_REQUEST['action_type'])){
         foreach($_POST['programme_level_id'] as $pID=>$programmeLevelID) {
             $userData = array(
                 'programmeID' => $_POST['programmeID'],
-                'courseID' => $_POST['courseID'],
+                 'courseID' => $_POST['courseID'],
                 'programmeLevelID' => $programmeLevelID,
                 'courseStatusID' => $_POST['courseStatusID'],
                 'courseStatus' => 1

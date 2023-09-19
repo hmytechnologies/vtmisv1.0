@@ -242,8 +242,10 @@ if ($instructorID) {
 
                                     // echo  $cpcourseID;
 
-                                    $studentNumber = $db->getStudentCourseSum($_SESSION['department_session'], $academicYearID, $programmeLevelID, $programmeID);
+                                //    echo $_SESSION['department_session'];
 
+                                    $studentNumber = $db->getStudentCourseSum($_SESSION['department_session'], $academicYearID, $programmeLevelID, $programmeID);
+                                    // $studentNumber = $db->getStudentNumber($academicYearID, $programmeLevelID, $programmeID);
                                     $addButton = '
                                 <div class="btn-group">
                                         <a href="index3.php?sp=add_term_marks&cid=' . $db->encrypt($cpcourseID) . '"class="fa fa-plus"></a>

@@ -69,8 +69,8 @@ if(!empty($_REQUEST['msg']))
 </div>
 <form name="" method="post" action="action_upload_exam_score.php" enctype="multipart/form-data">
 <input type="hidden" id="courseID" value="<?php echo $courseID;?>">
-<input type="hidden" id="semesterID" value="<?php echo $semesterSettingID;?>">
-<input type="hidden" id="batchID" value="<?php echo $batchID;?>">
+<!-- <input type="hidden" id="semesterID" value="<?php echo $semesterSettingID;?>"> -->
+<!-- <input type="hidden" id="batchID" value="<?php echo $batchID;?>"> -->
     <script type="text/javascript">
         $(document).ready(function () {
             $("#exam_date").datepicker({

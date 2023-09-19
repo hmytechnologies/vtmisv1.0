@@ -16,7 +16,7 @@ error_reporting (E_ALL | E_STRICT);
             $academicYearID = $_POST['academicYearID'];
             $courseID = $_POST['courseID'];
             $examDate = $_POST['examDate'];
-            $levelID = $_POST['levelID'];
+            // $levelID = $_POST['levelID'];
             $examCategoryID = $_POST['examCategoryID'];
 
             foreach($_POST['examNumber'] as $key=>$exNumber)
@@ -65,7 +65,7 @@ error_reporting (E_ALL | E_STRICT);
 
                     }
                 }
-            header("Location:index3.php?sp=add_score&cid=" . $db->encrypt($courseID) . "&sid=" . $db->encrypt($semesterID) . "=&bid=" . $db->encrypt($batchID) . "");
+            header("Location:index3.php?sp=add_score&cid=" . $db->encrypt($courseID) ."");
 
 
 
