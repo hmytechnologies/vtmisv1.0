@@ -110,7 +110,7 @@ $db = new DBHelper();
                             <div class="row">
                                 <div class="col-lg-4">
                                     <label for="FirstName">Center Name</label>
-                                    <input type="text" name="name"  class="form-control"  required />
+                                    <input type="text" name="name"  class="form-control"   />
                                 </div>
                                 <div class="col-lg-4">
                                     <label for="MiddleName">Center Short Code</label>
@@ -119,14 +119,14 @@ $db = new DBHelper();
 
                                 <div class="col-lg-4">
                                     <label for="LastName">Registration Number</label>
-                                    <input type="text" name="regNumber"  class="form-control"  required />
+                                    <input type="text" name="regNumber"  class="form-control"   />
                                 </div>
                             </div>
 
                             <div class="row">
                                 <div class="col-lg-3">
                                     <label for="Physical Address">Registration Type</label>
-                                    <select name="registrationTypeID" id="registrationTypeID" class="form-control" required>
+                                    <select name="registrationTypeID" id="registrationTypeID" class="form-control" >
 
                                         <option value="">Select Here</option>
                                         <?php
@@ -135,7 +135,7 @@ $db = new DBHelper();
                                         foreach($crt as $cr)
                                         {
                                             $centerTypeID=$cr['centerTypeID'];
-                                            $typeName=$cr['typeName'];
+                                           echo $typeName=$cr['typeName'];
                                             echo "<option value='$centerTypeID'>$typeName</option>";
                                         }
                                         ?>
@@ -144,7 +144,7 @@ $db = new DBHelper();
 
                                 <div class="col-lg-3">
                                     <label for="Physical Address">Accreditation Type</label>
-                                    <select name="accredidationTypeID" id="accredidationTypeID" class="form-control" required>
+                                    <select name="accredidationTypeID" id="accredidationTypeID" class="form-control" >
                                         <option value="">Select Here</option>
                                         <?php
                                         $cat=$db->getRows("center_accreditation_type",array('order_by ID ASC'));
@@ -160,7 +160,7 @@ $db = new DBHelper();
 
                                 <div class="col-lg-3">
                                     <label for="Physical Address">Ownership Type</label>
-                                    <select name="ownershipTypeID" id="ownershipTypeID" class="form-control" required>
+                                    <select name="ownershipTypeID" id="ownershipTypeID" class="form-control" >
                                         <option value="">Select Here</option>
                                         <?php
                                         $cot=$db->getRows("center_owner_type",array('order_by ID ASC'));
@@ -192,7 +192,7 @@ $db = new DBHelper();
                                 <div class="row">
                                 <div class="col-lg-3">
                                     <label for="Physical Address">Region</label>
-                                    <select name="regionID" id="regionID" class="form-control" required>
+                                    <select name="regionID" id="regionID" class="form-control" >
 
                                         <option value="">Select Here</option>
                                         <?php
@@ -212,7 +212,7 @@ $db = new DBHelper();
                                 <div class="col-lg-3">
                                     <label for="Physical Address">District</label>
 
-                                    <select name="districtID" id="districtID" class="form-control" required="">
+                                    <select name="districtID" id="districtID" class="form-control" >
 
                                         <option value="">--Select District--</option>
 
@@ -223,7 +223,7 @@ $db = new DBHelper();
                                 <div class="col-lg-3">
                                     <label for="Physical Address">Shehia</label>
 
-                                    <select name="shehiaID" id="shehiaID" class="form-control" required="">
+                                    <select name="shehiaID" id="shehiaID" class="form-control" >
 
                                         <option value="">--Select Shehia--</option>
 
@@ -233,7 +233,7 @@ $db = new DBHelper();
 
                                 <div class="col-lg-3">
                                     <label for="Physical Address">Physical Address</label>
-                                    <input type="text" name="physicalAddress"   class="form-control" required />
+                                    <input type="text" name="physicalAddress"   class="form-control"  />
                                 </div>
 
                             </div>
@@ -254,24 +254,24 @@ $db = new DBHelper();
 
                                 <div class="col-lg-3">
                                     <label for="Phone">Phone Number</label>
-                                    <input type="text" name="phoneNumber"  class="form-control" required>
+                                    <input type="text" name="phoneNumber"  class="form-control" >
                                 </div>
                             </div>
 
                             <div class="row">
                             <div class="col-lg-3">
                                 <label for="Phone">Contact Person</label>
-                                <input type="text" name="cperson"  class="form-control" required>
+                                <input type="text" name="cperson"  class="form-control" >
                             </div>
 
                                 <div class="col-lg-3">
                                     <label for="Phone">Contact Phone Number</label>
-                                    <input type="text" name="cphoneNumber"  class="form-control" required>
+                                    <input type="text" name="cphoneNumber"  class="form-control" >
                                 </div>
 
                                 <div class="col-lg-3">
                                     <label for="Phone">Contact Email Address</label>
-                                    <input type="text" name="cemail"  class="form-control" required>
+                                    <input type="text" name="cemail"  class="form-control" >
                                 </div>
                             </div>
 

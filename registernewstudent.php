@@ -84,16 +84,10 @@ if(!empty($_REQUEST['msg']))
       <div class="row">
 <div class="col-md-12">
 <div class="pull-right">
-<?php
-if($_SESSION['main_role_session']==7)
-{
 
-}
-else {
-    ?>
-    <a href='index3.php?sp=new_student'><span class="btn btn-success">Register New Student</span></a>
-    <?php
-}?>
+
+<a href='index3.php?sp=new_student'><span class="btn btn-success">Register New Student</span></a>
+
 </div>
  </div>
             <?php

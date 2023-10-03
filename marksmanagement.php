@@ -113,41 +113,41 @@ error_reporting(E_ALL | E_STRICT);
 
                                         if ($studentNumber == 0) {
                                             $addButton = '
-	<div class="btn-group">
-	     <i class="fa fa-plus" aria-hidden="true"></i>
-	</div>';
+                                                <div class="btn-group">
+                                                    <i class="fa fa-plus" aria-hidden="true"></i>
+                                                </div>';
 
                                             $excelButton = '
-	<div class="btn-group">
-        <i class="fa fa-file" aria-hidden="true"></i>
-	</div>';
+                                                    <div class="btn-group">
+                                                        <i class="fa fa-file" aria-hidden="true"></i>
+                                                    </div>';
 
                                             $viewButton = '
-	<div class="btn-group">
-        <i class="fa fa-eye" aria-hidden="true"></i>
-	</div>';
-                                        } else {
+                                                            <div class="btn-group">
+                                                                <i class="fa fa-eye" aria-hidden="true"></i>
+                                                            </div>';
+                                                        } else {
                                             $addButton = '
-    	<div class="btn-group">
-    	     <a href="index3.php?sp=add_score&cid=' . $db->encrypt($courseID) . '&acadID=' . $db->encrypt($academicYearID) . '&lvlID=' . $db->encrypt($programmeLevelID) . '&pid=' . $db->encrypt($programmeID) . '" class="glyphicon glyphicon-plus"></a>
-    	</div>';
+                                                        <div class="btn-group">
+                                                            <a href="index3.php?sp=add_score&cid=' . $db->encrypt($courseID) . '&acadID=' . $db->encrypt($academicYearID) . '&lvlID=' . $db->encrypt($programmeLevelID) . '&pid=' . $db->encrypt($programmeID) . '" class="glyphicon glyphicon-plus"></a>
+                                                        </div>';
 
                                             $excelButton = '
-    	<div class="btn-group">
-    	     <a href="index3.php?sp=import_score&cid=' . $db->encrypt($courseID) . '&acadID=' . $db->encrypt($academicYearID) . '&lvlID=' . $db->encrypt($programmeLevelID) . '&pid=' . $db->encrypt($programmeID) . '"class="glyphicon glyphicon-plus"></a>
-    	</div>';
+                                                    <div class="btn-group">
+                                                        <a href="index3.php?sp=import_score&cid=' . $db->encrypt($courseID) . '&acadID=' . $db->encrypt($academicYearID) . '&lvlID=' . $db->encrypt($programmeLevelID) . '&pid=' . $db->encrypt($programmeID) . '"class="glyphicon glyphicon-plus"></a>
+                                                    </div>';
 
                                             if ($boolExamStatus == true) {
                                                 $viewButton = '
-    	    <div class="btn-group">
-    	         <a href="index3.php?sp=view_score&cid=' . $db->encrypt($courseID) . '&acadID=' . $db->encrypt($academicYearID) . '&lvlID=' . $db->encrypt($programmeLevelID) . '&pid=' . $db->encrypt($programmeID) . '" class="glyphicon glyphicon-eye-open"></a>
-    	   </div>';
+                                                    <div class="btn-group">
+                                                        <a href="index3.php?sp=view_score&cid=' . $db->encrypt($courseID) . '&acadID=' . $db->encrypt($academicYearID) . '&lvlID=' . $db->encrypt($programmeLevelID) . '&pid=' . $db->encrypt($programmeID) . '" class="glyphicon glyphicon-eye-open"></a>
+                                                </div>';
                                             } else {
                                                 $viewButton = '
-        	<div class="btn-group">
-                <i class="fa fa-eye" aria-hidden="true"></i>
-        	</div>';
-                                            }
+                                                <div class="btn-group">
+                                                    <i class="fa fa-eye" aria-hidden="true"></i>
+                                                </div>';
+                                           }
                                         }
                                     ?>
 

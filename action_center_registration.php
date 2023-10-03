@@ -1,4 +1,4 @@
-academicYearID<?php
+<?php
 session_start();
 try {
 include 'DB.php';
@@ -40,6 +40,8 @@ if (isset($_REQUEST['action_type']) && !empty($_REQUEST['action_type'])) {
 
         // if no error occured, continue ....
         if (empty($errMSG)) {
+
+            // echo $_POST['registrationTypeID'];
             $userData = array(
                 'centerName' => $_POST['name'],
                 'regNumber'=>$_POST['regNumber'],

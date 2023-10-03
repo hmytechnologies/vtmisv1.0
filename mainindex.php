@@ -197,9 +197,9 @@ $roleID=$_SESSION['roleID'];
 
 
         case 'edit_student':
-            //include('edit_student.php');
+            include('edit_student.php');
             //include('registration_form.php');
-            include('student_registration.php');
+            ///include('student_registration.php');
             break;
 
             case 'generate_academic_advisor':
@@ -515,6 +515,10 @@ $roleID=$_SESSION['roleID'];
         case 'search_student_result':
             include('student_search_result.php');
             break;
+
+            // case 'field':
+            //     include('field_result.php');
+            //     break;
 
             case 'search_student_terms_result':
                 include('student_search_terms.php');

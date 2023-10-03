@@ -286,7 +286,7 @@ class DBHelper
             }
         } catch (PDOException $e) {
             echo $e->getMessage();
-        }echo "Getting Data Error: " . $ex->getMessage();echo "Getting Data Error: " . $ex->getMessage();
+        }echo "Getting Data Error: " . $e->getMessage();echo "Getting Data Error: " . $e->getMessage();
     }
 
     public function doMobileLogin($uname, $upass)
@@ -932,7 +932,7 @@ WHERE
 
     public function isFieldExist($table, $field, $field2)
     {
-        $query = $this->getRows($table, array('where' => array($field => $field2), 'order_by' => $field . ' ASC'));
+        $query = $this->getRows($table, array('where' => array($field => $field2), ' order_by' => $field . ' ASC'));
         if (!empty($query)) {
             return true;
         } else {
@@ -1750,7 +1750,7 @@ WHERE
     public function getcourseStudent($stdID,$exam_number,$academicYearID)
     {
        
-        $query = $this->conn->prepare("SELECT DISTINCT(courseCode) ,c.courseID,courseName,c.courseCategoryID,courseCategory,courseCode,units ,examScore from course_category  cc, course c,exam_number en, final_result fr where  fr.examNumber =en.examNumber AND c.courseID = fr.courseID and  en.regNumber=:studentID and en.examNumber =:exam_number and fr.academicYearID =:academicYearID and c.courseCategoryID  = cc.courseCategoryID ORDER BY courseCode ASC");
+        $query = $this->conn->prepare("SELECT DISTINCT(courseCode) ,c.courseID,courseName,c.courseCategoryID,courseCategory,courseCode,units ,examScore from course_category  cc, course c,exam_number en, final_result fr where  fr.examNumber =en.examNumber AND c.courseID = fr.courseID and  en.regNumber=:studentID and en.examNumber =:exam_number and fr.academicYearID =:academicYearID and c.courseCategoryID  = cc.courseCategoryID ORDER BY courseCode asc");
 
         $query->execute(array(':studentID' => $stdID,':exam_number' => $exam_number,':academicYearID' => $academicYearID,));
         $data = array();

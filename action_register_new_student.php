@@ -317,12 +317,12 @@ error_reporting (E_ALL | E_STRICT);
             $lname = trim(htmlentities(ucfirst($_POST['lname']),ENT_QUOTES));
             $gender=$_POST['gender'];
             $dob=$_POST['year']."-".$_POST['month']."-".$_POST['date'];
-            $oname=htmlentities($_POST['oname'],ENT_QUOTES);
+            // $oname=htmlentities($_POST['oname'],ENT_QUOTES);
             $placeOfBirth=htmlentities($_POST['placeOfBirth'],ENT_QUOTES);
             $mstatus=$_POST['mstatus'];
-            $citizenship=htmlentities($_POST['citizenship'],ENT_QUOTES);
+             $citizenship=$_POST['nationalID'];
             $address=htmlentities($_POST['address'],ENT_QUOTES);
-            $appemail=htmlentities($_POST['appemail'],ENT_QUOTES);
+            $appemail=htmlentities($_POST['email'],ENT_QUOTES);
             $phoneNumber=htmlentities($_POST['phoneNumber'],ENT_QUOTES);
             $districtID=$_POST['districtID'];
             $hosteller=$_POST['hosteller'];
@@ -339,8 +339,8 @@ error_reporting (E_ALL | E_STRICT);
 
             //academic information
             $academicYearID=$_POST['academicYearID'];
-            $mannerOfEntryID=$_POST['mannerOfEntryID'];
-            $batchID=$_POST['batchID'];
+            // $mannerOfEntryID=$_POST['mannerOfEntryID'];
+            // $batchID=$_POST['batchID'];
             $programmeID=$_POST['programmeID'];
             $admissionnumber=$_POST['admissionnumber'];
             $formfournumber=$_POST['formfournumber'];
@@ -353,9 +353,9 @@ error_reporting (E_ALL | E_STRICT);
             //Next of Kin
             $nextName=htmlentities($_POST['nextName'],ENT_QUOTES);
             $nextAddress=htmlentities($_POST['nextAddress'],ENT_QUOTES);
-            $nextPhoneNumber=htmlentities($_POST['nextPhoneNumber'],ENT_QUOTES);
+            $nextPhone=htmlentities($_POST['nextPhoneNumber'],ENT_QUOTES);
             $relationship=htmlentities($_POST['relationship'],ENT_QUOTES);
-            $nemail=$_POST['nemail'];
+            // $nemail=$_POST['nemail'];
             //Sponsor
             $sponsor=htmlentities($_POST['sponsor'],ENT_QUOTES);
             $sponsorname=htmlentities($_POST['sponsorname'],ENT_QUOTES);
@@ -367,33 +367,33 @@ error_reporting (E_ALL | E_STRICT);
                 'firstName'=>$fname,
                 'middleName'=>$mname,
                 'lastName'=>$lname,
-                'otherNames'=>$oname,
+                // 'otherNames'=>$oname,
                 'gender'=>$gender,
                 'dateOfBirth'=>$dob,
-                'districtID'=>$districtID,
+                // 'districtID'=>$districtID,
                 'placeOfBirth'=>$placeOfBirth,
                 'maritalStatus'=>$mstatus,
-                'citizenship'=>$citizenship,
+                // 'citizenship'=>$citizenship,
                 'physicalAddress'=>$address,
                 'phoneNumber' =>$phoneNumber,
                 'email'=>$appemail,
                 'nextOfKinName'=>$nextName,
-                'nextOfKinPhoneNumber'=>$nextPhoneNumber,
+                'nextOfkinPhoneNumber'=>$nextPhone,
                 'nextOfKinAddress'=>$nextAddress,
                 'relationship'=>$relationship,
-                'nextOfKinEmail'=>$_POST['nemail'],
+                // 'nextOfKinEmail'=>$_POST['nemail'],
                 'disabilityStatus'=>$disability,
                 'employmentStatus'=>$employed,
                 'sponsor'=>$sponsor,
-                'hosteller'=>$hosteller,
+                // 'hosteller'=>$hosteller,
                 'religion'=>$religion,
                 'academicYearID'=>$academicYearID,
                 'registrationNumber'=>strtoupper($regNumber),
-                'programmeID'=>$programmeID,
+                // 'programmeID'=>$programmeID,
                 'formFourIndexNumber'=>$formfournumber,
                 'admissionNumber'=>$admissionnumber,
-                'mannerEntryID'=>$mannerOfEntryID,
-                'batchID'=>$batchID,
+                // 'mannerEntryID'=>$mannerOfEntryID,
+                
                 'statusID'=>1
             );
             $condition=array("studentID"=>$studentID);

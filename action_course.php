@@ -34,7 +34,9 @@ if(isset($_REQUEST['action_type']) && !empty($_REQUEST['action_type'])){
             'courseTypeID'=>$_POST['courseTypeID'],
             'numberOfHours'=>$_POST['nhrs'],
             'departmentID'=>$_POST['department_id'],
-            'status'=>1
+            'status'=>1,
+            'courseCategoryID'=>$_POST['course_category']
+
         );
 
         $insert = $db->insert($tblName,$userData);
@@ -53,7 +55,8 @@ if(isset($_REQUEST['action_type']) && !empty($_REQUEST['action_type'])){
              'courseTypeID'=>$_POST['courseTypeID'],
              'numberOfHours'=>$_POST['nhrs'],
             'departmentID'=>$_POST['department_id'],
-            'status'=>$_POST['status']
+            'status'=>$_POST['status'],
+            'courseCategoryID'=>$_POST['course_category']
         );
             $condition = array('courseID' => $_POST['id']);
             $update = $db->update($tblName,$userData,$condition);
