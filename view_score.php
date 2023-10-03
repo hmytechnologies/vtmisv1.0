@@ -91,7 +91,20 @@ $db = new DBHelper();
                                 echo "<td>$examNumber</td>";
 
                                 $final_result = $db->decrypt($db->getFinalTermGrade($academicYearID, $courseID, $examNumber, 3));
+                                        $exam_category_marks = $db->getTermCategorySetting();
+                                        if (!empty($exam_category_marks)) {
+                                            foreach ($exam_category_marks as $gd) {
+                                                $mMark = $gd['mMark'];
+                                                $pMark = $gd['passMark'];
+                                                $wMark = $gd['wMark'];
+                                            }
+                                        }
 
+                                         $term1Score = $db->decrypt($db->getTermGrade($academicYearID, $courseID, $regNumber, 1));
+                                         $term2Score = $db->decrypt($db->getTermGrade($academicYearID, $courseID, $regNumber, 2));
+                                         $term1m = ($term1Score / $mMark) * $wMark;        
+                                         $finalm = ($final_result / 100) * 50;
+                                         $totalMarks = $term1m + $term2m + $finalm;
 
                                 /* $exam_category_marks = $db->getTermCategorySetting();
                         if (!empty($exam_category_marks)) {
@@ -106,9 +119,9 @@ $db = new DBHelper();
                         $term2m = ($term2 / $mMark) * $wMark; */
 
 
-                                echo "<td>" . $final_result . "</td>";
-                                echo "<td>" . $db->calculateTermGrade($final_result) . "</td>";
-                                echo "<td>" . $db->courseTermRemarks($final_result) . "</td>";
+                                echo "<td>" . $totalMarks . "</td>";
+                                echo "<td>" . $db->calculateTermGrade($totalMarks) . "</td>";
+                                echo "<td>" . $db->courseTermRemarks($totalMarks) . "</td>";
 
                               /*   $editButton = '
                                 <div class="btn-group">
@@ -202,7 +215,7 @@ $db = new DBHelper();
             <?php
             } else {
             ?>
-                <a href="index3.php?sp=addresult" class="btn btn-success form-control">Go Back</a>
+                <!-- <a href="index3.php?sp=addresult" class="btn btn-success form-control">Go Back</a> -->
             <?php
             }
             ?>

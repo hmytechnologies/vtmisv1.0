@@ -137,6 +137,19 @@ if(!empty($_REQUEST['msg']))
 </select></div>
 
 <div class="form-group">
+<label for="email">Course Category</label>
+<select name="course_category"  class="form-control">
+           <?php
+           $type = $db->getRows('course_category',array('order_by'=>'courseCategoryID DESC'));
+           if(!empty($type)){ $count = 0; foreach($type as $t){ $count++;
+            $courseCategory=$t['courseCategory'];
+            $courseCategoryID=$t['courseCategoryID'];
+           ?>
+           <option value="<?php echo $courseCategoryID;?>"><?php echo $courseCategory;?></option>
+           <?php }}?>
+</select></div>
+
+<div class="form-group">
 <label for="email">Course Units</label>
 <input type="number" id="units" name="units" step="any" placeholder="Course Units" class="form-control" />
 </div>

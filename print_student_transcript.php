@@ -7,7 +7,29 @@ if($_REQUEST['action']=="getPDF") {
          
         include 'DB.php';
         $db=new DBHelper(); 
-        
+
+
+                 $sumCoreMarks = 0;
+                 $countCoreSubjects = 0;
+                 
+                 $sumGeneralMarks = 0;
+                 $countGeneralSubjects = 0;
+ 
+                 // Initialize variables to track core and general subject data for the second set of data
+                 $sumCoreMarks2 = 0;
+                 $countCoreSubjects2 = 0;
+                 $sumGeneralMarks2 = 0;
+                 $countGeneralSubjects2 = 0;
+
+
+                 $sumCoreMarks3 = 0;
+                 $countCoreSubjects3 = 0;
+                 $sumGeneralMarks3 = 0;
+                 $countGeneralSubjects3 = 0;
+               
+
+
+
         $reg = $_POST['regNumber'];
         $studentPicture = $db->getRows('student',array('where'=>array('registrationNumber'=>$reg),' order_by'=>' studentID ASC'));
        if(!empty($studentPicture))
@@ -219,12 +241,8 @@ if($_REQUEST['action']=="getPDF") {
              //echo $selectedLevelsID ;
              $pdf->SetFont('Arial', 'B',8);  
              $countInner= (int) 0; 
-             if(  $countLevel == 1){
-                $sumCoreMarks = 0;
-                $countCoreSubjects = 0;
-                $sumGeneralMarks = 0;
-                $countGeneralSubjects = 0;
-
+             if($countLevel == 1){
+               
                 # code...
                 //$selectedLevelsID ;
                 $pdf->Ln(1);  
@@ -433,291 +451,168 @@ if($_REQUEST['action']=="getPDF") {
                 
              }
 
-            if($countLevel == 2)
-            {
-                // echo $academicYearName;
-
-               
-                $pageWidth = 297; // A4 width in mm
-                $pageHeight = 85; // A4 height in mm
-                $marginLeft = 10; // Left margin in mm
-                $marginRight = 10; // Right margin in mm
-
-                $sumCoreMarks = 0;
-                $countCoreSubjects = 0;
-                $sumGeneralMarks = 0;
-                $countGeneralSubjects = 0;
-
-
-
-                $sumCoreMarks2 = 0;
-                $countCoreSubjects2= 0;
-                $sumGeneralMarks2 = 0;
-                $countGeneralSubjects2 = 0;
+             if($countLevel == 2)
+             {
+                 // echo $academicYearName;
+ 
                 
-
-                if ($data == 1) {
-                   
-                   
+                 $pageWidth = 297; // A4 width in mm
+                 $pageHeight = 85; // A4 height in mm
+                 $marginLeft = 10; // Left margin in mm
+                 $marginRight = 10; // Right margin in mm
+ 
+                   // Initialize variables to track core and general subject data for the first set of data
+                 
+                 
+ 
+                 if ($data == 1) {
                     
-                    $pdf->SetFont('Arial', 'B', 8); // Set font to Arial, bold, size 10
-                  
-                    // Calculate the coordinates of the dividing line
-                    $divideX = $marginLeft + ($pageWidth - $marginLeft - $marginRight) / 2;
-                   
-                    $pdf->Rect($divideX, 73.1, 2, $pageHeight);
-                    $pdf->SetXY($marginLeft, 73); // Adjust the Y position as needed for centering
-                    $pdf->Cell($divideX - $marginLeft, 10,  $levelName .'  '.$academicYearName, 1, 0, 'C');
-                    $pdf->SetFont('Arial', 'B', 8);
-                    // Left half
-                    $pdf->SetXY($marginLeft, 83); // Adjust the Y position as needed for centering
-                    $pdf->Cell(20, 7, 'Code', 1, 0, 'C');
-                    $pdf->Cell(59.24, 7, 'Subjects', 1, 0, 'C');
-                    $pdf->Cell(59.24, 7, 'Average Performance', 1, 1, 'C');
-                    $pdf->Ln();
-
-                    $pdf->SetXY($marginLeft,90.2); // Adjust the Y position as needed for centering
-                    $pdf->Cell(20, 6, '', 1, 0, 'C');
-                    $pdf->Cell(59.24, 6, 'Core Subject', 1, 0, 'C');
-                    $pdf->Cell(59.24, 6, '', 1, 1, 'C');
-
-                    //echo $dx=($divideX - $marginLeft )/ 3;
-
-                     $examNumber= $db->getRows('exam_number',array('where'=>array('regNumber'=> $regNum,'academicYearID'=> $academicYearID),'order_by'=>'regNumber ASC'));
-                     if(is_array($examNumber) || is_object($examNumber) ){
-
-                     foreach ($examNumber as $number) {
-                         # code...
-                        
-                        $exam_nr =  $number['examNumber'];
-                        $programmeID =  $number['programmeID'];
-                        $regN =  $number['regNumber'];
-                     }
-
-                     $Std = $db->getcourseStudent($regN, $exam_nr ,$academicYearID);
-
-                    //  $sumCoreMarks = 0;
-                    //  $countCoreSubjects = 0;
+                    
                      
-                     foreach ($Std as $cs) 
-                    {
-                        # code...
+                     $pdf->SetFont('Arial', 'B', 8); // Set font to Arial, bold, size 10
+                   
+                     // Calculate the coordinates of the dividing line
+                     $divideX = $marginLeft + ($pageWidth - $marginLeft - $marginRight) / 2;
+                    
+                     $pdf->Rect($divideX, 73.1, 2, $pageHeight);
+                     $pdf->SetXY($marginLeft, 73); // Adjust the Y position as needed for centering
+                     $pdf->Cell($divideX - $marginLeft, 10,  $levelName .'  '.$academicYearName, 1, 0, 'C');
+                     $pdf->SetFont('Arial', 'B', 8);
+                     // Left half
+                     $pdf->SetXY($marginLeft, 83); // Adjust the Y position as needed for centering
+                     $pdf->Cell(20, 7, 'Code', 1, 0, 'C');
+                     $pdf->Cell(59.24, 7, 'Subjects', 1, 0, 'C');
+                     $pdf->Cell(59.24, 7, 'Average Performance', 1, 1, 'C');
+                     $pdf->Ln();
+ 
+                     $pdf->SetXY($marginLeft,90.2); // Adjust the Y position as needed for centering
+                     $pdf->Cell(20, 6, '', 1, 0, 'C');
+                     $pdf->Cell(59.24, 6, 'Core Subject', 1, 0, 'C');
+                     $pdf->Cell(59.24, 6, '', 1, 1, 'C');
+ 
+                     //echo $dx=($divideX - $marginLeft )/ 3;
+ 
+                      $examNumber= $db->getRows('exam_number',array('where'=>array('regNumber'=> $regNum,'academicYearID'=> $academicYearID),'order_by'=>'regNumber ASC'));
+                      if(is_array($examNumber) || is_object($examNumber) ){
+ 
+                      foreach ($examNumber as $number) {
+                          # code...
+                         
+                         $exam_nr =  $number['examNumber'];
+                         $programmeID =  $number['programmeID'];
+                         $regN =  $number['regNumber'];
+                      }
+ 
+                      $Std = $db->getcourseStudent($regN, $exam_nr ,$academicYearID);
+ 
+                     //  $sumCoreMarks = 0;
+                     //  $countCoreSubjects = 0;
                       
-    
-                        
-                        $examScore =  $cs['examScore'];
-                       $courseCode =  $cs['courseCode'];
-                      $courseID =  $cs['courseID'];  
-                     $courseName =  $cs['courseName'];  
-                       $courseTypeID=  $cs['courseCategoryID']; 
-                       $courseCategory=  $cs['courseCategory'];
-    
-                         $courseGrade = $db->getCourseCreditstudent($selectedLevelsID, $programmeID);
-                            $term1Score = $db->decrypt($db->getTermGrade($academicYearID, $courseID, $regN, 1));
-                            $term2Score = $db->decrypt($db->getTermGrade($academicYearID, $courseID, $regN, 2));
+                      foreach ($Std as $cs) 
+                     {
+                         # code...
+                       
+     
+                         
+                         $examScore =  $cs['examScore'];
+                        $courseCode =  $cs['courseCode'];
+                       $courseID =  $cs['courseID'];  
+                      $courseName =  $cs['courseName'];  
+                        $courseTypeID=  $cs['courseCategoryID']; 
+                        $courseCategory=  $cs['courseCategory'];
+     
+                          $courseGrade = $db->getCourseCreditstudent($selectedLevelsID, $programmeID);
+                             $term1Score = $db->decrypt($db->getTermGrade($academicYearID, $courseID, $regN, 1));
+                             $term2Score = $db->decrypt($db->getTermGrade($academicYearID, $courseID, $regN, 2));
                             $finalScore = $db->decrypt($db->getFinalTermGrade($academicYearID, $courseID,   $exam_nr , 3));
-                            $suppScore = $db->decrypt($db->getFinalTermGrade($academicYearID, $courseID,   $exam_nr , 5));
-                                    
-    
-                                 $exam_category_marks = $db->getTermCategorySetting();
-                          if (!empty($exam_category_marks))
-                           {
-                               foreach ($exam_category_marks as $gd)
-                                {
-                                   $mMark = $gd['mMark'];
-                                   $pMark = $gd['passMark'];
-                                  $wMark = $gd['wMark'];
-                                }
-                            }
-
-                            $term1m = ($term1Score / $mMark) * $wMark;
-                         $term2m = ($term2Score / $mMark) * $wMark;
+                             $suppScore = $db->decrypt($db->getFinalTermGrade($academicYearID, $courseID,   $exam_nr , 5));
+                                     
+     
+                                  $exam_category_marks = $db->getTermCategorySetting();
+                           if (!empty($exam_category_marks))
+                            {
+                                foreach ($exam_category_marks as $gd)
+                                 {
+                                    $mMark = $gd['mMark'];
+                                    $pMark = $gd['passMark'];
+                                   $wMark = $gd['wMark'];
+                                 }
+                             }
  
-                          $finalm1 = ($finalScore / 100) * 50;
-                         $tMarks = round($term1m + $term2m + $finalm1);
- 
-                          if ($tMarks>=35 && $tMarks<40 ) 
-                          {
-                             $addmarks=40-$tMarks;
-                          }
-                         else
-                         {
-                              $addmarks=0;
-                             
-                          }
-
-                          $finalScore = $finalScore + $addmarks;
-                         $finalm=$finalm1+$addmarks;
-                         $totalMarks = round($term1m + $term2m + $finalm);
-                         $grade = $db->calculateTermGrade($totalMarks);
- 
+                             $term1m = ($term1Score / $mMark) * $wMark;
+                          $term2m = ($term2Score / $mMark) * $wMark;
                           
-                         if($courseCategory=='Core Subjects'){
-                             
-                      
+ 
+                           $finalm1 = ($finalScore / 100) * 50;
+                           $tMarks = round($term1m + $term2m + $finalm1);
+  
+                           if ($tMarks>=35 && $tMarks<40 ) 
+                           {
+                              $addmarks=40-$tMarks;
+                           }
+                          else
+                          {
+                               $addmarks=0;
+                              
+                           }
+ 
+                           $finalScore = $finalScore + $addmarks;
+                          $finalm=$finalm1+$addmarks;
+ 
+                          if ($courseName =='Industrial Practical Training' ) {
+                            # code...
+                             $totalMarks = round($finalScore);
 
-                            $pdf->Cell(20, 7, $courseCode, 1, 0, 'C');
-                            $pdf->Cell(59.24, 7, $courseName, 1, 0, 'L');
-                            $pdf->Cell(59.24, 7, $grade, 1, 1, 'C');
-                            
-                            
-                                 // Add the total marks to the sum
-                                 $sumCoreMarks += $totalMarks;
-                                 // Increment the count of general subjects
+                        }else{
+                            $totalMarks = round($term1m + $term2m + $finalm);
+                        }
+
+ 
+                          $grade = $db->calculateTermGrade($totalMarks);
+  
+                           
+                          if($courseCategory=='Core Subjects'){
+ 
+ 
+                             if ($courseName =='Industrial Practical Training' ) {
+                                 # code...
                                  $countCoreSubjects++;
+     
+                             }else{
+                                 $sumCoreMarks += $totalMarks;
+                             }
+                              
+                             
  
-                            // $pdf->SetXY($marginLeft, 93); // Adjust the Y position as needed for centering
-                            // $pdf->Cell(20, 8, '', 1, 0, 'C');
-                            // $pdf->Cell(59, 8, 'Core Subject', 1, 0, 'C');
-                            // $pdf->Cell(59, 8, '', 1, 1, 'C');
-       
-                            
-                        }
-                        
- 
-                    }
-                }
-                    // echo "Sum of general subjects: " . $sumCoreMarks;
-
-                    $pdf->SetXY($marginLeft, 124); // Adjust the Y position as needed for centering
-                    $pdf->Cell(20, 6, '', 1, 0, 'C');
-                    $pdf->Cell(59.24, 6, 'General Subject', 1, 0, 'C');
-                    $pdf->Cell(59.24, 6, ' ', 1, 1, 'C');
-                    if(is_array($examNumber) || is_object($examNumber) ){
-
-                    foreach ($examNumber as $number) {
-                        # code...
-                       
-                       $exam_nr =  $number['examNumber'];
-                       $programmeID =  $number['programmeID'];
-                       $regN =  $number['regNumber'];
-                    }
-    
-                   $Std = $db->getcourseStudent($regN, $exam_nr ,$academicYearID);
-    
-
-                //    $sumGeneralMarks = 0;
-                //      $countGeneralSubjects = 0;
-                    
-                   foreach ($Std as $cs) 
-                   {
-                    $pdf->SetFont('Arial', 'B', 8); // Set font to Arial, bold, size 10
-
-                    $examScore =  $cs['examScore'];
-                    $courseCode =  $cs['courseCode'];
-                    $courseID =  $cs['courseID'];  
-                    $courseName =  $cs['courseName'];  
-                    $courseTypeID=  $cs['courseCategoryID']; 
-                    $courseCategory=  $cs['courseCategory'];
-
-                    $courseGrade = $db->getCourseCreditstudent($selectedLevelsID, $programmeID);
-                    $term1Score = $db->decrypt($db->getTermGrade($academicYearID, $courseID, $regN, 1));
-                    $term2Score = $db->decrypt($db->getTermGrade($academicYearID, $courseID, $regN, 2));
-                    $finalScore = $db->decrypt($db->getFinalTermGrade($academicYearID, $courseID,   $exam_nr , 3));
-                    $suppScore = $db->decrypt($db->getFinalTermGrade($academicYearID, $courseID,   $exam_nr , 5));
-
-
-                    $exam_category_marks = $db->getTermCategorySetting();
-                    if (!empty($exam_category_marks)) 
-                    {
-                         foreach ($exam_category_marks as $gd) {
-                             $mMark = $gd['mMark'];
-                             $pMark = $gd['passMark'];
-                            $wMark = $gd['wMark'];
+                             $pdf->Cell(20, 7, $courseCode, 1, 0, 'C');
+                             $pdf->Cell(59.24, 7, $courseName, 1, 0, 'L');
+                             $pdf->Cell(59.24, 7, $grade, 1, 1, 'C');
+                             
+                             
+                                  // Add the total marks to the sum
+                                 
+                                  // Increment the count of general subjects
+                                  
+  
+                             // $pdf->SetXY($marginLeft, 93); // Adjust the Y position as needed for centering
+                             // $pdf->Cell(20, 8, '', 1, 0, 'C');
+                             // $pdf->Cell(59, 8, 'Core Subject', 1, 0, 'C');
+                             // $pdf->Cell(59, 8, '', 1, 1, 'C');
+        
+                             
                          }
-                    }
-
-
-                    $term1m = ($term1Score / $mMark) * $wMark;
-                    $term2m = ($term2Score / $mMark) * $wMark;
-
-                     $finalm1 = ($finalScore / 100) * 50;
-                    $tMarks = round($term1m + $term2m + $finalm1);
-
-                     if ($tMarks>=35 && $tMarks<40 ) {
-                        $addmarks=40-$tMarks;
+                         
+  
                      }
-                    else
-                    {
-                         $addmarks=0;
-                        
-                     }
-
-
-                     $finalScore = $finalScore + $addmarks;
-                     $finalm=$finalm1+$addmarks;
-                     $totalMarks = round($term1m + $term2m + $finalm);
-
-                     
-                     $grade = $db->calculateTermGrade($totalMarks);
-               
-
-                     if($courseCategory=='General Subjects')
-                     {
-                        
-                        $pdf->Cell(20, 7, $courseCode, 1, 0, 'C');
-                        $pdf->Cell(59.24, 7, $courseName, 1, 0, 'L');
-                        $pdf->Cell(59.24, 7, $grade, 1, 1, 'C');
-
-
-                                // Add the total marks to the sum
-                                $sumGeneralMarks += $totalMarks;
-                                // Increment the count of general subjects
-                                $countGeneralSubjects++;
-
-
-
-
-                        // $pdf->SetXY($marginLeft, 93); // Adjust the Y position as needed for centering
-                        // $pdf->Cell(20, 8, '', 1, 0, 'C');
-                        // $pdf->Cell(59, 8, 'Core Subject', 1, 0, 'C');
-                        // $pdf->Cell(59, 8, '', 1, 1, 'C');
-   
-                        
-                    }
-
-
-                  
-
-
-                   }
-                }
-                //    echo "Sum of general subjects: " . $sumGeneralMarks;
-
-
-                }
-                else
-                {
-                    // echo $data;
-                    //echo $academicYearName;
-
-                    // $pdf->SetXY($divideX + 2, 99); // Adjust the Y position as needed for centering
-                    // $pdf->Cell(20, 6, '', 1, 0, 'C');
-                    // $pdf->Cell(58.25,6, 'General Subjects', 1, 0, 'C');
-                    // $pdf->Cell(58.25, 6, '', 1, 1, 'C');
-                    $pdf->SetFont('Arial', 'B', 8); // Set font to Arial, bold, size 10
-                    $pdf->SetXY($divideX + 2, 73.1); // Adjust the Y position as needed for centering
-                    $pdf->Cell($divideX - $marginLeft, 10,  $levelName .'  '.$academicYearName, 1, 0, 'C');
-                    // Left half
-                    $pdf->SetFont('Arial', 'B', 8); // Set font to Arial, bold, size 10
-                    $pdf->SetXY($divideX + 2, 83); // Adjust the Y position as needed for centering
-                    $pdf->Cell(20, 7, 'Code', 1, 0, 'C');
-                    $pdf->Cell(59.24, 7, 'Subjects', 1, 0, 'C');
-                    $pdf->Cell(59.24, 7, 'Average Performance', 1, 1, 'C');
-                    $pdf->Ln();
-                    $pdf->SetFont('Arial', 'B', 8); // Set font to Arial, bold, size 10
-                    $pdf->SetXY($divideX + 2, 90); // Adjust the Y position as needed for centering
-                    $pdf->Cell(20, 6, '', 1, 0, 'C');
-                    $pdf->Cell(59.24, 6, 'Core Subject', 1, 0, 'C');
-                    $pdf->Cell(59.24, 6, '', 1, 1, 'C');
-
-                    //echo $dx=($divideX - $marginLeft )/ 3;
-
-                     $examNumber= $db->getRows('exam_number',array('where'=>array('regNumber'=> $regNum,'academicYearID'=> $academicYearID),'order_by'=>'regNumber ASC'));
-                            // Set the width of each column in the table
-                  $columnWidths = array(20, 59.24, 59.24);
-                  if(is_array($examNumber) || is_object($examNumber) ){
-
+                 }
+                     // echo "Sum of general subjects: " . $sumCoreMarks;
+ 
+                     $pdf->SetXY($marginLeft, 124); // Adjust the Y position as needed for centering
+                     $pdf->Cell(20, 6, '', 1, 0, 'C');
+                     $pdf->Cell(59.24, 6, 'General Subject', 1, 0, 'C');
+                     $pdf->Cell(59.24, 6, ' ', 1, 1, 'C');
+                     if(is_array($examNumber) || is_object($examNumber) ){
+ 
                      foreach ($examNumber as $number) {
                          # code...
                         
@@ -725,205 +620,374 @@ if($_REQUEST['action']=="getPDF") {
                         $programmeID =  $number['programmeID'];
                         $regN =  $number['regNumber'];
                      }
-
-                     $Std = $db->getcourseStudent($regN, $exam_nr ,$academicYearID);
-
-
-                    //  $sumCoreMarks2 = 0;
-                    //  $countCoreSubjects2 = 0;
-                     foreach ($Std as $cs) 
+     
+                    $Std = $db->getcourseStudent($regN, $exam_nr ,$academicYearID);
+     
+ 
+                 //    $sumGeneralMarks = 0;
+                 //      $countGeneralSubjects = 0;
+                     
+                    foreach ($Std as $cs) 
                     {
-                        # code...
-                      
-    
-                        
-                        $examScore =  $cs['examScore'];
-                       $courseCode =  $cs['courseCode'];
-                      $courseID =  $cs['courseID'];  
+                     $pdf->SetFont('Arial', 'B', 8); // Set font to Arial, bold, size 10
+ 
+                     $examScore =  $cs['examScore'];
+                     $courseCode =  $cs['courseCode'];
+                     $courseID =  $cs['courseID'];  
                      $courseName =  $cs['courseName'];  
-                       $courseTypeID=  $cs['courseCategoryID']; 
-                       $courseCategory=  $cs['courseCategory'];
-    
-                         $courseGrade = $db->getCourseCreditstudent($selectedLevelsID, $programmeID);
-                            $term1Score = $db->decrypt($db->getTermGrade($academicYearID, $courseID, $regN, 1));
-                            $term2Score = $db->decrypt($db->getTermGrade($academicYearID, $courseID, $regN, 2));
-                            $finalScore = $db->decrypt($db->getFinalTermGrade($academicYearID, $courseID,   $exam_nr , 3));
-                            $suppScore = $db->decrypt($db->getFinalTermGrade($academicYearID, $courseID,   $exam_nr , 5));
-                                    
-    
-                                 $exam_category_marks = $db->getTermCategorySetting();
-                          if (!empty($exam_category_marks))
-                           {
-                               foreach ($exam_category_marks as $gd)
-                                {
-                                   $mMark = $gd['mMark'];
-                                   $pMark = $gd['passMark'];
-                                  $wMark = $gd['wMark'];
-                                }
-                            }
-
-                            $term1m = ($term1Score / $mMark) * $wMark;
-                         $term2m = ($term2Score / $mMark) * $wMark;
+                     $courseTypeID=  $cs['courseCategoryID']; 
+                     $courseCategory=  $cs['courseCategory'];
  
-                          $finalm1 = ($finalScore / 100) * 50;
-                         $tMarks = round($term1m + $term2m + $finalm1);
+                     $courseGrade = $db->getCourseCreditstudent($selectedLevelsID, $programmeID);
+                     $term1Score = $db->decrypt($db->getTermGrade($academicYearID, $courseID, $regN, 1));
+                     $term2Score = $db->decrypt($db->getTermGrade($academicYearID, $courseID, $regN, 2));
+                     $finalScore = $db->decrypt($db->getFinalTermGrade($academicYearID, $courseID,   $exam_nr , 3));
+                     $suppScore = $db->decrypt($db->getFinalTermGrade($academicYearID, $courseID,   $exam_nr , 5));
  
-                          if ($tMarks>=35 && $tMarks<40 ) 
-                          {
-                             $addmarks=40-$tMarks;
+ 
+                     $exam_category_marks = $db->getTermCategorySetting();
+                     if (!empty($exam_category_marks)) 
+                     {
+                          foreach ($exam_category_marks as $gd) {
+                              $mMark = $gd['mMark'];
+                              $pMark = $gd['passMark'];
+                             $wMark = $gd['wMark'];
                           }
-                         else
-                         {
-                              $addmarks=0;
-                             
-                          }
-
-                          $finalScore = $finalScore + $addmarks;
-                         $finalm=$finalm1+$addmarks;
-                         $totalMarks = round($term1m + $term2m + $finalm);
-                         $grade = $db->calculateTermGrade($totalMarks);
+                     }
+ 
+ 
+                     $term1m = ($term1Score / $mMark) * $wMark;
+                     $term2m = ($term2Score / $mMark) * $wMark;
+ 
+                       $finalm1 = ($finalScore / 100) * 50;
+ 
+                      
+                     $tMarks = round($term1m + $term2m + $finalm1);
+ 
+                      if ($tMarks>=35 && $tMarks<40 ) {
+                         $addmarks=40-$tMarks;
+                      }
+                     else
+                     {
+                          $addmarks=0;
+                         
+                      }
+ 
+ 
+                      $finalScore = $finalScore + $addmarks;
+                      $finalm=$finalm1+$addmarks;
+                     //  if ($courseName =='Industrial Practical Training' ) {
+                     //     # code...
+                     //     $totalMarks = round($finalScore);
+ 
+                     // }else{
+                     //     $totalMarks = round($term1m + $term2m + $finalm);
+                     // }
+                     $totalMarks = round($term1m + $term2m + $finalm);
+                      
+                      $grade = $db->calculateTermGrade($totalMarks);
+                
+ 
+                      if($courseCategory=='General Subjects')
+                      {
+                         
+                         $pdf->Cell(20, 7, $courseCode, 1, 0, 'C');
+                         $pdf->Cell(59.24, 7, $courseName, 1, 0, 'L');
+                         $pdf->Cell(59.24, 7, $grade, 1, 1, 'C');
+ 
+ 
+                                 // Add the total marks to the sum
+                                 $sumGeneralMarks += $totalMarks;
+                                 // Increment the count of general subjects
+                                 $countGeneralSubjects++;
+ 
+ 
+ 
+ 
+                         // $pdf->SetXY($marginLeft, 93); // Adjust the Y position as needed for centering
+                         // $pdf->Cell(20, 8, '', 1, 0, 'C');
+                         // $pdf->Cell(59, 8, 'Core Subject', 1, 0, 'C');
+                         // $pdf->Cell(59, 8, '', 1, 1, 'C');
+    
+                         
+                     }
+ 
+ 
+                   
+ 
+ 
+                    }
+                 }
+                 //    echo "Sum of general subjects: " . $sumGeneralMarks;
+ 
+ 
+                 }
+                 else
+                 {
+                     // echo $data;
+                     //echo $academicYearName;
+ 
+                     // $pdf->SetXY($divideX + 2, 99); // Adjust the Y position as needed for centering
+                     // $pdf->Cell(20, 6, '', 1, 0, 'C');
+                     // $pdf->Cell(58.25,6, 'General Subjects', 1, 0, 'C');
+                     // $pdf->Cell(58.25, 6, '', 1, 1, 'C');
+                     $pdf->SetFont('Arial', 'B', 8); // Set font to Arial, bold, size 10
+                     $pdf->SetXY($divideX + 2, 73.1); // Adjust the Y position as needed for centering
+                     $pdf->Cell($divideX - $marginLeft, 10,  $levelName .'  '.$academicYearName, 1, 0, 'C');
+                     // Left half
+                     $pdf->SetFont('Arial', 'B', 8); // Set font to Arial, bold, size 10
+                     $pdf->SetXY($divideX + 2, 83); // Adjust the Y position as needed for centering
+                     $pdf->Cell(20, 7, 'Code', 1, 0, 'C');
+                     $pdf->Cell(59.24, 7, 'Subjects', 1, 0, 'C');
+                     $pdf->Cell(59.24, 7, 'Average Performance', 1, 1, 'C');
+                     $pdf->Ln();
+                     $pdf->SetFont('Arial', 'B', 8); // Set font to Arial, bold, size 10
+                     $pdf->SetXY($divideX + 2, 90); // Adjust the Y position as needed for centering
+                     $pdf->Cell(20, 6, '', 1, 0, 'C');
+                     $pdf->Cell(59.24, 6, 'Core Subject', 1, 0, 'C');
+                     $pdf->Cell(59.24, 6, '', 1, 1, 'C');
+ 
+                     //echo $dx=($divideX - $marginLeft )/ 3;
+ 
+                      $examNumber= $db->getRows('exam_number',array('where'=>array('regNumber'=> $regNum,'academicYearID'=> $academicYearID),'order_by'=>'regNumber ASC'));
+                             // Set the width of each column in the table
+                   $columnWidths = array(20, 59.24, 59.24);
+                   if(is_array($examNumber) || is_object($examNumber) ){
+ 
+                      foreach ($examNumber as $number) {
+                          # code...
+                         
+                         $exam_nr =  $number['examNumber'];
+                         $programmeID =  $number['programmeID'];
+                         $regN =  $number['regNumber'];
+                      }
+ 
+                      $Std = $db->getcourseStudent($regN, $exam_nr ,$academicYearID);
+ 
+ 
+                     //  $sumCoreMarks2 = 0;
+                     //  $countCoreSubjects2 = 0;
+                      foreach ($Std as $cs) 
+                     {
+                         # code...
+                       
+     
+                         
+                         $examScore =  $cs['examScore'];
+                        $courseCode =  $cs['courseCode'];
+                       $courseID =  $cs['courseID'];  
+                      $courseName =  $cs['courseName'];  
+                        $courseTypeID=  $cs['courseCategoryID']; 
+                        $courseCategory=  $cs['courseCategory'];
+     
+                          $courseGrade = $db->getCourseCreditstudent($selectedLevelsID, $programmeID);
+                             $term1Score = $db->decrypt($db->getTermGrade($academicYearID, $courseID, $regN, 1));
+                             $term2Score = $db->decrypt($db->getTermGrade($academicYearID, $courseID, $regN, 2));
+                             $finalScore = $db->decrypt($db->getFinalTermGrade($academicYearID, $courseID,   $exam_nr , 3));
+                             $suppScore = $db->decrypt($db->getFinalTermGrade($academicYearID, $courseID,   $exam_nr , 5));
+                                     
+     
+                                  $exam_category_marks = $db->getTermCategorySetting();
+                           if (!empty($exam_category_marks))
+                            {
+                                foreach ($exam_category_marks as $gd)
+                                 {
+                                    $mMark = $gd['mMark'];
+                                    $pMark = $gd['passMark'];
+                                   $wMark = $gd['wMark'];
+                                 }
+                             }
+ 
+                             $term1m = ($term1Score / $mMark) * $wMark;
+                          $term2m = ($term2Score / $mMark) * $wMark;
+  
+                        $finalm1 = ($finalScore / 100) * 50;
  
                           
-                         if($courseCategory=='Core Subjects'){
-                            $pdf->SetX(150.5); // Adjust the X position according to your desired location
-                            $pdf->Cell($columnWidths[0], 7, $courseCode, 1, 0, 'L');
-                            $pdf->Cell($columnWidths[1], 7, $courseName, 1, 0, 'L');
-                            $pdf->Cell($columnWidths[2], 7, $grade, 1, 1, 'C');
-
-                            $sumCoreMarks2 += $totalMarks;
-                            // Increment the count of general subjects
-                            $countCoreSubjects2++;
-    
-       
+                          $tMarks = round($term1m + $term2m + $finalm1);
+  
+                           if ($tMarks>=35 && $tMarks<40 ) 
+                           {
+                              $addmarks=40-$tMarks;
+                           }
+                          else
+                          {
+                               $addmarks=0;
+                              
+                           }
+ 
+                           $finalScore = $finalScore + $addmarks;
+                          $finalm=$finalm1+$addmarks;
+                          if ($courseName =='Industrial Practical Training' ) {
+                             # code...
+                             $totalMarks = round($finalScore);
+ 
+                         }else{
+                             $totalMarks = round($term1m + $term2m + $finalm);
+                         }
+ 
+                         
+                          $grade = $db->calculateTermGrade($totalMarks);
+  
+                           
+                          if($courseCategory=='Core Subjects'){
+ 
+                             if ($courseName =='Industrial Practical Training' ) {
+                                 # code...
+                                 $countCoreSubjects2++;
+                             }else{
+                                 $sumCoreMarks2 += $totalMarks;
+                             }
+                             $pdf->SetX(150.5); // Adjust the X position according to your desired location
+                             $pdf->Cell($columnWidths[0], 7, $courseCode, 1, 0, 'L');
+                             $pdf->Cell($columnWidths[1], 7, $courseName, 1, 0, 'L');
+                             $pdf->Cell($columnWidths[2], 7, $grade, 1, 1, 'C');
+ 
                             
-                        }
+                             // Increment the count of general subjects
+                            
+     
+        
+                             
+                         }
+                         
+  
+                     }
+                 }
+ 
+ 
+                     // echo "Sum of core subjects 2:   " . $sumCoreMarks2;
+                    
+                     $pdf->SetXY($divideX + 2, 123.8); // Adjust the Y position as needed for centering
+                     $pdf->Cell(20, 6, '', 1, 0, 'C');
+                     $pdf->Cell(59.24, 6, 'General Subject', 1, 0, 'C');
+                     $pdf->Cell(59.24, 6, ' ', 1, 1, 'C');
+                     if(is_array($examNumber) || is_object($examNumber) ){
+ 
+                     foreach ($examNumber as $number) {
+                         # code...
                         
+                        $exam_nr =  $number['examNumber'];
+                        $programmeID =  $number['programmeID'];
+                        $regN =  $number['regNumber'];
+                     }
+     
+                    $Std = $db->getcourseStudent($regN, $exam_nr ,$academicYearID);
+     
+ 
+                 //    $sumCoreMarks2 = 0;
+                 //      $countCoreSubjects2 = 0;
+                    foreach ($Std as $cs) 
+                    {
+ 
+                     $examScore =  $cs['examScore'];
+                     $courseCode =  $cs['courseCode'];
+                     $courseID =  $cs['courseID'];  
+                     $courseName =  $cs['courseName'];  
+                     $courseTypeID=  $cs['courseCategoryID']; 
+                     $courseCategory=  $cs['courseCategory'];
+ 
+                     $courseGrade = $db->getCourseCreditstudent($selectedLevelsID, $programmeID);
+                     $term1Score = $db->decrypt($db->getTermGrade($academicYearID, $courseID, $regN, 1));
+                     $term2Score = $db->decrypt($db->getTermGrade($academicYearID, $courseID, $regN, 2));
+                     $finalScore = $db->decrypt($db->getFinalTermGrade($academicYearID, $courseID,   $exam_nr , 3));
+                     $suppScore = $db->decrypt($db->getFinalTermGrade($academicYearID, $courseID,   $exam_nr , 5));
+ 
+ 
+                     $exam_category_marks = $db->getTermCategorySetting();
+                     if (!empty($exam_category_marks)) 
+                     {
+                          foreach ($exam_category_marks as $gd) {
+                              $mMark = $gd['mMark'];
+                              $pMark = $gd['passMark'];
+                             $wMark = $gd['wMark'];
+                          }
+                     }
+ 
+ 
+                     $term1m = ($term1Score / $mMark) * $wMark;
+                     $term2m = ($term2Score / $mMark) * $wMark;
+ 
+                       $finalm1 = ($finalScore / 100) * 50;
+ 
+                    
+ 
+                     $tMarks = round($term1m + $term2m + $finalm1);
+ 
+                      if ($tMarks>=35 && $tMarks<40 ) {
+                         $addmarks=40-$tMarks;
+                      }
+                     else
+                     {
+                          $addmarks=0;
+                         
+                      }
+ 
+ 
+                      $finalScore = $finalScore + $addmarks;
+                      $finalm=$finalm1+$addmarks;
+                  
+                     $totalMarks = round($term1m + $term2m + $finalm);
+                      $grade = $db->calculateTermGrade($totalMarks);
+                      
+                     
+                      if($courseCategory=='General Subjects')
+                      {
+                         
+                         $pdf->SetX(150.5);
+                         $pdf->Cell(20, 7.05, $courseCode, 1, 0, 'L');
+                         $pdf->Cell(59.24, 7.05, $courseName, 1, 0, 'L');
+                         $pdf->Cell(59.24, 7.05, $grade, 1, 1, 'C');
+ 
+                       
+ 
+                         $sumGeneralMarks2 += $totalMarks;
+                         // Increment the count of general subjects
+                         $countGeneralSubjects2++;
+ 
+ 
+                         // $pdf->SetXY($marginLeft, 93); // Adjust the Y position as needed for centering
+                         // $pdf->Cell(20, 8, '', 1, 0, 'C');
+                         // $pdf->Cell(59, 8, 'Core Subject', 1, 0, 'C');
+                         // $pdf->Cell(59, 8, '', 1, 1, 'C');
+    
+                         
+                     }
+                     $sumCoreMarks3 = 0;
+                     $countCoreSubjects3 = 0;
+                     $sumGeneralMarks3 = 0;
+                     $countGeneralSubjects3 = 0;
+                   
  
                     }
-                }
+                 }
+                 //    echo "Sum of general subjects 2: " . $sumGeneralMarks2;
+               }
+ 
+            
+  // Calculate the average of core subjects
+ //  $averagePerformanceCore = ($sumCoreMarks2 + $sumCoreMarks) / 8;
+ //  echo "Average of core subjects: " . $averagePerformanceCore;
+ 
+ //  // Calculate the average of general subjects
+ //  $averagePerformanceGeneral = ($sumGeneralMarks2 + $sumGeneralMarks) / 8;
+ //  echo "Average of general subjects: " . $averagePerformanceGeneral;
+  // Calculate the average of core subjects separately for each set of data
+//   $averagePerformanceCore1 = ($sumCoreMark) ;
+//   $averagePerformanceCore2 = ($sumCoreMarks2 ) ;
 
-
-                    // echo "Sum of core subjects 2:   " . $sumCoreMarks2;
-                   
-                    $pdf->SetXY($divideX + 2, 123.8); // Adjust the Y position as needed for centering
-                    $pdf->Cell(20, 6, '', 1, 0, 'C');
-                    $pdf->Cell(59.24, 6, 'General Subject', 1, 0, 'C');
-                    $pdf->Cell(59.24, 6, ' ', 1, 1, 'C');
-                    if(is_array($examNumber) || is_object($examNumber) ){
-
-                    foreach ($examNumber as $number) {
-                        # code...
-                       
-                       $exam_nr =  $number['examNumber'];
-                       $programmeID =  $number['programmeID'];
-                       $regN =  $number['regNumber'];
-                    }
-    
-                   $Std = $db->getcourseStudent($regN, $exam_nr ,$academicYearID);
-    
-
-                //    $sumCoreMarks2 = 0;
-                //      $countCoreSubjects2 = 0;
-                   foreach ($Std as $cs) 
-                   {
-
-                    $examScore =  $cs['examScore'];
-                    $courseCode =  $cs['courseCode'];
-                    $courseID =  $cs['courseID'];  
-                    $courseName =  $cs['courseName'];  
-                    $courseTypeID=  $cs['courseCategoryID']; 
-                    $courseCategory=  $cs['courseCategory'];
-
-                    $courseGrade = $db->getCourseCreditstudent($selectedLevelsID, $programmeID);
-                    $term1Score = $db->decrypt($db->getTermGrade($academicYearID, $courseID, $regN, 1));
-                    $term2Score = $db->decrypt($db->getTermGrade($academicYearID, $courseID, $regN, 2));
-                    $finalScore = $db->decrypt($db->getFinalTermGrade($academicYearID, $courseID,   $exam_nr , 3));
-                    $suppScore = $db->decrypt($db->getFinalTermGrade($academicYearID, $courseID,   $exam_nr , 5));
-
-
-                    $exam_category_marks = $db->getTermCategorySetting();
-                    if (!empty($exam_category_marks)) 
-                    {
-                         foreach ($exam_category_marks as $gd) {
-                             $mMark = $gd['mMark'];
-                             $pMark = $gd['passMark'];
-                            $wMark = $gd['wMark'];
-                         }
-                    }
-
-
-                    $term1m = ($term1Score / $mMark) * $wMark;
-                    $term2m = ($term2Score / $mMark) * $wMark;
-
-                     $finalm1 = ($finalScore / 100) * 50;
-                    $tMarks = round($term1m + $term2m + $finalm1);
-
-                     if ($tMarks>=35 && $tMarks<40 ) {
-                        $addmarks=40-$tMarks;
-                     }
-                    else
-                    {
-                         $addmarks=0;
-                        
-                     }
-
-
-                     $finalScore = $finalScore + $addmarks;
-                     $finalm=$finalm1+$addmarks;
-                     $totalMarks = round($term1m + $term2m + $finalm);
-                     $grade = $db->calculateTermGrade($totalMarks);
-                     
-                    
-                     if($courseCategory=='General Subjects')
-                     {
-                        
-                        $pdf->SetX(150.5);
-                        $pdf->Cell(20, 7.05, $courseCode, 1, 0, 'L');
-                        $pdf->Cell(59.24, 7.05, $courseName, 1, 0, 'L');
-                        $pdf->Cell(59.24, 7.05, $grade, 1, 1, 'C');
-
-                      
-
-                        $sumGeneralMarks2 += $totalMarks;
-                        // Increment the count of general subjects
-                        $countGeneralSubjects2++;
-
-
-                        // $pdf->SetXY($marginLeft, 93); // Adjust the Y position as needed for centering
-                        // $pdf->Cell(20, 8, '', 1, 0, 'C');
-                        // $pdf->Cell(59, 8, 'Core Subject', 1, 0, 'C');
-                        // $pdf->Cell(59, 8, '', 1, 1, 'C');
-   
-                        
-                    }
-
-
-                   }
-                }
-                //    echo "Sum of general subjects 2: " . $sumGeneralMarks2;
-              }
-
-           
- // Calculate the average of core subjects
-//  $averagePerformanceCore = ($sumCoreMarks2 + $sumCoreMarks) / 8;
-//  echo "Average of core subjects: " . $averagePerformanceCore;
-
-//  // Calculate the average of general subjects
-//  $averagePerformanceGeneral = ($sumGeneralMarks2 + $sumGeneralMarks) / 8;
-//  echo "Average of general subjects: " . $averagePerformanceGeneral;
-
-
-
-$averagePerformanceCore = ($sumCoreMarks2 + $sumCoreMarks) / 6;
-// echo "Average of core subjects: " . $averagePerformanceCore;
-
-// Calculate the average of general subjects
-$averagePerformanceGeneral = ($sumGeneralMarks2 + $sumGeneralMarks) / 8;
-// echo "Average of general subjects: " . $averagePerformanceGeneral;
-
-
-               
-         }
+ 
+ 
+ $averagePerformanceCore = ($sumCoreMarks2 + $sumCoreMarks) / 6 ;
+ // echo "Average of core subjects: " . $averagePerformanceCore;
+ 
+ // Calculate the average of general subjects
+ $averagePerformanceGeneral = ($sumGeneralMarks2 + $sumGeneralMarks) / 8;
+ // echo "Average of general subjects: " . $averagePerformanceGeneral;
+ 
+ 
+                
+          }
  
 
  
@@ -938,23 +1002,8 @@ $averagePerformanceGeneral = ($sumGeneralMarks2 + $sumGeneralMarks) / 8;
                 $marginLeft = 10; // Left margin in mm
                 $marginRight = 10; // Right margin in mm
                 
-                $sumCoreMarks = 0;
-                $countCoreSubjects = 0;
-                $sumGeneralMarks = 0;
-                $countGeneralSubjects = 0;
-
-
-
-                $sumCoreMarks2 = 0;
-                $countCoreSubjects2= 0;
-                $sumGeneralMarks2 = 0;
-                $countGeneralSubjects2 = 0;
-
                 
-              $sumCoreMarks3 = 0;
-              $countCoreSubjects3 = 0;
-              $sumGeneralMarks3 = 0;
-              $countGeneralSubjects3 = 0;
+                
             
 
 
@@ -1044,7 +1093,10 @@ $averagePerformanceGeneral = ($sumGeneralMarks2 + $sumGeneralMarks) / 8;
                             $term1m = ($term1Score / $mMark) * $wMark;
                          $term2m = ($term2Score / $mMark) * $wMark;
  
-                          $finalm1 = ($finalScore / 100) * 50;
+                       $finalm1 = ($finalScore / 100) * 50;
+
+                      
+
                          $tMarks = round($term1m + $term2m + $finalm1);
  
                           if ($tMarks>=35 && $tMarks<40 ) 
@@ -1059,7 +1111,15 @@ $averagePerformanceGeneral = ($sumGeneralMarks2 + $sumGeneralMarks) / 8;
 
                           $finalScore = $finalScore + $addmarks;
                          $finalm=$finalm1+$addmarks;
-                         $totalMarks = round($term1m + $term2m + $finalm);
+
+                         if ($courseName =='Industrial Practical Training' ) {
+                            # code...
+                             $totalMarks = round($finalScore);
+
+                        }else{
+                            $totalMarks = round($term1m + $term2m + $finalm);
+                        }
+
                          $grade = $db->calculateTermGrade($totalMarks);
  
                           
@@ -1150,7 +1210,9 @@ $averagePerformanceGeneral = ($sumGeneralMarks2 + $sumGeneralMarks) / 8;
                             $term1m = ($term1Score / $mMark) * $wMark;
                          $term2m = ($term2Score / $mMark) * $wMark;
  
-                          $finalm1 = ($finalScore / 100) * 50;
+                       $finalm1 = ($finalScore / 100) * 50;
+
+                       
                          $tMarks = round($term1m + $term2m + $finalm1);
  
                           if ($tMarks>=35 && $tMarks<40 ) 
@@ -1165,7 +1227,9 @@ $averagePerformanceGeneral = ($sumGeneralMarks2 + $sumGeneralMarks) / 8;
 
                           $finalScore = $finalScore + $addmarks;
                          $finalm=$finalm1+$addmarks;
-                         $totalMarks = round($term1m + $term2m + $finalm);
+
+
+                        $totalMarks = round($term1m + $term2m + $finalm);
                          $grade = $db->calculateTermGrade($totalMarks);
  
                           
@@ -1263,7 +1327,9 @@ $averagePerformanceGeneral = ($sumGeneralMarks2 + $sumGeneralMarks) / 8;
                              $term1m = ($term1Score / $mMark) * $wMark;
                           $term2m = ($term2Score / $mMark) * $wMark;
   
-                           $finalm1 = ($finalScore / 100) * 50;
+                            $finalm1 = ($finalScore / 100) * 50;
+
+                        
                           $tMarks = round($term1m + $term2m + $finalm1);
   
                            if ($tMarks>=35 && $tMarks<40 ) 
@@ -1278,7 +1344,14 @@ $averagePerformanceGeneral = ($sumGeneralMarks2 + $sumGeneralMarks) / 8;
  
                            $finalScore = $finalScore + $addmarks;
                           $finalm=$finalm1+$addmarks;
-                          $totalMarks = round($term1m + $term2m + $finalm);
+
+                          if ($coursName =='Industrial Practical Training' ) {
+                            # code...
+                            $totalMarks = round($finalScore);
+
+                        }else{
+                            $totalMarks = round($term1m + $term2m + $finalm);
+                        }
                           $grade = $db->calculateTermGrade($totalMarks);
   
                            
@@ -1365,6 +1438,10 @@ $averagePerformanceGeneral = ($sumGeneralMarks2 + $sumGeneralMarks) / 8;
                           $term2m = ($term2Score / $mMark) * $wMark;
   
                            $finalm1 = ($finalScore / 100) * 50;
+
+
+                     
+
                           $tMarks = round($term1m + $term2m + $finalm1);
   
                            if ($tMarks>=35 && $tMarks<40 ) 
@@ -1379,7 +1456,9 @@ $averagePerformanceGeneral = ($sumGeneralMarks2 + $sumGeneralMarks) / 8;
  
                            $finalScore = $finalScore + $addmarks;
                           $finalm=$finalm1+$addmarks;
-                          $totalMarks = round($term1m + $term2m + $finalm);
+                     
+                            $totalMarks = round($term1m + $term2m + $finalm);
+                       
                           $grade = $db->calculateTermGrade($totalMarks);
   
                           
@@ -1487,6 +1566,9 @@ $averagePerformanceGeneral = ($sumGeneralMarks2 + $sumGeneralMarks) / 8;
                           $term2m = ($term2Score / $mMark) * $wMark;
   
                            $finalm1 = ($finalScore / 100) * 50;
+
+                        
+                        
                           $tMarks = round($term1m + $term2m + $finalm1);
   
                            if ($tMarks>=35 && $tMarks<40 ) 
@@ -1501,7 +1583,15 @@ $averagePerformanceGeneral = ($sumGeneralMarks2 + $sumGeneralMarks) / 8;
  
                            $finalScore = $finalScore + $addmarks;
                           $finalm=$finalm1+$addmarks;
-                          $totalMarks = round($term1m + $term2m + $finalm);
+                         
+                          if ($courseName =='Industrial Practical Training' ) {
+                            # code...
+                            $totalMarks = round($finalScore);
+
+                        }else{
+                            $totalMarks = round($term1m + $term2m + $finalm);
+                        }
+
                           $grade = $db->calculateTermGrade($totalMarks);
   
                            
@@ -1622,7 +1712,12 @@ $averagePerformanceGeneral = ($sumGeneralMarks2 + $sumGeneralMarks) / 8;
  
                            $finalScore = $finalScore + $addmarks;
                           $finalm=$finalm1+$addmarks;
+
+                          
                           $totalMarks = round($term1m + $term2m + $finalm);
+
+                       
+                       
                           $grade = $db->calculateTermGrade($totalMarks);
   
                            
@@ -1692,12 +1787,12 @@ $averagePerformanceGeneral = ($sumGeneralMarks2 + $sumGeneralMarks) / 8;
             }
 
 
-  $averagePerformanceCore; 
-  $averagePerformanceGeneral;
+//   $averagePerformanceCore; 
+//   $averagePerformanceGeneral;
 
  $Coregrade = $db->calculateTermGrade($averagePerformanceCore);
 
- $Generalgrade = $db->calculateTermGrade($averagePerformanceGeneral);
+  $Generalgrade = $db->calculateTermGrade($averagePerformanceGeneral);
 
            if ( $countLevel == 2)
             {

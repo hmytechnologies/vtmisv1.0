@@ -102,6 +102,23 @@ else
 </select>
 
 </div>
+
+<div class="form-group">
+<label for="email">Course Category</label>
+<select name="course_category"  class="form-control">
+
+<option 
+value='<?php echo $db->getData('course_category','courseCategoryID','courseCategoryID',$userData['courseCategoryID']);?>'>
+      <?php echo $db->getData('course_category','courseCategory','courseCategoryID',$userData['courseCategoryID']);?></option>
+           <?php
+           $type = $db->getRows('course_category',array('order_by'=>'courseCategoryID DESC'));
+           if(!empty($type)){ $count = 0; foreach($type as $t){ $count++;
+            $courseCategory=$t['courseCategory'];
+            $courseCategoryID=$t['courseCategoryID'];
+           ?>
+           <option value="<?php echo $courseCategoryID;?>"><?php echo $courseCategory;?></option>
+           <?php }}?>
+</select></div>
     
 <div class="form-group">
 <label for="email">Course Status</label>

@@ -277,7 +277,18 @@
                                                     $term1m = ($term1Score / $mMark) * $wMark;
                                                     $term2m = ($term2Score / $mMark) * $wMark;
 
-                                                    $final = ($finalScore / 100) * 50;
+
+                                                    if ($coursename =='Industrial Practical Training' ) {
+                                                        # code...
+                                                        $final = round($finalScore);
+
+                                                    } else {
+                                                        # code...
+                                                        $final = ($finalScore / 100) * 50;
+                                                    }
+                                                    
+                                                    // $final = ($finalScore / 100) * 50;
+                                                    
                                                     $tMarks = round($term1m + $term2m + $final);
                                                     $totalTearmMarks = $db-> calculateTermTotal($term1m, $term2m);
                                                     // $term1m +  $term2m );

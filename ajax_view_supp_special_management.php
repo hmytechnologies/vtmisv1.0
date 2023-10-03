@@ -26,7 +26,7 @@ session_start();
 
 
 
-                   $courseprogramme= $db->getRows('center_programme_course',array('where'=>array('academicYearID'=>$academicYearID),' order_by'=>' academicYearID ASC'));
+                $courseprogramme= $db->getRows('center_programme_course',array('where'=>array('academicYearID'=>$academicYearID),' order_by'=>' academicYearID ASC'));
                     if(!empty($courseprogramme))
                     {
                         $count = 0;
@@ -88,7 +88,7 @@ session_start();
 
                                         //getstudentresult
                                         // $student=$db->getStudentSuppSpecialRegNumber($courseID,$semesterSettingID);
-                                       echo $student=$db->getRows('student',array('where'=>array('academicYearID'=>$academicYearID),'order_by'=>' registrationNumber ASC'));
+                                       $student=$db->getRows('student',array('where'=>array('academicYearID'=>$academicYearID),'order_by'=>' registrationNumber ASC'));
                                         if(!empty($student))
                                         {
                                             $studentNo=0;
