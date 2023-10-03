@@ -150,7 +150,7 @@ if(!empty($student))
         $lname=$std['lastName'];
         $gender=$std['gender'];
         $dob=$std['dateOfBirth'];
-      echo  $martialStatus=$std['maritalStatus'];
+        $martialStatus=$std['maritalStatus'];
         $employmentStatus=$std['employmentStatus'];
         $shehiaID=$std['shehiaID'];
         $religion=$std['religion'];
@@ -630,9 +630,11 @@ if(!empty($student))
                                             <label for="Physical Address">Center Name</label>
                                             <select name="centerID" id="centerIDD"  class="form-control" required>
                                                 <!-- <option value="">Select Here</option> -->
+                                                <option value="<?php echo $centerID;?>"selected>
+                                                <?php echo $db->getData("center_registration","centerName","centerRegistrationID",$centerID);?></option>
                                                 <?php
 
-                                                    $center = $db->getRows('center_registration',array('where'=>array('centerRegistrationID'=>$centerID),'order_by'=>'centerName ASC'));
+                                                    $center = $db->getRows('center_registration',array('order_by'=>'centerName ASC'));
                                                 if(!empty($center)){
 
                                                     $count = 0; foreach($center as $cnt){ $count++;
