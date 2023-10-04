@@ -5117,31 +5117,52 @@ WHERE
     //     $file .= "/userlog";
     //     file_put_contents($file . '.log', $log_data . "\n", FILE_APPEND);
     // }
-    private function system_logs($log_data)
-    {
-        $file = "logs";
+    // private function system_logs($log_data)
+    // {
+    //     $file = "logs";
     
-        // create directory/folder uploads.
+    //     // create directory/folder uploads.
+    //     try {
+    //         if (!file_exists($file)) mkdir($file, 0777, true);
+    //     } catch (Exception $e) {
+            
+    //         echo $e->getMessage();
+    //         return;
+    //     }
+    
+    //     // user existence
+    //     /* $cnd['userCode'] = $_SESSION['user_session'];
+    //     $cond['where'] = $cnd;
+    //     $cond['select'] = "roleCode";
+    //     $cond['return_type'] = "single";
+    //     $user = $this->getRows("userroles", $cond)['roleCode']; */
+    //     // end of find...
+    
+    //     $file .= "/userlog";
+    //     file_put_contents($file . '.log', $log_data . "\n", FILE_APPEND);
+    // }
+
+
+    private function system_logs($log_data)
+{
+    $logDir = __DIR__ . "/logs"; // Absolute path to the logs directory
+    
+    // Create the directory if it doesn't exist
+    if (!file_exists($logDir)) {
         try {
-            if (!file_exists($file)) mkdir($file, 0777, true);
+            mkdir($logDir, 0755, true); // Adjust permissions as needed
         } catch (Exception $e) {
-            // Handle the permission denied error here.
-            // For example, you could log the error to a file or send an email notification.
-            echo $e->getMessage();
+            // Log the error instead of echoing it
+            error_log("Error creating log directory: " . $e->getMessage());
             return;
         }
-    
-        // user existence
-        /* $cnd['userCode'] = $_SESSION['user_session'];
-        $cond['where'] = $cnd;
-        $cond['select'] = "roleCode";
-        $cond['return_type'] = "single";
-        $user = $this->getRows("userroles", $cond)['roleCode']; */
-        // end of find...
-    
-        $file .= "/userlog";
-        file_put_contents($file . '.log', $log_data . "\n", FILE_APPEND);
     }
+    
+    // Log the data to the "userlog.log" file
+    $logFile = $logDir . "/userlog.log";
+    file_put_contents($logFile, $log_data . "\n", FILE_APPEND);
+}
+
     
     
 }

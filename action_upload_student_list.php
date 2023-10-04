@@ -1,7 +1,8 @@
 <?php
+ob_start();
 session_start();
-ini_set ('display_errors', 1);
-error_reporting (E_ALL | E_STRICT);
+ini_set('display_errors', 1);
+error_reporting(E_ALL | E_STRICT);
 try {
     include 'DB.php';
     $db = new DBHelper();
@@ -149,15 +150,11 @@ try {
                 }
             }
             
-          if($boolStatus)
-            {
+            if ($boolStatus) {
                 header("Location:index3.php?sp=rform&msg=succ");
-                // header("Location:index3.php?sp=upload_file&msg=succ");
-            }
-            else
-            {
+            } else {
                 header("Location:index3.php?sp=upload_file&msg=unsucc");
-            } 
+            }
             
         }
     }
@@ -165,3 +162,4 @@ try {
 } catch (PDOException $ex) {
     header("Location:index3.php?sp=upload_file&msg=error");
 } 
+ob_end_flush();
