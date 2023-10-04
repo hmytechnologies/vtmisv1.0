@@ -151,7 +151,8 @@ try {
             
           if($boolStatus)
             {
-                header("Location:index3.php?sp=upload_file&msg=succ");
+                header("Location:index3.php?sp=rform&msg=succ");
+                // header("Location:index3.php?sp=upload_file&msg=succ");
             }
             else
             {

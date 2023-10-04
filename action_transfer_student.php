@@ -13,7 +13,7 @@ if(isset($_REQUEST['action_type']) && !empty($_REQUEST['action_type'])){
         {
             $regNumber=$_POST['regNumber'][$key];
             $hosteller=$_POST['hosteller'][$key];
-            $centerID=$_POST['centerID'][$key];
+           echo  $centerID=$_POST['centerID'][$key];
 
                 $study_year= $db->getRows('student_programme',array('where'=>array('regNumber'=>$regNumber,'academicYearID'=>$academicYearID),' order_by'=>'regNumber ASC'));
                 if(empty($study_year))
@@ -53,6 +53,9 @@ if(isset($_REQUEST['action_type']) && !empty($_REQUEST['action_type'])){
         }
         $statusMsg = true;
         header("Location:index3.php?sp=transfer_student&msg=succ");
-    }
+    }else{
+
+
+     }
 }
 
