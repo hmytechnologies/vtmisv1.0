@@ -401,20 +401,20 @@ error_reporting (E_ALL | E_STRICT);
             $condition = array('studentID' =>  $_POST['studentID']);  
             $update = $db->update($tblStudent,$editData,$condition);
 
-               $center=$_POST['centerID'];
-            //    $programmeID=$_POST['programmeID'];
-                $student_programmeData=array(
-                    'regNumber'=>$regNumber,
-                    'centerID'=>$center,
-                    'programmeLevelID'=>$_POST['programmeLevelID'],
-                    'programmeID'=>$programmeID,
-                    'academicYearID'=>$academicYearID
+            //    $center=$_POST['centerID'];
+            // //    $programmeID=$_POST['programmeID'];
+            //     $student_programmeData=array(
+            //         'regNumber'=>$regNumber,
+            //         'centerID'=>$center,
+            //         'programmeLevelID'=>$_POST['programmeLevelID'],
+            //         'programmeID'=>$programmeID,
+            //         'academicYearID'=>$academicYearID
                     
                    
-                );
+            //     );
 
-                $datacondition=array("regNumber"=>$regNumber);
-                $insertacademic=$db->update("student_programme", $student_programmeData,$datacondition);
+            //     $datacondition=array("regNumber"=>$regNumber);
+            //     $insertacademic=$db->update("student_programme", $student_programmeData,$datacondition);
 
             if($disability=="Yes"){
                 $disabilityData=array(
