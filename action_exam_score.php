@@ -65,7 +65,8 @@ error_reporting (E_ALL | E_STRICT);
 
                     }
                 }
-            header("Location:index3.php?sp=add_score&cid=" . $db->encrypt($courseID) ."");
+            // header("Location:index3.php?sp=add_score&cid=" . $db->encrypt($courseID) ."");
+            header("Location:index3.php?sp=add_score");
 
 
 
