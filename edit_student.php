@@ -170,6 +170,7 @@ if(!empty($student))
         $sponsor=$std['sponsor'];
         
        $hosteller=$db->getData("student_hostel","hostelStatus","regNumber",$registrationNumber);
+       $studentProgrammeID=$db->getData('student_programme','studentProgrammeID','regNumber',$registrationNumber);
        $student_programme = $db->getRows('student_programme',array('where'=>array('regNumber'=>$registrationNumber),'order_by'=>'regNumber ASC'));
        foreach ($student_programme as $stp)
        {
@@ -814,6 +815,8 @@ if(!empty($student))
                          
 
                             <input type="hidden" name="studentID" value="<?php echo $id;?>">
+
+                            <input type="hidden" name="studentProgrammeID" value="<?php echo $studentProgrammeID;?>">
                             <input type="hidden" name="action_type" value="edit"/>
                             <div class="col-lg-3">
                             <input type="submit" name="doSubmit" value="Save Records" class="btn btn-success btn-block  form-control"">

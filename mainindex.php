@@ -698,6 +698,8 @@ $roleID=$_SESSION['roleID'];
             include('student_discount.php');
             break;
 
+            
+
 
         case 'waiver':
             include('waiver.php');
