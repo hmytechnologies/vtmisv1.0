@@ -37,7 +37,7 @@ if($_REQUEST['action']=="getPDF") {
         function SetCol($col)
         {
             // Set position at a given column
-            $this->col = $col;
+            $this->$col = $col;
             $x = 10 + $col * 65;
             $this->SetLeftMargin($x);
             $this->SetX($x);

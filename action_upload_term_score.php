@@ -65,16 +65,16 @@ if(isset($_REQUEST['action_type']) && !empty($_REQUEST['action_type'])){
         
         if($boolStatus)
         {
-            header("Location:index3.php?sp=import_term_score&cid=".$db->encrypt($courseID)."&sid=".$db->encrypt($semesterID)."&bid=".$db->encrypt($batchID)."&msg=succ");
+            header("Location:index3.php?sp=import_term_score&cid=".$db->encrypt($courseID)."&sid=".$db->encrypt($semesterID)."&msg=succ");
         }
         else
         {
-            header("Location:index3.php?sp=import_term_score&cid=".$db->encrypt($courseID)."&sid=".$db->encrypt($semesterID)."&bid=".$db->encrypt($batchID)."&msg=unsucc");
+            header("Location:index3.php?sp=import_term_score&cid=".$db->encrypt($courseID)."&sid=".$db->encrypt($semesterID)."&msg=unsucc");
         }
         
     }
 }
 
  } catch (PDOException $ex) {
-     header("Location:index3.php?sp=import_term_score&cid=".$db->encrypt($courseID)."&sid=".$db->encrypt($semesterID)."&bid=".$db->encrypt($batchID)."&msg=error");
+     header("Location:index3.php?sp=import_term_score&cid=".$db->encrypt($courseID)."&sid=".$db->encrypt($semesterID)."&msg=error");
  }

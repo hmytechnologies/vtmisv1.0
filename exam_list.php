@@ -124,8 +124,12 @@
                         </h4>
                     </div>
                     <div class="col-lg-3">
-                        <a href='print_exam_list.php?action=getPDF&cid=<?php echo $centerID; ?>&lid=<?php echo $programmeLevelID; ?>&ay=<?php echo $academicYearID; ?>' target='_blank'> <button type="button" class="btn btn-success pull-right form-control" style="margin-right: 5px;">
+                        <a href='print_exam_list.php?action=getPDF&cid=<?php echo $centerID; ?>&lid=<?php echo $programmeLevelID; ?>&ay=<?php echo $academicYearID; ?>' target='_blank'> <button type="button" class="btn btn-success pull-right form-control " style="margin-right: 5px; margin-bottom: 5px; ">
                                 <i class="fa fa-download"></i>Print Report
+                            </button></a>
+
+                            <a href='exam_dailyreport.php?action=getPDF&cid=<?php echo $centerID; ?>&lid=<?php echo $programmeLevelID; ?>&ay=<?php echo $academicYearID; ?>' target='_blank'> <button type="button" class="btn btn-success pull-right form-control" style="margin-right: 5px;">
+                                <i class="fa fa-download"></i>Print Exam Attendance
                             </button></a>
                     </div>
                 </div>

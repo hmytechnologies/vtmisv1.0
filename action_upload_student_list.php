@@ -1,5 +1,5 @@
 <?php
-ob_start();
+
 session_start();
 ini_set('display_errors', 1);
 error_reporting(E_ALL | E_STRICT);
@@ -162,4 +162,3 @@ try {
 } catch (PDOException $ex) {
     header("Location:index3.php?sp=upload_file&msg=error");
 } 
-ob_end_flush();
