@@ -66,12 +66,12 @@ if ($_REQUEST['action'] == "getPDF") {
     $levelName = $db->getData("programme_level", "programmeLevel", "programmeLevelID", $programmeLevelID);
     $academicYear = $db->getData("academic_year", "academicYear", "academicYearID", $academicYearID);
     
-    // Retrieve and display trade and student data
+  
     $header = array('No', 'Name', 'Sex', 'Exam Number', '', '', '', '', '', '', '');
     $trades = $db->getCenterTrade($centerID, $programmeLevelID, $academicYearID);
 
     if (!empty($trades)) {
-        // Create a new PDF instance
+     
         $pdf = new PDF('L'); // 'L' for landscape orientation
         $pdf->AliasNbPages();
         
@@ -89,7 +89,7 @@ if ($_REQUEST['action'] == "getPDF") {
             $pdf->Line(14, $pdf->GetY(), 288, $pdf->GetY());
             $pdf->SetFont('Arial', '', 11);
             $pdf->Cell(180, 6, "Trade Name: " . $programmeName, 0, 0, 'L');
-            $pdf->Ln(6);
+            $pdf->Ln(7);
             $student = $db->printCenterStudentExamNumber($centerID, $programmeLevelID, $programmeID, $academicYearID);
             if (!empty($student)) {
                 $pdf->SetFont('Arial', 'B', 11);
