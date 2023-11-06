@@ -128,8 +128,15 @@
                                 <i class="fa fa-download"></i>Print Report
                             </button></a>
 
-                            <a href='exam_dailyreport.php?action=getPDF&cid=<?php echo $centerID; ?>&lid=<?php echo $programmeLevelID; ?>&ay=<?php echo $academicYearID; ?>' target='_blank'> <button type="button" class="btn btn-success pull-right form-control" style="margin-right: 5px;">
+                            <a href='exam_dailyreport.php?action=getPDF&cid=<?php echo $centerID; ?>&lid=<?php echo $programmeLevelID; ?>&ay=<?php echo $academicYearID; ?>' target='_blank'> <button type="button" class="btn btn-success pull-right form-control" style="margin-right: 5px; margin-bottom: 5px; ">
                                 <i class="fa fa-download"></i>Print Exam Attendance
+                            </button></a>
+
+                            <a href='marking_sheet.php?action=getPDF&cid=<?php echo $centerID; ?>&lid=<?php echo $programmeLevelID; ?>&ay=<?php echo $academicYearID; ?>' target='_blank'> <button type="button" class="btn btn-success pull-right form-control" style="margin-right: 5px; margin-bottom: 5px; ">
+                                <i class="fa fa-download"></i>Print Marking Sheet
+                            </button></a>
+                            <a href='computer_application_sheet.php?action=getPDF&cid=<?php echo $centerID; ?>&lid=<?php echo $programmeLevelID; ?>&ay=<?php echo $academicYearID; ?>' target='_blank'> <button type="button" class="btn btn-success pull-right form-control" style="margin-right: 5px;">
+                                <i class="fa fa-download"></i>Print C/Application Sheet
                             </button></a>
                     </div>
                 </div>
