@@ -138,6 +138,11 @@
                             <a href='computer_application_sheet.php?action=getPDF&cid=<?php echo $centerID; ?>&lid=<?php echo $programmeLevelID; ?>&ay=<?php echo $academicYearID; ?>' target='_blank'> <button type="button" class="btn btn-success pull-right form-control" style="margin-right: 5px;">
                                 <i class="fa fa-download"></i>Print C/Application Sheet
                             </button></a>
+
+<!-- 
+                            <a href='new_transcript.php?action=getPDF&cid=<?php echo $centerID; ?>&lid=<?php echo $programmeLevelID; ?>&ay=<?php echo $academicYearID; ?>' target='_blank'> <button type="button" class="btn btn-success pull-right form-control" style="margin-right: 5px;">
+                                <i class="fa fa-download"></i>Transcript
+                            </button></a> -->
                     </div>
                 </div>
 

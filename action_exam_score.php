@@ -1,6 +1,8 @@
 <?php
 session_start();
 ini_set ('display_errors', 1);
+ini_set('display_errors', 1);
+ob_start(); // Start output buffering
 error_reporting (E_ALL | E_STRICT);
 //try {
     include 'DB.php';
@@ -65,12 +67,15 @@ error_reporting (E_ALL | E_STRICT);
 
                     }
                 }
-            // header("Location:index3.php?sp=add_score&cid=" . $db->encrypt($courseID) ."");
-            header("Location:index3.php?sp=add_score");
+             header("Location:index3.php?sp=add_score&cid=" . $db->encrypt($courseID) ."");
+            // header("Location:index3.php?sp=add_score');
 
 
-
-        } //sup
+            ob_end_flush();
+        } 
+        
+        
+        //sup
         /*else if ($_REQUEST['action_type'] == 'add_sup') {
             $number_student = $_POST['number_student'];
             $semesterID = $_POST['semesterID'];

@@ -812,6 +812,10 @@ $roleID=$_SESSION['roleID'];
         include('import_term_results.php');
         break;
 
+        case 'new_transcript':
+            include('new_transcript.php');
+            break;
+
         
     case 'view_term_score':
         include('view_term_score.php');

@@ -1,4 +1,8 @@
-<?php 
+<?php
+
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
+
 $file = "logs/userlog.log";
 $cont = 0;
 if (file_exists($file))
