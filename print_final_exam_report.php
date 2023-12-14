@@ -1,7 +1,8 @@
 <?php
 session_start();
 
-
+// error_reporting(E_ALL);
+// ini_set('display_errors', 1);
 if($_REQUEST['action']=="getPDF") {
     include 'DB.php';
     $db = new DBHelper();
@@ -61,7 +62,7 @@ if($_REQUEST['action']=="getPDF") {
 
         function BasicTable($header)
         {
-            $w = array(10, 35, 60,10);
+            $w = array(10, 35, 40,10);
             for ($i = 0; $i < count($header); $i++)
                 $this->Cell($w[$i], 6, $header[$i], 1, 0, 'C', 0);
             //$this->Ln();
@@ -73,7 +74,7 @@ if($_REQUEST['action']=="getPDF") {
     $levelID = $_REQUEST["lid"];
     $academicYearID = $_REQUEST["aid"];
     $centerID = $_REQUEST["cid"];
-    $termID=$_REQUEST['termID'];
+    // $termID=$_REQUEST['termID'];
     $centerName= $db->getData("center_registration", "centerName", "centerRegistrationID", $centerID);
     $levelName= $db->getData("programme_level", "programmeLevel", "programmeLevelID", $levelID);
     $academicYear= $db->getData("academic_year", "academicYear", "academicYearID", $academicYearID);
@@ -96,47 +97,184 @@ if($_REQUEST['action']=="getPDF") {
     $pdf->Text(10, 53, 'Final Exam Results - '. $db->getData("programmes", "programmeName", "programmeID", $programmeID)."-".$db->getData("programme_level", "programmeLevel", "programmeLevelID", $levelID)." ". $db->getData("academic_year", "academicYear", "academicYearID", $academicYearID));
     $pdf->Line(10,55,280,55);
 
-    $header = array('No', 'Registration','Name','Sex');
+    $header = array('No', 'Exam Number','Name','Sex');
     $pdf->Ln(10);
     //course details
     $pdf->SetFont('Arial', 'B', 11);
 
     $pdf->Cell('10', 6, '');
     $pdf->Ln(6);
+    
 
-   /*  $trades = $db->getCenterTrade($centerID,$programmeLevelID,$academicYearID);
-    if (!empty($trades)) {
-        foreach ($trades as $pg) {
-            $programmeID = $pg['programmeID'];
-            $programmeName=$pg['programmeName'];
-            $pdf->SetFont('Arial', '', 11);
-            $pdf->Cell(180, 6, "Trade Name:" . $programmeName, 0, 0, 'L');
-            $pdf->Ln(6); */
             $studentNumber=0;
-            // $student = $db->getStudentTermList($centerProgrammeCourseID, $academicYearID, $levelID, $programmeID);
-            // $student = $db->printCenterStudentExamNumber($centerID,$programmeLevelID, $programmeID, $academicYearID);
+           
+            
             $student = $db->getStudentTermList($centerID,$academicYearID,$programmeLevelID, $programmeID);
             if (!empty($student)) {
                 $pdf->SetFont('Arial', 'B', 11);
                 $pdf->BasicTable($header);
                 $course = $db->getCourseCredit($programmeLevelID, $programmeID);
+
+                
                 $wdth = 140/7;
+
+                 // Initialize with an empty string outside the loop
+                 $codeCode = '';
                 foreach ($course as $cs) {
-                    $pdf->Cell($wdth, 6, $cs['courseCode'], 1);
+                    $courseID = $cs['courseID'];
+                    $code = $cs['courseCode'];
+                    $courseTypeID = $cs['courseTypeID'];
+
+                    
+                    $courseType = $db->getData("course_type", "courseType", "courseTypeID", $courseTypeID);
+                    $courseCategoryID = $cs['courseCategoryID'];
+
+
+                    $courseCategory = $db->getData("course_category", "courseCategory", "courseCategoryID", $courseCategoryID);
+
+
+
+
+                    // $levelName= $db->getData("programme_level", "programmeLevel", "programmeLevelID", $levelID);
+
+                
+                    if ($courseCategory == 'Core Subjects' ) {
+
+
+                        if ( $levelName =='Level I') {
+                            # code...
+
+
+                            if ($courseType== 'Theory') { 
+                                $codeCode = $code . '11';
+                            } 
+                            elseif ($courseType== 'Field Training') {
+                                # code...
+                                $codeCode = $code . '13';
+                            }
+                            
+                            else {
+                                $codeCode = $code . '12';
+                            }
+                        }
+                        elseif( $levelName =='Level II'){
+
+
+
+                            if ($courseType== 'Theory') { 
+                                $codeCode = $code . '21';
+                            } 
+                            elseif ($courseType== 'Field Training') {
+                                # code...
+                                $codeCode = $code . '22';
+                            }
+                            
+                            else {
+                                $codeCode = $code . '23';
+                            }
+
+                        }
+                        
+                        else {
+                            # code...
+
+
+
+                            if ($courseType== 'Theory') { 
+                                $codeCode = $code . '31';
+                            } 
+                            elseif ($courseType== 'Field Training') {
+                                # code...
+                                $codeCode = $code . '33';
+                            }
+                            
+                            else {
+                                $codeCode = $code . '32';
+                            }
+                        }
+                        
+
+
+                       
+                    }
+                    else {
+                        if ( $levelName =='Level I') {
+                            # code...
+
+
+                            if ($courseType== 'Theory') { 
+                                $codeCode = $code . '11';
+                            } 
+                            elseif ($courseType== 'Field Training') {
+                                # code...
+                                $codeCode = $code . '13';
+                            }
+                            
+                            else {
+                                $codeCode = $code . '12';
+                            }
+                        }
+                        elseif( $levelName =='Level II'){
+
+
+
+                            if ($courseType== 'Theory') { 
+                                $codeCode = $code . '21';
+                            } 
+                            elseif ($courseType== 'Field Training') {
+                                # code...
+                                $codeCode = $code . '22';
+                            }
+                            
+                            else {
+                                $codeCode = $code . '23';
+                            }
+
+                        }
+                        
+                        else {
+                            # code...
+
+
+
+                            if ($courseType== 'Theory') { 
+                                $codeCode = $code . '31';
+                            } 
+                            elseif ($courseType== 'Field Training') {
+                                # code...
+                                $codeCode = $code . '33';
+                            }
+                            
+                            else {
+                                $codeCode = $code . '32';
+                            }
+                        }
+                        
+
+                    }
+                
+                    // Debugging
+                   // echo "codeCode: $codeCode<br>";
+                
+                    // Display the codeCode using $pdf->Cell if needed
+                    $pdf->Cell($wdth, 6, $codeCode, 1);
                 }
-                //$pdf->Ln();
+                
+                
+                
+                
+               
+                
                 $pdf->SetFont('Arial', 'B', 9);
-                /* $pdf->Cell(13, 6, "CSAVG", 1);
-                $pdf->Cell(13, 6, "GSAVG", 1); */
-                $pdf->Cell(15, 6, "RMK", 1);
+                $pdf->Cell(12, 6, "RMK", 1);
                 $pdf->Ln();
-                $pdf->Cell(115, 6, "", 1);
+                $pdf->Cell(95, 6, "", 1);
                 $pdf->SetFont('Arial', '', 8);
                 foreach ($course as $cs) {
                     $pdf->Cell(10, 6, "Marks", 1);
                     $pdf->Cell(10, 6, "Grade", 1);
                 }
-                $pdf->Cell(15, 6, "Remark", 1);
+                $pdf->Cell(12, 6, "Remark", 1);
                 $pdf->Ln();
 
                 $count=0;$totalPass=0;$totalSupp=0;
@@ -201,15 +339,17 @@ if($_REQUEST['action']=="getPDF") {
                     $name = "$fname $mname $lname";
                     $regNumber = $st['registrationNumber'];
                     // $examNumber = $st['examNumber'];
+                    $examnumber = $db->getData("exam_number", "examNumber", "regNumber", $regNumber);
+                    
                     $gender=$st['gender'];
 
                     if($gender=="M") $mgender++;
                     else $fgender++;
 
-                    $pdf->setFont('Arial', '', 8);
+                    $pdf->setFont('Arial', '', 7);
                     $pdf->Cell(10, 6, $count, 1);
-                    $pdf->Cell(35, 6, $regNumber, 1, 0, 'C');
-                    $pdf->Cell(60, 6, $name, 1, 0);
+                    $pdf->Cell(35, 6, $examnumber, 1, 0, 'C');
+                    $pdf->Cell(40, 6, $name, 1, 0);
                     $pdf->Cell(10, 6, $gender, 1, 0);
                    
 
@@ -233,10 +373,7 @@ if($_REQUEST['action']=="getPDF") {
 
 
 
-                        // $term1Score = $db->decrypt($db->getTermGrade($academicYearID, $courseID, $regNumber, 1));
-                        // $term2Score = $db->decrypt($db->getTermGrade($academicYearID, $courseID, $regNumber, 2));
-                        // $finalScore = $db->decrypt($db->getFinalTermGrade($academicYearID, $courseID, $examNumber, 3));
-                        // $suppScore = $db->decrypt($db->getFinalTermGrade($academicYearID, $courseID, $examNumber, 5));
+                     
                          $finalScore = $db->decrypt($db->getFinalTermGrade($academicYearID, $courseID, $exam_nr, 3));
                         $term1Score = $db->decrypt($db->getTermGrade($academicYearID, $courseID, $regNumber, 1));
                         $term2Score = $db->decrypt($db->getTermGrade($academicYearID, $courseID, $regNumber, 2));
@@ -255,50 +392,23 @@ if($_REQUEST['action']=="getPDF") {
 
                         $final = ($finalScore / 100) * 50;
                         $totalMarks = round($term1m + $term2m + $final);
-                        /* if ($suppScore>=0) {
-                            $finalm1=$suppScore;
-                            $tMarks = round($finalm1);
-                        }
-                        else{ */
-                            // $finalm1 = ($finalScore / 100) * 50;
-                            // $tMarks = round($term1m + $term2m + $finalm1);
-                        //}
-                       // $totalMarks = round($term1m + $term2m + $finalm);
- /*
-                        if ($tMarks>=35 && $tMarks<40 ) {
-                            $addmarks=40-$tMarks;
-                        }
-                        else
-                        {
-                            $addmarks=0;
-                            $finalScore = $finalScore;
-                            $finalm2 = ($finalScore / $mMark) * $wMark;
-                            $totalMarks = round($term1m + $term2m + $finalm); 
-                        }*/
 
-                            // $finalScore = $finalScore + $addmarks;
-                            //$finalm = ($finalScore / $mMark) * $wMark;
-                            // $finalm=$finalm1+$addmarks;
-                            /* if($suppScore>=40){
-                                $totalMarks=$suppScore;
-                            }
-                            else{ */
-                                // $totalMarks = round($term1m + $term2m + $finalm);
-
-                                // $totalMark = round($term);
-
-
-
-                            //}
-                           /*  if($suppScore>=40)
-                            {
-                                $grade="D";
-                            }
-                            
-                            else { */
-                               
-                               
+                    
+                            //    if ( $totalMarks > 0) {
+                                
                                 $grade = $db->calculateTermGrade($totalMarks);
+                            //    }
+                               
+                               
+                            //    else {
+                                
+
+                            //     continue;
+
+                            //    }
+                               
+                               
+                               
                             //}
                             if ($grade == "A" || $grade == "B" || $grade == "C"|| $grade == "D") {
                                 $tpass++;
@@ -413,7 +523,7 @@ if($_REQUEST['action']=="getPDF") {
 
 //             /* $pdf->Cell(13, 6, $csaverage, 1);
 //             $pdf->Cell(13, 6, $gsaverage, 1); */
-            $pdf->Cell(15, 6, $gparemarks, 1);
+            $pdf->Cell(12, 6, $gparemarks, 1);
             $pdf->Ln();
 
             if($gender=="M")

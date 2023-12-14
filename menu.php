@@ -116,7 +116,7 @@ $db = new DBHelper();
                     <li><a href="index3.php?sp=graduate_report">Graduate Reports</a></li>
                     <li><a href="index3.php?sp=register_exam">Exam Roster</a></li>
                     <li><a href="index3.php?sp=exam_list">Examination Statistics</a></li>
-                    <li><a href="index3.php?sp=new_transcript">Transcript</a></li>
+                    <!-- <li><a href="index3.php?sp=new_transcript">Transcript</a></li> -->
 
     </li>
 <?php

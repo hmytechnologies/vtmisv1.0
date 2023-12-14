@@ -117,14 +117,143 @@ if($_REQUEST['action']=="getPDF") {
                 $pdf->BasicTable($header);
                 $course = $db->getCourseCredit($levelID, $programmeID);
                 $wdth = 140/7;
+                $codeCode = '';
+                $course = $db->getCourseCredit($levelID,$programmeID);
                 foreach ($course as $cs) {
-                    $pdf->Cell($wdth, 6, $cs['courseCode'], 1);
+                    $courseID = $cs['courseID'];
+                        $code = $cs['courseCode'];
+                        $courseTypeID = $cs['courseTypeID'];
+
+
+                        $courseType = $db->getData("course_type", "courseType", "courseTypeID", $courseTypeID);
+                        $courseCategoryID = $cs['courseCategoryID'];
+
+
+                        $courseCategory = $db->getData("course_category", "courseCategory", "courseCategoryID", $courseCategoryID);
+                        $levelName= $db->getData("programme_level", "programmeLevel", "programmeLevelID", $levelID);
+
+
+                        if ($courseCategory == 'Core Subjects' ) {
+
+
+                            if ( $levelName =='Level I') {
+                                # code...
+    
+    
+                                if ($courseType== 'Theory') { 
+                                    $codeCode = $code . '11';
+                                } 
+                                elseif ($courseType== 'Field Training') {
+                                    # code...
+                                    $codeCode = $code . '13';
+                                }
+                                
+                                else {
+                                    $codeCode = $code . '12';
+                                }
+                            }
+                            elseif( $levelName =='Level II'){
+    
+    
+    
+                                if ($courseType== 'Theory') { 
+                                    $codeCode = $code . '21';
+                                } 
+                                elseif ($courseType== 'Field Training') {
+                                    # code...
+                                    $codeCode = $code . '22';
+                                }
+                                
+                                else {
+                                    $codeCode = $code . '23';
+                                }
+    
+                            }
+                            
+                            else {
+                                # code...
+    
+    
+    
+                                if ($courseType== 'Theory') { 
+                                    $codeCode = $code . '31';
+                                } 
+                                elseif ($courseType== 'Field Training') {
+                                    # code...
+                                    $codeCode = $code . '33';
+                                }
+                                
+                                else {
+                                    $codeCode = $code . '32';
+                                }
+                            }
+                            
+    
+    
+                           
+                        }
+                        else {
+                            if ( $levelName =='Level I') {
+                                # code...
+    
+    
+                                if ($courseType== 'Theory') { 
+                                    $codeCode = $code . '11';
+                                } 
+                                elseif ($courseType== 'Field Training') {
+                                    # code...
+                                    $codeCode = $code . '13';
+                                }
+                                
+                                else {
+                                    $codeCode = $code . '12';
+                                }
+                            }
+                            elseif( $levelName =='Level II'){
+    
+    
+    
+                                if ($courseType== 'Theory') { 
+                                    $codeCode = $code . '21';
+                                } 
+                                elseif ($courseType== 'Field Training') {
+                                    # code...
+                                    $codeCode = $code . '22';
+                                }
+                                
+                                else {
+                                    $codeCode = $code . '23';
+                                }
+    
+                            }
+                            
+                            else {
+                                # code...
+    
+    
+    
+                                if ($courseType== 'Theory') { 
+                                    $codeCode = $code . '31';
+                                } 
+                                elseif ($courseType== 'Field Training') {
+                                    # code...
+                                    $codeCode = $code . '33';
+                                }
+                                
+                                else {
+                                    $codeCode = $code . '32';
+                                }
+                            }
+                            
+    
+                        }
+                        $pdf->Cell(12.5, 6, $codeCode, 1, 0, 'C');
                 }
                 //$pdf->Ln();
                 $pdf->SetFont('Arial', 'B', 9);
-                $pdf->Cell(13, 6, "CSAVG", 1);
-                $pdf->Cell(13, 6, "GSAVG", 1);
-                $pdf->Cell(15, 6, "RMK", 1);
+                $pdf->Cell(12.5, 6, "CSAVG", 1);
+                $pdf->Cell(12.5, 6, "GSAVG", 1);
+                $pdf->Cell(12.5, 6, "RMK", 1);
                 $pdf->Ln();
                 //$pdf->Cell(90, 6, "", 1);
                 $pdf->SetFont('Arial', '', 8);
@@ -215,7 +344,7 @@ if($_REQUEST['action']=="getPDF") {
                             else 
                                 $grade="F";
                             $pdf->SetFillColor(169, 169, 169);
-                            $pdf->Cell(20, 6, $grade,1,0,'L',1);
+                            $pdf->Cell(12.5, 6, $grade,1,0,'L',1);
                         }
                         else 
                         {
@@ -224,14 +353,14 @@ if($_REQUEST['action']=="getPDF") {
                             {
                                 if ($grade=="F") {
                                     $pdf->SetFillColor(220, 50, 50);
-                                    $pdf->Cell(20, 6, $grade, 1, 0, 'L', 1);
+                                    $pdf->Cell(12.5, 6, $grade, 1, 0, 'L', 1);
                                 }
                                 else
-                                    $pdf->Cell(20, 6, $grade, 1);
+                                    $pdf->Cell(12.5, 6, $grade, 1);
                             }
                             else
                             {
-                                $pdf->Cell(20, 6, $grade, 1);
+                                $pdf->Cell(12.5, 6, $grade, 1);
                             }
                         }
 
@@ -265,13 +394,13 @@ if($_REQUEST['action']=="getPDF") {
                         $gparemarks = "Supp"; */
                     //$pdf->Ln();
 
-            $pdf->Cell(13, 6, $gradecs, 1);
-            $pdf->Cell(13, 6, $gradegs, 1);
+            $pdf->Cell(12.5, 6, $gradecs, 1);
+            $pdf->Cell(12.5, 6, $gradegs, 1);
             if ($gparemarks == "FAIL") {
                 $pdf->SetFillColor(220, 50, 50);
-                $pdf->Cell(15, 6, $gparemarks, 1, 0, 'L', 1);
+                $pdf->Cell(12.5, 6, $gparemarks, 1, 0, 'L', 1);
             } else {
-                $pdf->Cell(15, 6, $gparemarks, 1);
+                $pdf->Cell(12.5, 6, $gparemarks, 1);
             }
             //$pdf->Cell(15, 6, $gparemarks, 1);
             $pdf->Ln();

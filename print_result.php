@@ -297,9 +297,137 @@
                                     <th>Gender</th>
                                     <th>Reg.Number</th>
                                     <?php
+                                     $codeCode = '';
                                     $course = $db->getCourseCredit($levelID,$programmeID);
                                     foreach ($course as $cs) {
-                                        echo "<th>".$cs['courseCode']."</th>";
+                                        $courseID = $cs['courseID'];
+                                            $code = $cs['courseCode'];
+                                            $courseTypeID = $cs['courseTypeID'];
+
+
+                                            $courseType = $db->getData("course_type", "courseType", "courseTypeID", $courseTypeID);
+                                            $courseCategoryID = $cs['courseCategoryID'];
+
+
+                                            $courseCategory = $db->getData("course_category", "courseCategory", "courseCategoryID", $courseCategoryID);
+                                            $levelName= $db->getData("programme_level", "programmeLevel", "programmeLevelID", $levelID);
+
+
+                                            if ($courseCategory == 'Core Subjects' ) {
+
+
+                                                if ( $levelName =='Level I') {
+                                                    # code...
+                        
+                        
+                                                    if ($courseType== 'Theory') { 
+                                                        $codeCode = $code . '11';
+                                                    } 
+                                                    elseif ($courseType== 'Field Training') {
+                                                        # code...
+                                                        $codeCode = $code . '13';
+                                                    }
+                                                    
+                                                    else {
+                                                        $codeCode = $code . '12';
+                                                    }
+                                                }
+                                                elseif( $levelName =='Level II'){
+                        
+                        
+                        
+                                                    if ($courseType== 'Theory') { 
+                                                        $codeCode = $code . '21';
+                                                    } 
+                                                    elseif ($courseType== 'Field Training') {
+                                                        # code...
+                                                        $codeCode = $code . '22';
+                                                    }
+                                                    
+                                                    else {
+                                                        $codeCode = $code . '23';
+                                                    }
+                        
+                                                }
+                                                
+                                                else {
+                                                    # code...
+                        
+                        
+                        
+                                                    if ($courseType== 'Theory') { 
+                                                        $codeCode = $code . '31';
+                                                    } 
+                                                    elseif ($courseType== 'Field Training') {
+                                                        # code...
+                                                        $codeCode = $code . '33';
+                                                    }
+                                                    
+                                                    else {
+                                                        $codeCode = $code . '32';
+                                                    }
+                                                }
+                                                
+                        
+                        
+                                               
+                                            }
+                                            else {
+                                                if ( $levelName =='Level I') {
+                                                    # code...
+                        
+                        
+                                                    if ($courseType== 'Theory') { 
+                                                        $codeCode = $code . '11';
+                                                    } 
+                                                    elseif ($courseType== 'Field Training') {
+                                                        # code...
+                                                        $codeCode = $code . '13';
+                                                    }
+                                                    
+                                                    else {
+                                                        $codeCode = $code . '12';
+                                                    }
+                                                }
+                                                elseif( $levelName =='Level II'){
+                        
+                        
+                        
+                                                    if ($courseType== 'Theory') { 
+                                                        $codeCode = $code . '21';
+                                                    } 
+                                                    elseif ($courseType== 'Field Training') {
+                                                        # code...
+                                                        $codeCode = $code . '22';
+                                                    }
+                                                    
+                                                    else {
+                                                        $codeCode = $code . '23';
+                                                    }
+                        
+                                                }
+                                                
+                                                else {
+                                                    # code...
+                        
+                        
+                        
+                                                    if ($courseType== 'Theory') { 
+                                                        $codeCode = $code . '31';
+                                                    } 
+                                                    elseif ($courseType== 'Field Training') {
+                                                        # code...
+                                                        $codeCode = $code . '33';
+                                                    }
+                                                    
+                                                    else {
+                                                        $codeCode = $code . '32';
+                                                    }
+                                                }
+                                                
+                        
+                                            }
+                                            echo "<th>" . $codeCode . "</th>";
                                     }
                                     ?>
                                 </tr>

@@ -687,7 +687,7 @@ where  regNumber =:regNumber And sp.programmeID =ps.programmeID and sp.programme
 
     public function getCourseCredit($levelID, $progID)
     {
-        $query = $this->conn->prepare("SELECT DISTINCT(cp.courseID),courseName,courseCode,units,courseTypeID,courseRank,courseCategoryID from programmemaping cp,course c
+        $query = $this->conn->prepare("SELECT DISTINCT(cp.courseID),cp.courseID,courseName,courseCode,units,courseTypeID,courseRank,courseCategoryID from programmemaping cp,course c
         where c.courseID=cp.courseID
         AND cp.programmeID=:progID 
         AND cp.programmeLevelID=:levelID
@@ -2806,7 +2806,23 @@ ORDER BY semesterSettingID DESC");
             echo "Getting Data Error: " . $ex->getMessage();
         }
     }
+    // public function getFinal($academicYearID, $courseID)
+    // {
+    //     $examScore = "";
 
+    //     $query = $this->conn->prepare("SELECT DISTINCT courseCode ,fr.courseID ,examScore from exam_number en,final_result fr,course c
+    //         WHERE 
+    //         en.examNumber=fr.examNumber
+    //         AND c.courseID = fr.courseID
+    //         AND fr.courseID=:cid
+    //         AND fr.academicYearID=:sid
+    //         AND fr.examCategoryID=3");
+    //     $query->execute(array( ':cid' => $courseID, ':sid' => $academicYearID));
+    //     while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
+    //         $examScore = $row['examScore'];
+    //     }
+    //     return $examScore;
+    // }
     //getFinalresult
     public function getStudentFinalResult($courseID, $semesterID, $batchID)
     {
@@ -3781,7 +3797,17 @@ WHERE
 
     public function isExamNumberExist($examNumber, $semesterID)
     {
-        $query = $this->getRows("exam_number", array('where' => array('examNumber' => $examNumber, 'semesterSettingID' => $semesterID)));
+        $query = $this->getRows("exam_number", array('where' => array('examNumber' => $examNumber, 'academicYearID' => $semesterID)));
+        if (!empty($query)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function isExamExist($examNumber)
+    {
+        $query = $this->getRows("exam_number", array('where' => array('examNumber' => $examNumber)));
         if (!empty($query)) {
             return true;
         } else {

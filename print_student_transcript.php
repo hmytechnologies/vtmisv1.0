@@ -20,7 +20,7 @@ if($_REQUEST['action']=="getPDF") {
                  $countCoreSubjects2 = 0;
                  $sumGeneralMarks2 = 0;
                  $countGeneralSubjects2 = 0;
-
+                 $codeCode = '';
 
                  $sumCoreMarks3 = 0;
                  $countCoreSubjects3 = 0;
@@ -455,11 +455,11 @@ if($_REQUEST['action']=="getPDF") {
              {
                  // echo $academicYearName;
  
-                
+                 
                  $pageWidth = 297; // A4 width in mm
-                 $pageHeight = 85; // A4 height in mm
-                 $marginLeft = 10; // Left margin in mm
-                 $marginRight = 10; // Right margin in mm
+                 $pageHeight = 78.2; // A4 height in mm
+                 $marginLeft = 30; // Left margin in mm
+                 $marginRight = 30; // Right margin in mm
  
                    // Initialize variables to track core and general subject data for the first set of data
                  
@@ -474,22 +474,23 @@ if($_REQUEST['action']=="getPDF") {
                      // Calculate the coordinates of the dividing line
                      $divideX = $marginLeft + ($pageWidth - $marginLeft - $marginRight) / 2;
                     
-                     $pdf->Rect($divideX, 73.1, 2, $pageHeight);
+                     $pdf->Rect($divideX, 73, 2, $pageHeight);
                      $pdf->SetXY($marginLeft, 73); // Adjust the Y position as needed for centering
-                     $pdf->Cell($divideX - $marginLeft, 10,  $levelName .'  '.$academicYearName, 1, 0, 'C');
+                     $pdf->Cell($divideX - $marginLeft, 6,  $levelName .'  '.$academicYearName, 1, 0, 'C');
                      $pdf->SetFont('Arial', 'B', 8);
+                     
                      // Left half
-                     $pdf->SetXY($marginLeft, 83); // Adjust the Y position as needed for centering
+                     $pdf->SetXY($marginLeft, 79); // Adjust the Y position as needed for centering
                      $pdf->Cell(20, 7, 'Code', 1, 0, 'C');
                      $pdf->Cell(59.24, 7, 'Subjects', 1, 0, 'C');
-                     $pdf->Cell(59.24, 7, 'Average Performance', 1, 1, 'C');
+                     $pdf->Cell(39.3, 7, 'Average Performance', 1, 1, 'C');
                      $pdf->Ln();
  
-                     $pdf->SetXY($marginLeft,90.2); // Adjust the Y position as needed for centering
+                     $pdf->SetXY($marginLeft,86); // Adjust the Y position as needed for centering
                      $pdf->Cell(20, 6, '', 1, 0, 'C');
                      $pdf->Cell(59.24, 6, 'Core Subject', 1, 0, 'C');
-                     $pdf->Cell(59.24, 6, '', 1, 1, 'C');
- 
+                     $pdf->Cell(39.3, 6, '', 1, 1, 'C');
+                     $pdf->SetXY($marginLeft,92);
                      //echo $dx=($divideX - $marginLeft )/ 3;
  
                       $examNumber= $db->getRows('exam_number',array('where'=>array('regNumber'=> $regNum,'academicYearID'=> $academicYearID),'order_by'=>'regNumber ASC'));
@@ -507,7 +508,7 @@ if($_REQUEST['action']=="getPDF") {
  
                      //  $sumCoreMarks = 0;
                      //  $countCoreSubjects = 0;
-                      
+                     
                       foreach ($Std as $cs) 
                      {
                          # code...
@@ -515,11 +516,155 @@ if($_REQUEST['action']=="getPDF") {
      
                          
                          $examScore =  $cs['examScore'];
-                        $courseCode =  $cs['courseCode'];
+                        $code =  $cs['courseCode'];
                        $courseID =  $cs['courseID'];  
-                      $courseName =  $cs['courseName'];  
+                        $courseName =  $cs['courseName'];  
                         $courseTypeID=  $cs['courseCategoryID']; 
                         $courseCategory=  $cs['courseCategory'];
+                        $courseType = $db->getData("course_type", "courseType", "courseTypeID", $courseTypeID);
+                        $category = $db->getData("course_category", "courseCategory", "courseCategoryID", $courseCategory);
+
+
+
+
+                        if ($courseCategory == 'Core Subjects' ) {
+
+
+                          if ( $levelName =='Level I') {
+                              # code...
+  
+  
+                              if ($courseType== 'Theory') { 
+                                  $codeCode = $code . '11';
+                              } 
+                              elseif ($courseType== 'Field Training') {
+                                  # code...
+                                  $codeCode = $code . '13';
+                              }
+                              
+                              else {
+                                  $codeCode = $code . '12';
+                              }
+                          }
+                          elseif( $levelName =='Level II'){
+  
+  
+  
+                              if ($courseType== 'Theory') { 
+                                  $codeCode = $code . '21';
+                              } 
+                              elseif ($courseType== 'Field Training') {
+                                  # code...
+                                  $codeCode = $code . '22';
+                              }
+                              
+                              else {
+                                  $codeCode = $code . '23';
+                              }
+  
+                          }
+                          
+                          else {
+                              # code...
+  
+  
+  
+                              if ($courseType== 'Theory') { 
+                                  $codeCode = $code . '31';
+                              } 
+                              elseif ($courseType== 'Field Training') {
+                                  # code...
+                                  $codeCode = $code . '33';
+                              }
+                              
+                              else {
+                                  $codeCode = $code . '32';
+                              }
+                          }
+                          
+  
+  
+                         
+                      }
+                      else {
+                          if ( $levelName =='Level I') {
+                              # code...
+  
+  
+                              if ($courseType== 'Theory') { 
+                                  $codeCode = $code . '11';
+                              } 
+                              elseif ($courseType== 'Field Training') {
+                                  # code...
+                                  $codeCode = $code . '13';
+                              }
+                              
+                              else {
+                                  $codeCode = $code . '12';
+                              }
+                          }
+                          elseif( $levelName =='Level II'){
+  
+  
+  
+                              if ($courseType== 'Theory') { 
+                                  $codeCode = $code . '21';
+                              } 
+                              elseif ($courseType== 'Field Training') {
+                                  # code...
+                                  $codeCode = $code . '22';
+                              }
+                              
+                              else {
+                                  $codeCode = $code . '23';
+                              }
+  
+                          }
+                          
+                          else {
+                              # code...
+  
+  
+  
+                              if ($courseType== 'Theory') { 
+                                  $codeCode = $code . '31';
+                              } 
+                              elseif ($courseType== 'Field Training') {
+                                  # code...
+                                  $codeCode = $code . '33';
+                              }
+                              
+                              else {
+                                  $codeCode = $code . '32';
+                              }
+                          }
+                          
+  
+                      }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
      
                           $courseGrade = $db->getCourseCreditstudent($selectedLevelsID, $programmeID);
                              $term1Score = $db->decrypt($db->getTermGrade($academicYearID, $courseID, $regN, 1));
@@ -570,7 +715,7 @@ if($_REQUEST['action']=="getPDF") {
  
                           $grade = $db->calculateTermGrade($totalMarks);
   
-                           
+                      
                           if($courseCategory=='Core Subjects'){
  
  
@@ -581,12 +726,14 @@ if($_REQUEST['action']=="getPDF") {
                              }else{
                                  $sumCoreMarks += $totalMarks;
                              }
+                            //  $pdf->Cell(20, 6, '', 1, 0, 'C');
+                            //  $pdf->Cell(59.24, 6, 'Core Subject', 1, 0, 'C');
+                            //  $pdf->Cell(39.3, 6, '', 1, 1, 'C');
+                            $pdf->SetX(30);
                               
-                             
- 
-                             $pdf->Cell(20, 7, $courseCode, 1, 0, 'C');
-                             $pdf->Cell(59.24, 7, $courseName, 1, 0, 'L');
-                             $pdf->Cell(59.24, 7, $grade, 1, 1, 'C');
+                             $pdf->Cell(20, 6, $codeCode, 1, 0, 'C');
+                             $pdf->Cell(59.24, 6, $courseName, 1, 0, 'L');
+                             $pdf->Cell(39.3, 6, $grade, 1, 1, 'C');
                              
                              
                                   // Add the total marks to the sum
@@ -594,11 +741,6 @@ if($_REQUEST['action']=="getPDF") {
                                   // Increment the count of general subjects
                                   
   
-                             // $pdf->SetXY($marginLeft, 93); // Adjust the Y position as needed for centering
-                             // $pdf->Cell(20, 8, '', 1, 0, 'C');
-                             // $pdf->Cell(59, 8, 'Core Subject', 1, 0, 'C');
-                             // $pdf->Cell(59, 8, '', 1, 1, 'C');
-        
                              
                          }
                          
@@ -607,10 +749,10 @@ if($_REQUEST['action']=="getPDF") {
                  }
                      // echo "Sum of general subjects: " . $sumCoreMarks;
  
-                     $pdf->SetXY($marginLeft, 124); // Adjust the Y position as needed for centering
+                     $pdf->SetXY($marginLeft, 110); // Adjust the Y position as needed for centering
                      $pdf->Cell(20, 6, '', 1, 0, 'C');
                      $pdf->Cell(59.24, 6, 'General Subject', 1, 0, 'C');
-                     $pdf->Cell(59.24, 6, ' ', 1, 1, 'C');
+                     $pdf->Cell(39.3, 6, ' ', 1, 1, 'C');
                      if(is_array($examNumber) || is_object($examNumber) ){
  
                      foreach ($examNumber as $number) {
@@ -632,12 +774,166 @@ if($_REQUEST['action']=="getPDF") {
                      $pdf->SetFont('Arial', 'B', 8); // Set font to Arial, bold, size 10
  
                      $examScore =  $cs['examScore'];
-                     $courseCode =  $cs['courseCode'];
+                     $code =  $cs['courseCode'];
                      $courseID =  $cs['courseID'];  
-                     $courseName =  $cs['courseName'];  
-                     $courseTypeID=  $cs['courseCategoryID']; 
-                     $courseCategory=  $cs['courseCategory'];
- 
+                      $courseName =  $cs['courseName'];  
+                      $courseTypeID=  $cs['courseCategoryID']; 
+                      $courseCategory=  $cs['courseCategory'];
+                      $courseType = $db->getData("course_type", "courseType", "courseTypeID", $courseTypeID);
+                      $category = $db->getData("course_category", "courseCategory", "courseCategoryID", $courseCategory);
+
+
+
+
+                      if ($courseCategory == 'Core Subjects' ) {
+
+
+                        if ( $levelName =='Level I') {
+                            # code...
+
+
+                            if ($courseType== 'Theory') { 
+                                $codeCode = $code . '11';
+                            } 
+                            elseif ($courseType== 'Field Training') {
+                                # code...
+                                $codeCode = $code . '13';
+                            }
+                            
+                            else {
+                                $codeCode = $code . '12';
+                            }
+                        }
+                        elseif( $levelName =='Level II'){
+
+
+
+                            if ($courseType== 'Theory') { 
+                                $codeCode = $code . '21';
+                            } 
+                            elseif ($courseType== 'Field Training') {
+                                # code...
+                                $codeCode = $code . '22';
+                            }
+                            
+                            else {
+                                $codeCode = $code . '23';
+                            }
+
+                        }
+                        
+                        else {
+                            # code...
+
+
+
+                            if ($courseType== 'Theory') { 
+                                $codeCode = $code . '31';
+                            } 
+                            elseif ($courseType== 'Field Training') {
+                                # code...
+                                $codeCode = $code . '33';
+                            }
+                            
+                            else {
+                                $codeCode = $code . '32';
+                            }
+                        }
+                        
+
+
+                       
+                    }
+                    else {
+                        if ( $levelName =='Level I') {
+                            # code...
+
+
+                            if ($courseType== 'Theory') { 
+                                $codeCode = $code . '11';
+                            } 
+                            elseif ($courseType== 'Field Training') {
+                                # code...
+                                $codeCode = $code . '13';
+                            }
+                            
+                            else {
+                                $codeCode = $code . '12';
+                            }
+                        }
+                        elseif( $levelName =='Level II'){
+
+
+
+                            if ($courseType== 'Theory') { 
+                                $codeCode = $code . '21';
+                            } 
+                            elseif ($courseType== 'Field Training') {
+                                # code...
+                                $codeCode = $code . '22';
+                            }
+                            
+                            else {
+                                $codeCode = $code . '23';
+                            }
+
+                        }
+                        
+                        else {
+                            # code...
+
+
+
+                            if ($courseType== 'Theory') { 
+                                $codeCode = $code . '31';
+                            } 
+                            elseif ($courseType== 'Field Training') {
+                                # code...
+                                $codeCode = $code . '33';
+                            }
+                            
+                            else {
+                                $codeCode = $code . '32';
+                            }
+                        }
+                        
+
+                    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                      $courseGrade = $db->getCourseCreditstudent($selectedLevelsID, $programmeID);
                      $term1Score = $db->decrypt($db->getTermGrade($academicYearID, $courseID, $regN, 1));
                      $term2Score = $db->decrypt($db->getTermGrade($academicYearID, $courseID, $regN, 2));
@@ -690,10 +986,13 @@ if($_REQUEST['action']=="getPDF") {
  
                       if($courseCategory=='General Subjects')
                       {
+
+                        $pdf->SetX(30);
+                        
                          
-                         $pdf->Cell(20, 7, $courseCode, 1, 0, 'C');
+                         $pdf->Cell(20, 7, $codeCode, 1, 0, 'C');
                          $pdf->Cell(59.24, 7, $courseName, 1, 0, 'L');
-                         $pdf->Cell(59.24, 7, $grade, 1, 1, 'C');
+                         $pdf->Cell(39.3, 7, $grade, 1, 1, 'C');
  
  
                                  // Add the total marks to the sum
@@ -723,7 +1022,7 @@ if($_REQUEST['action']=="getPDF") {
  
                  }
                  else
-                 {
+                 { 
                      // echo $data;
                      //echo $academicYearName;
  
@@ -733,19 +1032,19 @@ if($_REQUEST['action']=="getPDF") {
                      // $pdf->Cell(58.25, 6, '', 1, 1, 'C');
                      $pdf->SetFont('Arial', 'B', 8); // Set font to Arial, bold, size 10
                      $pdf->SetXY($divideX + 2, 73.1); // Adjust the Y position as needed for centering
-                     $pdf->Cell($divideX - $marginLeft, 10,  $levelName .'  '.$academicYearName, 1, 0, 'C');
+                     $pdf->Cell($divideX - $marginLeft, 6,  $levelName .'  '.$academicYearName, 1, 0, 'C');
                      // Left half
                      $pdf->SetFont('Arial', 'B', 8); // Set font to Arial, bold, size 10
-                     $pdf->SetXY($divideX + 2, 83); // Adjust the Y position as needed for centering
+                     $pdf->SetXY($divideX + 2, 79); // Adjust the Y position as needed for centering
                      $pdf->Cell(20, 7, 'Code', 1, 0, 'C');
                      $pdf->Cell(59.24, 7, 'Subjects', 1, 0, 'C');
-                     $pdf->Cell(59.24, 7, 'Average Performance', 1, 1, 'C');
+                     $pdf->Cell(39.3, 7, 'Average Performance', 1, 1, 'C');
                      $pdf->Ln();
                      $pdf->SetFont('Arial', 'B', 8); // Set font to Arial, bold, size 10
-                     $pdf->SetXY($divideX + 2, 90); // Adjust the Y position as needed for centering
+                     $pdf->SetXY($divideX + 2, 86); // Adjust the Y position as needed for centering
                      $pdf->Cell(20, 6, '', 1, 0, 'C');
                      $pdf->Cell(59.24, 6, 'Core Subject', 1, 0, 'C');
-                     $pdf->Cell(59.24, 6, '', 1, 1, 'C');
+                     $pdf->Cell(39.3, 6, '', 1, 1, 'C');
  
                      //echo $dx=($divideX - $marginLeft )/ 3;
  
@@ -774,11 +1073,177 @@ if($_REQUEST['action']=="getPDF") {
      
                          
                          $examScore =  $cs['examScore'];
-                        $courseCode =  $cs['courseCode'];
-                       $courseID =  $cs['courseID'];  
-                      $courseName =  $cs['courseName'];  
-                        $courseTypeID=  $cs['courseCategoryID']; 
-                        $courseCategory=  $cs['courseCategory'];
+                         $code =  $cs['courseCode'];
+                         $courseID =  $cs['courseID'];  
+                          $courseName =  $cs['courseName'];  
+                          $courseTypeID=  $cs['courseCategoryID']; 
+                          $courseCategory=  $cs['courseCategory'];
+                          $courseType = $db->getData("course_type", "courseType", "courseTypeID", $courseTypeID);
+                          $category = $db->getData("course_category", "courseCategory", "courseCategoryID", $courseCategory);
+  
+  
+  
+  
+                          if ($courseCategory == 'Core Subjects' ) {
+  
+  
+                            if ( $levelName =='Level I') {
+                                # code...
+    
+    
+                                if ($courseType== 'Theory') { 
+                                    $codeCode = $code . '11';
+                                } 
+                                elseif ($courseType== 'Field Training') {
+                                    # code...
+                                    $codeCode = $code . '13';
+                                }
+                                
+                                else {
+                                    $codeCode = $code . '12';
+                                }
+                            }
+                            elseif( $levelName =='Level II'){
+    
+    
+    
+                                if ($courseType== 'Theory') { 
+                                    $codeCode = $code . '21';
+                                } 
+                                elseif ($courseType== 'Field Training') {
+                                    # code...
+                                    $codeCode = $code . '22';
+                                }
+                                
+                                else {
+                                    $codeCode = $code . '23';
+                                }
+    
+                            }
+                            
+                            else {
+                                # code...
+    
+    
+    
+                                if ($courseType== 'Theory') { 
+                                    $codeCode = $code . '31';
+                                } 
+                                elseif ($courseType== 'Field Training') {
+                                    # code...
+                                    $codeCode = $code . '33';
+                                }
+                                
+                                else {
+                                    $codeCode = $code . '32';
+                                }
+                            }
+                            
+    
+    
+                           
+                        }
+                        else {
+                            if ( $levelName =='Level I') {
+                                # code...
+    
+    
+                                if ($courseType== 'Theory') { 
+                                    $codeCode = $code . '11';
+                                } 
+                                elseif ($courseType== 'Field Training') {
+                                    # code...
+                                    $codeCode = $code . '13';
+                                }
+                                
+                                else {
+                                    $codeCode = $code . '12';
+                                }
+                            }
+                            elseif( $levelName =='Level II'){
+    
+    
+    
+                                if ($courseType== 'Theory') { 
+                                    $codeCode = $code . '21';
+                                } 
+                                elseif ($courseType== 'Field Training') {
+                                    # code...
+                                    $codeCode = $code . '22';
+                                }
+                                
+                                else {
+                                    $codeCode = $code . '23';
+                                }
+    
+                            }
+                            
+                            else {
+                                # code...
+    
+    
+    
+                                if ($courseType== 'Theory') { 
+                                    $codeCode = $code . '31';
+                                } 
+                                elseif ($courseType== 'Field Training') {
+                                    # code...
+                                    $codeCode = $code . '33';
+                                }
+                                
+                                else {
+                                    $codeCode = $code . '32';
+                                }
+                            }
+                            
+    
+                        }
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
      
                           $courseGrade = $db->getCourseCreditstudent($selectedLevelsID, $programmeID);
                              $term1Score = $db->decrypt($db->getTermGrade($academicYearID, $courseID, $regN, 1));
@@ -838,10 +1303,16 @@ if($_REQUEST['action']=="getPDF") {
                              }else{
                                  $sumCoreMarks2 += $totalMarks;
                              }
+
+                            //  $pdf->Cell(20, 6, '', 1, 0, 'C');
+                            //  $pdf->Cell(59.24, 6, 'Core Subject', 1, 0, 'C');
+                            //  $pdf->Cell(39.3, 6, '', 1, 1, 'C');
+
+
                              $pdf->SetX(150.5); // Adjust the X position according to your desired location
-                             $pdf->Cell($columnWidths[0], 7, $courseCode, 1, 0, 'L');
-                             $pdf->Cell($columnWidths[1], 7, $courseName, 1, 0, 'L');
-                             $pdf->Cell($columnWidths[2], 7, $grade, 1, 1, 'C');
+                             $pdf->Cell(20, 6, $codeCode, 1, 0, 'L');
+                             $pdf->Cell(59.24, 6, $courseName, 1, 0, 'L');
+                             $pdf->Cell(39.3, 6, $grade, 1, 1, 'C');
  
                             
                              // Increment the count of general subjects
@@ -858,10 +1329,10 @@ if($_REQUEST['action']=="getPDF") {
  
                      // echo "Sum of core subjects 2:   " . $sumCoreMarks2;
                     
-                     $pdf->SetXY($divideX + 2, 123.8); // Adjust the Y position as needed for centering
+                     $pdf->SetXY($divideX + 2, 110); // Adjust the Y position as needed for centering
                      $pdf->Cell(20, 6, '', 1, 0, 'C');
                      $pdf->Cell(59.24, 6, 'General Subject', 1, 0, 'C');
-                     $pdf->Cell(59.24, 6, ' ', 1, 1, 'C');
+                     $pdf->Cell(39.3, 6, ' ', 1, 1, 'C');
                      if(is_array($examNumber) || is_object($examNumber) ){
  
                      foreach ($examNumber as $number) {
@@ -880,12 +1351,187 @@ if($_REQUEST['action']=="getPDF") {
                     foreach ($Std as $cs) 
                     {
  
-                     $examScore =  $cs['examScore'];
-                     $courseCode =  $cs['courseCode'];
+                     $ $examScore =  $cs['examScore'];
+                     $code =  $cs['courseCode'];
                      $courseID =  $cs['courseID'];  
-                     $courseName =  $cs['courseName'];  
-                     $courseTypeID=  $cs['courseCategoryID']; 
-                     $courseCategory=  $cs['courseCategory'];
+                      $courseName =  $cs['courseName'];  
+                      $courseTypeID=  $cs['courseCategoryID']; 
+                      $courseCategory=  $cs['courseCategory'];
+                      $courseType = $db->getData("course_type", "courseType", "courseTypeID", $courseTypeID);
+                      $category = $db->getData("course_category", "courseCategory", "courseCategoryID", $courseCategory);
+
+
+
+
+                      if ($courseCategory == 'Core Subjects' ) {
+
+
+                        if ( $levelName =='Level I') {
+                            # code...
+
+
+                            if ($courseType== 'Theory') { 
+                                $codeCode = $code . '11';
+                            } 
+                            elseif ($courseType== 'Field Training') {
+                                # code...
+                                $codeCode = $code . '13';
+                            }
+                            
+                            else {
+                                $codeCode = $code . '12';
+                            }
+                        }
+                        elseif( $levelName =='Level II'){
+
+
+
+                            if ($courseType== 'Theory') { 
+                                $codeCode = $code . '21';
+                            } 
+                            elseif ($courseType== 'Field Training') {
+                                # code...
+                                $codeCode = $code . '22';
+                            }
+                            
+                            else {
+                                $codeCode = $code . '23';
+                            }
+
+                        }
+                        
+                        else {
+                            # code...
+
+
+
+                            if ($courseType== 'Theory') { 
+                                $codeCode = $code . '31';
+                            } 
+                            elseif ($courseType== 'Field Training') {
+                                # code...
+                                $codeCode = $code . '33';
+                            }
+                            
+                            else {
+                                $codeCode = $code . '32';
+                            }
+                        }
+                        
+
+
+                       
+                    }
+                    else {
+                        if ( $levelName =='Level I') {
+                            # code...
+
+
+                            if ($courseType== 'Theory') { 
+                                $codeCode = $code . '11';
+                            } 
+                            elseif ($courseType== 'Field Training') {
+                                # code...
+                                $codeCode = $code . '13';
+                            }
+                            
+                            else {
+                                $codeCode = $code . '12';
+                            }
+                        }
+                        elseif( $levelName =='Level II'){
+
+
+
+                            if ($courseType== 'Theory') { 
+                                $codeCode = $code . '21';
+                            } 
+                            elseif ($courseType== 'Field Training') {
+                                # code...
+                                $codeCode = $code . '22';
+                            }
+                            
+                            else {
+                                $codeCode = $code . '23';
+                            }
+
+                        }
+                        
+                        else {
+                            # code...
+
+
+
+                            if ($courseType== 'Theory') { 
+                                $codeCode = $code . '31';
+                            } 
+                            elseif ($courseType== 'Field Training') {
+                                # code...
+                                $codeCode = $code . '33';
+                            }
+                            
+                            else {
+                                $codeCode = $code . '32';
+                            }
+                        }
+                        
+
+                    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                     
  
                      $courseGrade = $db->getCourseCreditstudent($selectedLevelsID, $programmeID);
                      $term1Score = $db->decrypt($db->getTermGrade($academicYearID, $courseID, $regN, 1));
@@ -935,9 +1581,9 @@ if($_REQUEST['action']=="getPDF") {
                       {
                          
                          $pdf->SetX(150.5);
-                         $pdf->Cell(20, 7.05, $courseCode, 1, 0, 'L');
+                         $pdf->Cell(20, 7.05, $codeCode, 1, 0, 'L');
                          $pdf->Cell(59.24, 7.05, $courseName, 1, 0, 'L');
-                         $pdf->Cell(59.24, 7.05, $grade, 1, 1, 'C');
+                         $pdf->Cell(39.3, 7.05, $grade, 1, 1, 'C');
  
                        
  
