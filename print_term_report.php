@@ -121,10 +121,140 @@ if($_REQUEST['action']=="getPDF") {
                 $pdf->BasicTable($header);
                 $course = $db->getCourseCredit($programmeLevelID, $programmeID);
                 $wdth = 140/7;
+             
+
+                $codeCode = '';
+                $course = $db->getCourseCredit($levelID,$programmeID);
                 foreach ($course as $cs) {
-                    // $pdf->Cell($wdth, 6, $cs['courseCode'], 1);
-                    $pdf->Cell($wdth, 6, $cs['courseCode'], 1, 0, 'C');
-                } 
+                    $courseID = $cs['courseID'];
+                        $code = $cs['courseCode'];
+                        $courseTypeID = $cs['courseTypeID'];
+
+
+                        $courseType = $db->getData("course_type", "courseType", "courseTypeID", $courseTypeID);
+                        $courseCategoryID = $cs['courseCategoryID'];
+
+
+                        $courseCategory = $db->getData("course_category", "courseCategory", "courseCategoryID", $courseCategoryID);
+                        $levelName= $db->getData("programme_level", "programmeLevel", "programmeLevelID", $levelID);
+
+
+                        if ($courseCategory == 'Core Subjects' ) {
+
+
+                            if ( $levelName =='Level I') {
+                                # code...
+    
+    
+                                if ($courseType== 'Theory') { 
+                                    $codeCode = $code . '11';
+                                } 
+                                elseif ($courseType== 'Field Training') {
+                                    # code...
+                                    $codeCode = $code . '13';
+                                }
+                                
+                                else {
+                                    $codeCode = $code . '12';
+                                }
+                            }
+                            elseif( $levelName =='Level II'){
+    
+    
+    
+                                if ($courseType== 'Theory') { 
+                                    $codeCode = $code . '21';
+                                } 
+                                elseif ($courseType== 'Field Training') {
+                                    # code...
+                                    $codeCode = $code . '22';
+                                }
+                                
+                                else {
+                                    $codeCode = $code . '23';
+                                }
+    
+                            }
+                            
+                            else {
+                                # code...
+    
+    
+    
+                                if ($courseType== 'Theory') { 
+                                    $codeCode = $code . '31';
+                                } 
+                                elseif ($courseType== 'Field Training') {
+                                    # code...
+                                    $codeCode = $code . '33';
+                                }
+                                
+                                else {
+                                    $codeCode = $code . '32';
+                                }
+                            }
+                            
+    
+    
+                           
+                        }
+                        else {
+                            if ( $levelName =='Level I') {
+                                # code...
+    
+    
+                                if ($courseType== 'Theory') { 
+                                    $codeCode = $code . '11';
+                                } 
+                                elseif ($courseType== 'Field Training') {
+                                    # code...
+                                    $codeCode = $code . '13';
+                                }
+                                
+                                else {
+                                    $codeCode = $code . '12';
+                                }
+                            }
+                            elseif( $levelName =='Level II'){
+    
+    
+    
+                                if ($courseType== 'Theory') { 
+                                    $codeCode = $code . '21';
+                                } 
+                                elseif ($courseType== 'Field Training') {
+                                    # code...
+                                    $codeCode = $code . '22';
+                                }
+                                
+                                else {
+                                    $codeCode = $code . '23';
+                                }
+    
+                            }
+                            
+                            else {
+                                # code...
+    
+    
+    
+                                if ($courseType== 'Theory') { 
+                                    $codeCode = $code . '31';
+                                } 
+                                elseif ($courseType== 'Field Training') {
+                                    # code...
+                                    $codeCode = $code . '33';
+                                }
+                                
+                                else {
+                                    $codeCode = $code . '32';
+                                }
+                            }
+                            
+    
+                        }
+                        $pdf->Cell($wdth, 6, $codeCode, 1, 0, 'C');
+                }
                 //$pdf->Ln();
                 $pdf->SetFont('Arial', 'B', 9);
                 /* $pdf->Cell(13, 6, "CSAVG", 1);
@@ -209,7 +339,7 @@ if($_REQUEST['action']=="getPDF") {
                     if($gender=="M") $mgender++;
                     else $fgender++;
 
-                    $pdf->setFont('Arial', '', 8);
+                    $pdf->setFont('Arial', '', 7);
                     $pdf->Cell(10, 6, $count, 1);
                     $pdf->Cell(35, 6, $regNumber, 1, 0, 'C');
                     $pdf->Cell(60, 6, $name, 1, 0);
