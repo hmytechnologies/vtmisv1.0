@@ -13,6 +13,24 @@ $examDate=$_POST['examDate'];
 if($examDate=="")
     $examDate=date("Y-m-d");
 ?>
+
+<script type="text/javascript">
+                    $(document).ready(function() {
+                        $('#selecctall').click(function(event) {  //on click
+                            if(this.checked) { // check select status
+                                $('.checkbox1').each(function() { //loop through each checkbox
+                                    this.checked = true;  //select all checkboxes with class "checkbox1"
+                                });
+                            }else{
+                                $('.checkbox1').each(function() { //loop through each checkbox
+                                    this.checked = false; //deselect all checkboxes with class "checkbox1"
+                                });
+                            }
+                        });
+
+                    });
+                </script>
+
 <div class="col-lg-6">
     <form name="" method="post" action="action_exam_score.php">
     <?php
@@ -35,6 +53,7 @@ if($examDate=="")
             <thead>
             <tr>
                 <th>No.</th>
+                <th><input type="checkbox" id="selecctall"/></th>
                 <th>Exam Number</th>
                 <th>Score</th>
                 <th>Status</th>
@@ -68,8 +87,21 @@ if($examDate=="")
 
                 <tr>
                     <td><?php echo $count; ?></td>
+                    <td>
+                    <input class="checkbox1" type="checkbox" name="examnumber[]" value="<?php echo $examNumber; ?>">
+                    </td>
                     <input type='text' hidden name="examNumber[]"
                            value="<?php echo $examNumber; ?>">
+                           
+                          
+                           
+                           
+
+
+
+
+
+
                     <input type='text' hidden name="regNumber[]"
                            value="<?php echo $regNumber; ?>">
 
@@ -151,6 +183,7 @@ if($examDate=="")
                     <input type="hidden" name="examCategoryID" value="<?php echo $examCategoryID;?>">
                     <input type="hidden" name="examDate" value="<?php echo $examDate;?>">
                     <input type="submit" name="doSubmit" value="Save Records" class="btn btn-primary form-control" />
+                    <input type="submit" name="Submit" value="Insert Numbers" class="btn btn-success form-control"/>
                 </div>
                 <div class="col-lg-3">
                     <input type="reset" value="Cancel" class="btn btn-danger form-control" />
