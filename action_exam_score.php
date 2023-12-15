@@ -1,7 +1,7 @@
 <?php
 session_start();
 ini_set ('display_errors', 1);
-ob_start(); 
+// ob_start(); 
 error_reporting (E_ALL | E_STRICT);
 try {
     include 'DB.php';
@@ -111,11 +111,13 @@ try {
                         $insert = $db->insert($tblFinal, $finalData);
                         $statusMsg = $insert ? 'Exam Score data has been inserted successfully.' : 'Some problem occurred, please try again.';
                         $_SESSION['statusMsg'] = $statusMsg;
+
+                        echo 'error';
                     }
                 
                 }
 
-                header("Location:index3.php?sp=add_score&cid=" . $db->encrypt($courseID) ."");
+                // header("Location:index3.php?sp=add_score&cid=" . $db->encrypt($courseID) ."");
 
             }
             
@@ -126,7 +128,7 @@ try {
             // header("Location:index3.php?sp=add_score');
 
 
-            ob_end_flush();
+            // ob_end_flush();
         } 
         
     }   
