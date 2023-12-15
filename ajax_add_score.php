@@ -1,5 +1,8 @@
 <?php
 session_start();
+ini_set ('display_errors', 1);
+ 
+error_reporting (E_ALL | E_STRICT);
 include("DB.php");
 $db=new DBHelper();
 if($_POST['examCategoryID'])
@@ -14,22 +17,7 @@ if($examDate=="")
     $examDate=date("Y-m-d");
 ?>
 
-<script type="text/javascript">
-                    $(document).ready(function() {
-                        $('#selecctall').click(function(event) {  //on click
-                            if(this.checked) { // check select status
-                                $('.checkbox1').each(function() { //loop through each checkbox
-                                    this.checked = true;  //select all checkboxes with class "checkbox1"
-                                });
-                            }else{
-                                $('.checkbox1').each(function() { //loop through each checkbox
-                                    this.checked = false; //deselect all checkboxes with class "checkbox1"
-                                });
-                            }
-                        });
 
-                    });
-                </script>
 
 <div class="col-lg-6">
     <form name="" method="post" action="action_exam_score.php">
@@ -183,10 +171,14 @@ if($examDate=="")
                     <input type="hidden" name="examCategoryID" value="<?php echo $examCategoryID;?>">
                     <input type="hidden" name="examDate" value="<?php echo $examDate;?>">
                     <input type="submit" name="doSubmit" value="Save Records" class="btn btn-primary form-control" />
-                    <input type="submit" name="Submit" value="Insert Numbers" class="btn btn-success form-control"/>
+                    
                 </div>
                 <div class="col-lg-3">
                     <input type="reset" value="Cancel" class="btn btn-danger form-control" />
+                </div>
+
+                <div class="col-lg-3">
+                <input type="submit" name="Submit" value="Insert Numbers" class="btn btn-success form-control"/>
                 </div>
             </div>
         </form>
