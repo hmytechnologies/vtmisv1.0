@@ -171,15 +171,15 @@ if($examDate=="")
                     <input type="hidden" name="examCategoryID" value="<?php echo $examCategoryID;?>">
                     <input type="hidden" name="examDate" value="<?php echo $examDate;?>">
                     <input type="submit" name="doSubmit" value="Save Records" class="btn btn-primary form-control" />
+
+                    <br>
+                    <input type="submit" name="Submit" value="Insert Numbers" class="btn btn-success form-control"/>
                     
                 </div>
                 <div class="col-lg-3">
                     <input type="reset" value="Cancel" class="btn btn-danger form-control" />
                 </div>
 
-                <div class="col-lg-3">
-                <input type="submit" name="Submit" value="Insert Numbers" class="btn btn-success form-control"/>
-                </div>
             </div>
         </form>
     <?php
