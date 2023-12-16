@@ -53,6 +53,9 @@ if($examDate=="")
                 $count++;
                 $regNumber = $st['regNumber'];
                 $examNumber = $st['examNumber'];
+                $courseid = $st['courseID'];
+                $academicYearid = $st['academicYearID'];
+                
                 ?>
                 <script type="text/javascript">
                     $(document).ready(function () {
@@ -80,6 +83,10 @@ if($examDate=="")
                     </td>
                     <input type='text' hidden name="examNumber[]"
                            value="<?php echo $examNumber; ?>">
+                           <input type='text' hidden name="courseid"
+                           value="<?php echo $courseid; ?>">
+                           <input type='text' hidden name="academicYearid"
+                           value="<?php echo $academicYearid; ?>">
                            
                           
                            
@@ -166,6 +173,8 @@ if($examDate=="")
                     <input type="hidden" name="action_type" value="add"/>
                     <input type="hidden" name="courseID" value="<?php echo $courseID;?>">
                     <input type="hidden" name="number_student" value="<?php echo $count;?>">
+                    <input type="hidden" name="academicYearID" value="<?php echo $academicYearID;?>">
+                    
                     <input type="hidden" name="academicYearID" value="<?php echo $academicYearID;?>">
                     <input type="hidden" name="programmeLevelID" value="<?php echo $levelID;?>">
                     <input type="hidden" name="examCategoryID" value="<?php echo $examCategoryID;?>">

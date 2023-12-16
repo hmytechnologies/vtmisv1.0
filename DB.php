@@ -2592,7 +2592,7 @@ ORDER BY semesterSettingID DESC");
     public function getStudentExamList($courseID, $academicYearID, $levelID, $progID)
     {
         try {
-            $query = $this->conn->prepare("SELECT DISTINCT e.examNumber,e.regNumber from student s, student_programme sp,programmemaping p, exam_number e
+            $query = $this->conn->prepare("SELECT DISTINCT e.examNumber,e.regNumber,p.courseID,sp.programmeID,e.academicYearID from student s, student_programme sp,programmemaping p, exam_number e
             WHERE s.registrationNumber=e.regNumber
             AND e.regNumber=sp.regNumber
             AND sp.programmeLevelID=p.programmeLevelID
@@ -2636,6 +2636,22 @@ ORDER BY semesterSettingID DESC");
         }
     }
 
+    public function getExam($regNumber)
+    {
+        try {
+            $query = $this->conn->prepare("SELECT DISTINCT examNumber,e.academicYearID,  from student s,exam_number e
+            WHERE s.registrationNumber=e.regNumber
+            AND e.academicYearID=:acadID
+            AND e.regNumber=:regNo
+            ORDER BY e.examNumber ASC");
+            $query->execute(array( ':regNo' => $regNumber));
+            $row = $query->fetch(PDO::FETCH_ASSOC);
+            $number = $row['examNumber'];
+            return $number;
+        } catch (PDOException $ex) {
+            echo "Getting Data Error: " . $ex->getMessage();
+        }
+    }
 
     public function getExamNumber($regNumber, $academicYearID)
     {
