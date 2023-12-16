@@ -117,7 +117,7 @@ echo 'error';
                 
                 }
 
-                header("Location:index3.php?sp=add_score&cid=" . $db->encrypt($courseID) ."");
+                // header("Location:index3.php?sp=add_score&cid=" . $db->encrypt($courseID) ."");
 
             }
             
