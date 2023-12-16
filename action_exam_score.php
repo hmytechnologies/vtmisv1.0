@@ -73,17 +73,21 @@ error_reporting (E_ALL | E_STRICT);
             //    echo $number_student = $_POST['number_student'];
             //    echo $academicYearID = $_POST['academicYearID'];
             //   echo  $courseID = $_POST['courseID'];
-            //  echo   $examDate = $_POST['examDate'];
+            echo   $examDate = $_POST['examDate'];
             //    echo  $examCategoryID = $_POST['examCategoryID'];
-echo 'error';
+// echo 'error';
+
+        if (isset($_POST['examnumber']) && is_array($_POST['examnumber'])) {
+   
+             $courseid=$_POST['courseid'];
+            $academicYearid=$_POST['academicYearid'];
                 foreach($_POST['examnumber'] as $key=>$exNumber)
                 {
                     echo $examNumber=$_POST['examnumber'][$key];
                     
-                   echo  $examScore=$_POST['score'][$key];
-                  echo  $status=$_POST['status'][$key];
-                 echo  $courseid=$_POST['courseid'][$key];
-               echo  $academicYearid=$_POST['academicYearid'][$key];
+                     $examScore=$_POST['score'][$key];
+                    $status=$_POST['status'][$key];
+                 
                     $regNumber=$_POST['regNumber'][$key];
                   
                     $finalData = array(
@@ -100,9 +104,9 @@ echo 'error';
                         'comments' => 0
                     );
                 
-                    $score = $db->getRows('final_result', array('where' => array('examCategoryID' => $examCategoryID, 'examNumber' => $examNumber, 'courseID' => $courseID, 'academicYearID' => $academicYearID), ' order_by' => 'examNumber ASC'));
+                    $score = $db->getRows('final_result', array('where' => array('examCategoryID' => 3, 'examNumber' => $examNumber, 'courseID' => $courseid, 'academicYearID' => $academicYearid), ' order_by' => 'examNumber ASC'));
                     if (!empty($score)) {
-                        $condition = array('examNumber' => $examNumber, 'academicYearID' => $academicYearID, 'courseID' => $courseID, 'examCategoryID' => $examCategoryID);
+                        $condition = array('examNumber' => $examNumber, 'academicYearID' => $academicYearid, 'courseID' => $courseid, 'examCategoryID' => 3);
                         $update = $db->update($tblFinal, $finalData, $condition);
                         $statusMsg = $update ? 'Exam Score data has been updated successfully.' : 'Some problem occurred, please try again.';
                         $_SESSION['statusMsg'] = $statusMsg;
@@ -115,6 +119,7 @@ echo 'error';
                     }
                 
                 }
+            }
 
                 // header("Location:index3.php?sp=add_score&cid=" . $db->encrypt($courseID) ."");
 
