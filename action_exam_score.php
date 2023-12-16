@@ -74,50 +74,50 @@ try {
                 # code...
 
 
-                $number_student = $_POST['number_student'];
-                $academicYearID = $_POST['academicYearID'];
-                $courseID = $_POST['courseID'];
-                $examDate = $_POST['examDate'];
-                $examCategoryID = $_POST['examCategoryID'];
-
+               echo $number_student = $_POST['number_student'];
+               echo $academicYearID = $_POST['academicYearID'];
+              echo  $courseID = $_POST['courseID'];
+             echo   $examDate = $_POST['examDate'];
+               echo  $examCategoryID = $_POST['examCategoryID'];
+echo 'error';
                 foreach($_POST['examnumber'] as $key=>$exNumber)
                 {
-                    $examNumber=$_POST['examnumber'][$key];
-                    $examScore=$_POST['score'][$key];
-                    $status=$_POST['status'][$key];
-                    $regNumber=$_POST['regNumber'][$key];
+                    echo $examNumber=$_POST['examnumber'][$key];
+                   echo  $examScore=$_POST['score'][$key];
+                  echo  $status=$_POST['status'][$key];
+                    // $regNumber=$_POST['regNumber'][$key];
                   
-                    $finalData = array(
-                        'courseID' => $courseID,
-                        'examNumber' => $examNumber,
-                        'academicYearID' => $academicYearID,
-                        'examCategoryID' => $examCategoryID,
-                        'examDate' => $examDate,
-                        'examSitting' => 1,
-                        'examScore' => $db->encrypt($examScore),
-                        'status' => 0,
-                        'checked' => 0,
-                        'present' => $status,
-                        'comments' => 0
-                    );
+                    // $finalData = array(
+                    //     'courseID' => $courseID,
+                    //     'examNumber' => $examNumber,
+                    //     'academicYearID' => $academicYearID,
+                    //     'examCategoryID' => $examCategoryID,
+                    //     'examDate' => $examDate,
+                    //     'examSitting' => 1,
+                    //     'examScore' => $db->encrypt($examScore),
+                    //     'status' => 0,
+                    //     'checked' => 0,
+                    //     'present' => $status,
+                    //     'comments' => 0
+                    // );
                 
-                    $score = $db->getRows('final_result', array('where' => array('examCategoryID' => $examCategoryID, 'examNumber' => $examNumber, 'courseID' => $courseID, 'academicYearID' => $academicYearID), ' order_by' => 'examNumber ASC'));
-                    if (!empty($score)) {
-                        $condition = array('examNumber' => $examNumber, 'academicYearID' => $academicYearID, 'courseID' => $courseID, 'examCategoryID' => $examCategoryID);
-                        $update = $db->update($tblFinal, $finalData, $condition);
-                        $statusMsg = $update ? 'Exam Score data has been updated successfully.' : 'Some problem occurred, please try again.';
-                        $_SESSION['statusMsg'] = $statusMsg;
-                    } else {
-                        $insert = $db->insert($tblFinal, $finalData);
-                        $statusMsg = $insert ? 'Exam Score data has been inserted successfully.' : 'Some problem occurred, please try again.';
-                        $_SESSION['statusMsg'] = $statusMsg;
+                    // $score = $db->getRows('final_result', array('where' => array('examCategoryID' => $examCategoryID, 'examNumber' => $examNumber, 'courseID' => $courseID, 'academicYearID' => $academicYearID), ' order_by' => 'examNumber ASC'));
+                    // if (!empty($score)) {
+                    //     $condition = array('examNumber' => $examNumber, 'academicYearID' => $academicYearID, 'courseID' => $courseID, 'examCategoryID' => $examCategoryID);
+                    //     $update = $db->update($tblFinal, $finalData, $condition);
+                    //     $statusMsg = $update ? 'Exam Score data has been updated successfully.' : 'Some problem occurred, please try again.';
+                    //     $_SESSION['statusMsg'] = $statusMsg;
+                    // } else {
+                    //     $insert = $db->insert($tblFinal, $finalData);
+                    //     $statusMsg = $insert ? 'Exam Score data has been inserted successfully.' : 'Some problem occurred, please try again.';
+                    //     $_SESSION['statusMsg'] = $statusMsg;
 
-                        echo 'error';
-                    }
+                    //     // echo 'error';
+                    // }
                 
                 }
 
-                // header("Location:index3.php?sp=add_score&cid=" . $db->encrypt($courseID) ."");
+                header("Location:index3.php?sp=add_score&cid=" . $db->encrypt($courseID) ."");
 
             }
             
