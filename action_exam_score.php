@@ -3,16 +3,16 @@ session_start();
 ini_set ('display_errors', 1);
 // ob_start(); 
 error_reporting (E_ALL | E_STRICT);
-try {
+// try {
     include 'DB.php';
     $db = new DBHelper();
-    $tblName = 'exam_result';
-    $tblFinal = 'final_result';
+   echo $tblName = 'exam_result';
+   echo $tblFinal = 'final_result';
     $err = array();
     $mess = array();
-    if (isset($_REQUEST['action_type']) && !empty($_REQUEST['action_type'])) {
+    // if (isset($_REQUEST['action_type']) && !empty($_REQUEST['action_type'])) {
 
-        if ($_REQUEST['action_type'] == 'add') {
+        // if ($_REQUEST['action_type'] == 'add') {
 
             if (isset($_POST['doSubmit'])) {
                 # code...
@@ -123,20 +123,20 @@ echo 'error';
             
            
 
-                }
+               // }
              
             // header("Location:index3.php?sp=add_score');
 
 
             // ob_end_flush();
-        } 
+       // } 
         
-    }   
-    catch (PDOException $ex)
-{
-    // header("Location:index3.php?sp=add_score&cid=" . $db->encrypt($courseID) ."");
+  //  }   
+//     catch (PDOException $ex)
+// {
+//     // header("Location:index3.php?sp=add_score&cid=" . $db->encrypt($courseID) ."");
 
-}
+// }
         //sup
         /*else if ($_REQUEST['action_type'] == 'add_sup') {
             $number_student = $_POST['number_student'];
