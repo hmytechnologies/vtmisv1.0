@@ -5,7 +5,7 @@ ini_set ('display_errors', 1);
 error_reporting (E_ALL | E_STRICT);
 include("DB.php");
 $db=new DBHelper();
-if($_POST['examCategoryID'])
+if(isset($_POST['examCategoryID']))
 {
 $examCategoryID=$_POST['examCategoryID'];
 $courseID=$_POST['courseID'];
