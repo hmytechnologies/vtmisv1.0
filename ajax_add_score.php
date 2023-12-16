@@ -79,7 +79,8 @@ if($examDate=="")
                 <tr>
                     <td><?php echo $count; ?></td>
                     <td>
-                    <input class="checkbox1" type="checkbox" name="examnumber[]" value="<?php echo $examNumber; ?>">
+                    <input class="checkbox1" type="checkbox" name="examNumbers[]" 
+                    value="<?php echo $examNumber; ?>" >
                     </td>
                     <input type='text' hidden name="exam[]" value="<?php echo $examNumber; ?>">
                     <input type='text' hidden name="courseid" value="<?php echo $courseid; ?>">

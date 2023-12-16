@@ -17,10 +17,15 @@ error_reporting (E_ALL | E_STRICT);
             if (isset($_POST['doSubmit'])) {
                 # code...
                
-                
-            foreach($_POST['examNumber'] as $key=>$exNumber)
+                 $number_student = $_POST['number_student'];
+                    $academicYearID = $_POST['academicYearID'];
+                 $courseID = $_POST['courseID'];
+                 $examCategoryID = $_POST['examCategoryID'];
+                 $examDate =$_POST['examDate'];
+
+            foreach($_POST['exam'] as $key=>$exNumber)
             {
-                $examNumber=$_POST['examNumber'][$key];
+                $examNumber=$_POST['exam'][$key];
                 $examScore=$_POST['score'][$key];
                 $status=$_POST['status'][$key];
                 $regNumber=$_POST['regNumber'][$key];
@@ -73,29 +78,30 @@ error_reporting (E_ALL | E_STRICT);
             //    echo $number_student = $_POST['number_student'];
             //    echo $academicYearID = $_POST['academicYearID'];
             //   echo  $courseID = $_POST['courseID'];
-            echo   $examDate = $_POST['examDate'];
-            //    echo  $examCategoryID = $_POST['examCategoryID'];
-// echo 'error';
+          
+      
 
-        if (isset($_POST['examnumber']) && is_array($_POST['examnumber'])) {
-   
+        if (!empty($_POST['examNumbers']) ) {
+            // echo   $examDate = $_POST['examDate'];
              $courseid=$_POST['courseid'];
             $academicYearid=$_POST['academicYearid'];
-                foreach($_POST['examnumber'] as $key=>$exNumber)
+                foreach($_POST['examNumbers'] as $exNumber)
                 {
-                    echo $examNumber=$_POST['examnumber'][$key];
+                    // echo $examNumber=$_POST['examNumbers'][$key];
                     
-                     $examScore=$_POST['score'][$key];
-                    $status=$_POST['status'][$key];
+                    //  $examScore=$_POST['score'][$key];
+                     $examScore= 0;
+                    // $status=$_POST['status'][$key];
+                    $status=1;
                  
-                    $regNumber=$_POST['regNumber'][$key];
+                    // $regNumber=$_POST['regNumber'][$key];
                   
                     $finalData = array(
                         'courseID' => $courseid,
-                        'examNumber' => $examNumber,
+                        'examNumber' => $exNumber,
                         'academicYearID' => $academicYearid,
                         'examCategoryID' => 3,
-                        'examDate' => $examDate,
+                        'examDate' => '2023-12-16',
                         'examSitting' => 1,
                         'examScore' => $db->encrypt($examScore),
                         'status' => 0,
@@ -104,9 +110,9 @@ error_reporting (E_ALL | E_STRICT);
                         'comments' => 0
                     );
                 
-                    $score = $db->getRows('final_result', array('where' => array('examCategoryID' => 3, 'examNumber' => $examNumber, 'courseID' => $courseid, 'academicYearID' => $academicYearid), ' order_by' => 'examNumber ASC'));
+                    $score = $db->getRows('final_result', array('where' => array('examCategoryID' => 3, 'examNumber' => $exNumber, 'courseID' => $courseid, 'academicYearID' => $academicYearid), ' order_by' => 'examNumber ASC'));
                     if (!empty($score)) {
-                        $condition = array('examNumber' => $examNumber, 'academicYearID' => $academicYearid, 'courseID' => $courseid, 'examCategoryID' => 3);
+                        $condition = array('examNumber' => $exNumber, 'academicYearID' => $academicYearid, 'courseID' => $courseid, 'examCategoryID' => 3);
                         $update = $db->update($tblFinal, $finalData, $condition);
                         $statusMsg = $update ? 'Exam Score data has been updated successfully.' : 'Some problem occurred, please try again.';
                         $_SESSION['statusMsg'] = $statusMsg;
