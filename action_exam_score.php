@@ -10,18 +10,28 @@ error_reporting (E_ALL | E_STRICT);
    echo $tblFinal = 'final_result';
     $err = array();
     $mess = array();
+
+
+
+     
+   
+    if (isset($_POST['examCategoryID'])) {
+       
+        
+
+    $number_student = $_POST['number_student'];
+    $academicYearID = $_POST['academicYearID'];
+    $courseID = $_POST['courseID'];
+    $examDate = $_POST['examDate'];
+    // $levelID = $_POST['levelID'];
+    $examCategoryID = $_POST['examCategoryID'];
     // if (isset($_REQUEST['action_type']) && !empty($_REQUEST['action_type'])) {
 
         // if ($_REQUEST['action_type'] == 'add') {
 
             if (isset($_POST['doSubmit'])) {
                 # code...
-                $number_student = $_POST['number_student'];
-                $academicYearID = $_POST['academicYearID'];
-                $courseID = $_POST['courseID'];
-                $examDate = $_POST['examDate'];
-                // $levelID = $_POST['levelID'];
-                $examCategoryID = $_POST['examCategoryID'];
+               
                 
             foreach($_POST['examNumber'] as $key=>$exNumber)
             {
@@ -74,11 +84,11 @@ error_reporting (E_ALL | E_STRICT);
                 # code...
 
 
-               echo $number_student = $_POST['number_student'];
-               echo $academicYearID = $_POST['academicYearID'];
-              echo  $courseID = $_POST['courseID'];
-             echo   $examDate = $_POST['examDate'];
-               echo  $examCategoryID = $_POST['examCategoryID'];
+            //    echo $number_student = $_POST['number_student'];
+            //    echo $academicYearID = $_POST['academicYearID'];
+            //   echo  $courseID = $_POST['courseID'];
+            //  echo   $examDate = $_POST['examDate'];
+            //    echo  $examCategoryID = $_POST['examCategoryID'];
 echo 'error';
                 foreach($_POST['examnumber'] as $key=>$exNumber)
                 {
@@ -120,6 +130,7 @@ echo 'error';
                 // header("Location:index3.php?sp=add_score&cid=" . $db->encrypt($courseID) ."");
 
             }
+    }
             
            
 
