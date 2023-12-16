@@ -81,12 +81,9 @@ if($examDate=="")
                     <td>
                     <input class="checkbox1" type="checkbox" name="examnumber[]" value="<?php echo $examNumber; ?>">
                     </td>
-                    <input type='text' hidden name="examNumber[]"
-                           value="<?php echo $examNumber; ?>">
-                           <input type='text' hidden name="courseid"
-                           value="<?php echo $courseid; ?>">
-                           <input type='text' hidden name="academicYearid"
-                           value="<?php echo $academicYearid; ?>">
+                    <input type='text' hidden name="exam[]" value="<?php echo $examNumber; ?>">
+                    <input type='text' hidden name="courseid" value="<?php echo $courseid; ?>">
+                    <input type='text' hidden name="academicYearid" value="<?php echo $academicYearid; ?>">
                            
                           
                            
