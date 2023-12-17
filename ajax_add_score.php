@@ -1,11 +1,8 @@
 <?php
 session_start();
-ini_set ('display_errors', 1);
- 
-error_reporting (E_ALL | E_STRICT);
 include("DB.php");
 $db=new DBHelper();
-if(isset($_POST['examCategoryID']))
+if($_POST['examCategoryID'])
 {
 $examCategoryID=$_POST['examCategoryID'];
 $courseID=$_POST['courseID'];
@@ -16,9 +13,6 @@ $examDate=$_POST['examDate'];
 if($examDate=="")
     $examDate=date("Y-m-d");
 ?>
-
-
-
 <div class="col-lg-6">
     <form name="" method="post" action="action_exam_score.php">
     <?php
@@ -41,7 +35,6 @@ if($examDate=="")
             <thead>
             <tr>
                 <th>No.</th>
-                <th><input type="checkbox" id="selecctall"/></th>
                 <th>Exam Number</th>
                 <th>Score</th>
                 <th>Status</th>
@@ -53,9 +46,6 @@ if($examDate=="")
                 $count++;
                 $regNumber = $st['regNumber'];
                 $examNumber = $st['examNumber'];
-                $courseid = $st['courseID'];
-                $academicYearid = $st['academicYearID'];
-                
                 ?>
                 <script type="text/javascript">
                     $(document).ready(function () {
@@ -78,23 +68,8 @@ if($examDate=="")
 
                 <tr>
                     <td><?php echo $count; ?></td>
-                    <td>
-                    <input class="checkbox1" type="checkbox" name="examNumbers[]" 
-                    value="<?php echo $examNumber; ?>" >
-                    </td>
-                    <input type='text' hidden name="exam[]" value="<?php echo $examNumber; ?>">
-                    <input type='text' hidden name="courseid" value="<?php echo $courseid; ?>">
-                    <input type='text' hidden name="academicYearid" value="<?php echo $academicYearid; ?>">
-                           
-                          
-                           
-                           
-
-
-
-
-
-
+                    <input type='text' hidden name="examNumber[]"
+                           value="<?php echo $examNumber; ?>">
                     <input type='text' hidden name="regNumber[]"
                            value="<?php echo $regNumber; ?>">
 
@@ -172,21 +147,14 @@ if($examDate=="")
                     <input type="hidden" name="courseID" value="<?php echo $courseID;?>">
                     <input type="hidden" name="number_student" value="<?php echo $count;?>">
                     <input type="hidden" name="academicYearID" value="<?php echo $academicYearID;?>">
-                    
-                    <input type="hidden" name="academicYearID" value="<?php echo $academicYearID;?>">
                     <input type="hidden" name="programmeLevelID" value="<?php echo $levelID;?>">
                     <input type="hidden" name="examCategoryID" value="<?php echo $examCategoryID;?>">
                     <input type="hidden" name="examDate" value="<?php echo $examDate;?>">
                     <input type="submit" name="doSubmit" value="Save Records" class="btn btn-primary form-control" />
-
-                    <br>
-                    <input type="submit" name="Submit" value="Insert Numbers" class="btn btn-success form-control"/>
-                    
                 </div>
                 <div class="col-lg-3">
                     <input type="reset" value="Cancel" class="btn btn-danger form-control" />
                 </div>
-
             </div>
         </form>
     <?php

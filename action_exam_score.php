@@ -1,153 +1,74 @@
 <?php
 session_start();
+ob_start(); 
 ini_set ('display_errors', 1);
-// ob_start(); 
 error_reporting (E_ALL | E_STRICT);
-// try {
+//try {
     include 'DB.php';
     $db = new DBHelper();
-   echo $tblName = 'exam_result';
-   echo $tblFinal = 'final_result';
+    $tblName = 'exam_result';
+    $tblFinal = 'final_result';
     $err = array();
     $mess = array();
-    // if (isset($_REQUEST['action_type']) && !empty($_REQUEST['action_type'])) {
+    if (isset($_REQUEST['action_type']) && !empty($_REQUEST['action_type'])) {
 
-        // if ($_REQUEST['action_type'] == 'add') {
+        if ($_REQUEST['action_type'] == 'add') {
+            $number_student = $_POST['number_student'];
+            $academicYearID = $_POST['academicYearID'];
+            $courseID = $_POST['courseID'];
+            $examDate = $_POST['examDate'];
+            $levelID = $_POST['levelID'];
+            $examCategoryID = $_POST['examCategoryID'];
 
-            if (isset($_POST['doSubmit'])) {
-                # code...
-               
-                 $number_student = $_POST['number_student'];
-                    $academicYearID = $_POST['academicYearID'];
-                 $courseID = $_POST['courseID'];
-                 $examCategoryID = $_POST['examCategoryID'];
-                 $examDate =$_POST['examDate'];
-
-            foreach($_POST['exam'] as $key=>$exNumber)
-            {
-                $examNumber=$_POST['exam'][$key];
-                $examScore=$_POST['score'][$key];
-                $status=$_POST['status'][$key];
-                $regNumber=$_POST['regNumber'][$key];
-                
-
-                       /* $max_sfe_mark = $db->getExamCategoryMaxMark(2, $regNumber);
-                        if ($examScore > $max_sfe_mark) {
-                            $err[] = "Sorry-Final Exam Marks must be less than " . $max_sfe_mark . ", Review your Marks before you submit to the system";
-                            $statusMsg = "Sorry-Final Exam Marks must be less than " . $max_sfe_mark . ", Review your Marks before you submit to the system";
-                            $_SESSION['statusMsg'] = $statusMsg;
-                        }*/
-                       /* if (empty($err)) {
-                            if ($examScore < $db->getExamCategoryMark(2, $regNumber))
-                                $supStatus = 1;
-                            else
-                                $supStatus = 0;*/
-                            //$examNumber = $examNumber;
-                            $finalData = array(
-                                'courseID' => $courseID,
-                                'examNumber' => $examNumber,
-                                'academicYearID' => $academicYearID,
-                                'examCategoryID' => $examCategoryID,
-                                'examDate' => $examDate,
-                                'examSitting' => 1,
-                                'examScore' => $db->encrypt($examScore),
-                                'status' => 0,
-                                'checked' => 0,
-                                'present' => $status,
-                                'comments' => 0
-                            );
-                            $score = $db->getRows('final_result', array('where' => array('examCategoryID' => $examCategoryID, 'examNumber' => $examNumber, 'courseID' => $courseID, 'academicYearID' => $academicYearID), ' order_by' => 'examNumber ASC'));
-                            if (!empty($score)) {
-                                $condition = array('examNumber' => $examNumber, 'academicYearID' => $academicYearID, 'courseID' => $courseID, 'examCategoryID' => $examCategoryID);
-                                $update = $db->update($tblFinal, $finalData, $condition);
-                                $statusMsg = $update ? 'Exam Score data has been updated successfully.' : 'Some problem occurred, please try again.';
-                                $_SESSION['statusMsg'] = $statusMsg;
-                            } else {
-                                $insert = $db->insert($tblFinal, $finalData);
-                                $statusMsg = $insert ? 'Exam Score data has been inserted successfully.' : 'Some problem occurred, please try again.';
-                                $_SESSION['statusMsg'] = $statusMsg;
-                            }
-
-                }
-
-                header("Location:index3.php?sp=add_score&cid=" . $db->encrypt($courseID) ."");
-            } else {
-                # code...
-
-
-            //    echo $number_student = $_POST['number_student'];
-            //    echo $academicYearID = $_POST['academicYearID'];
-            //   echo  $courseID = $_POST['courseID'];
-          
-      
-
-        if (!empty($_POST['examNumbers']) ) {
-            // echo   $examDate = $_POST['examDate'];
-            echo  $courseid=$_POST['courseid'];
-             $academicYearid=$_POST['academicYearid'];
-                foreach($_POST['examNumbers'] as $exNumber)
+            foreach($_POST['examNumber'] as $key=>$exNumber)
                 {
-                    // echo $examNumber=$_POST['examNumbers'][$key];
-                    
-                    //  $examScore=$_POST['score'][$key];
-                     $examScore= 0;
-                    // $status=$_POST['status'][$key];
-                    $status=1;
-                 
-                    // $regNumber=$_POST['regNumber'][$key];
-                  
-                    $finalData = array(
-                        'courseID' => $courseid,
-                        'examNumber' => $exNumber,
-                        'academicYearID' => $academicYearid,
-                        'examCategoryID' => 3,
-                        'examDate' => '2023-12-16',
-                        'examSitting' => 1,
-                        'examScore' => $db->encrypt($examScore),
-                        'status' => 0,
-                        'checked' => 0,
-                        'present' => $status,
-                        'comments' => 0
-                    );
-                
-                    $score = $db->getRows('final_result', array('where' => array('examCategoryID' => 3, 'examNumber' => $exNumber, 'courseID' => $courseid, 'academicYearID' => $academicYearid), ' order_by' => 'examNumber ASC'));
-                    if (!empty($score)) {
-                        $condition = array('examNumber' => $exNumber, 'academicYearID' => $academicYearid, 'courseID' => $courseid, 'examCategoryID' => 3);
-                        $update = $db->update($tblFinal, $finalData, $condition);
-                        $statusMsg = $update ? 'Exam Score data has been updated successfully.' : 'Some problem occurred, please try again.';
-                        $_SESSION['statusMsg'] = $statusMsg;
-                    } else {
-                        $insert = $db->insert($tblFinal, $finalData);
-                        $statusMsg = $insert ? 'Exam Score data has been inserted successfully.' : 'Some problem occurred, please try again.';
-                        $_SESSION['statusMsg'] = $statusMsg;
+                    $examNumber=$_POST['examNumber'][$key];
+                    $examScore=$_POST['score'][$key];
+                    $status=$_POST['status'][$key];
+                    $regNumber=$_POST['regNumber'][$key];
 
-                        // echo 'error';
+                           /* $max_sfe_mark = $db->getExamCategoryMaxMark(2, $regNumber);
+                            if ($examScore > $max_sfe_mark) {
+                                $err[] = "Sorry-Final Exam Marks must be less than " . $max_sfe_mark . ", Review your Marks before you submit to the system";
+                                $statusMsg = "Sorry-Final Exam Marks must be less than " . $max_sfe_mark . ", Review your Marks before you submit to the system";
+                                $_SESSION['statusMsg'] = $statusMsg;
+                            }*/
+                           /* if (empty($err)) {
+                                if ($examScore < $db->getExamCategoryMark(2, $regNumber))
+                                    $supStatus = 1;
+                                else
+                                    $supStatus = 0;*/
+                                //$examNumber = $examNumber;
+                                $finalData = array(
+                                    'courseID' => $courseID,
+                                    'examNumber' => $examNumber,
+                                    'academicYearID' => $academicYearID,
+                                    'examCategoryID' => $examCategoryID,
+                                    'examDate' => $examDate,
+                                    'examSitting' => 1,
+                                    'examScore' => $db->encrypt($examScore),
+                                    'status' => 0,
+                                    'checked' => 0,
+                                    'present' => $status,
+                                    'comments' => 0
+                                );
+                                $score = $db->getRows('final_result', array('where' => array('examCategoryID' => $examCategoryID, 'examNumber' => $examNumber, 'courseID' => $courseID, 'academicYearID' => $academicYearID), ' order_by' => 'examNumber ASC'));
+                                if (!empty($score)) {
+                                    $condition = array('examNumber' => $examNumber, 'academicYearID' => $academicYearID, 'courseID' => $courseID, 'examCategoryID' => $examCategoryID);
+                                    $update = $db->update($tblFinal, $finalData, $condition);
+                                    $statusMsg = $update ? 'Exam Score data has been updated successfully.' : 'Some problem occurred, please try again.';
+                                    $_SESSION['statusMsg'] = $statusMsg;
+                                } else {
+                                    $insert = $db->insert($tblFinal, $finalData);
+                                    $statusMsg = $insert ? 'Exam Score data has been inserted successfully.' : 'Some problem occurred, please try again.';
+                                    $_SESSION['statusMsg'] = $statusMsg;
+                                }
+
                     }
-                
                 }
-            }
-
-                // header("Location:index3.php?sp=add_score&cid=" . $db->encrypt($courseID) ."");
-
-            }
-            
-           
-
-               // }
-             
-            // header("Location:index3.php?sp=add_score');
-
-
-            // ob_end_flush();
-       // } 
-        
-  //  }   
-//     catch (PDOException $ex)
-// {
-//     // header("Location:index3.php?sp=add_score&cid=" . $db->encrypt($courseID) ."");
-
-// }
-        //sup
+                header("Location:index3.php?sp=add_score&cid=" . $db->encrypt($courseID) ."");
+                ob_end_flush();
+        } //sup
         /*else if ($_REQUEST['action_type'] == 'add_sup') {
             $number_student = $_POST['number_student'];
             $semesterID = $_POST['semesterID'];
