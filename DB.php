@@ -2592,7 +2592,7 @@ ORDER BY semesterSettingID DESC");
     public function getStudentExams($courseID, $academicYearID, $levelID, $progID)
     {
         try {
-            $query = $this->conn->prepare("SELECT DISTINCT e.examNumber, registrationNumber,cp.courseID 
+            $query = $this->conn->prepare("SELECT DISTINCT e.examNumber, e.regNumber,cp.courseID 
             from student s,student_programme sp,exam_number e ,courseprogramme cp where
             s.registrationNumber = sp.regNumber and sp.programmeLevelID=:lvlID and 
             e.programmeID=:pID and  e.academicYearID = :acadID and cp.courseID  =:cid
