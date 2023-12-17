@@ -3,88 +3,29 @@ session_start();
 ob_start(); 
 ini_set ('display_errors', 1);
 error_reporting (E_ALL | E_STRICT);
-try {
-    include 'DB.php';
-    $db = new DBHelper();
-    $tblName = 'exam_result';
-    $tblFinal = 'final_result';
-    $err = array();
-    $mess = array();
-     if (isset($_REQUEST['action_type']) && !empty($_REQUEST['action_type'])) {
-        
+// try {
+    
+     if (isset($_REQUEST['action_type']) =="add") {
+        include 'DB.php';
+        $db = new DBHelper();
+       echo  $tblName = 'exam_result';
+       echo $tblFinal = 'final_result';
+        $err = array();
+        $mess = array();
 
-        if (isset($_POST['doSubmit'])) {
-            var_dump("Reached after session_start1");
 
-            echo $number_student = $_POST['number_student'];
-            echo $academicYearID = $_POST['academicYearID'];
-           echo  $courseID = $_POST['courseID'];
-            echo $examDate = $_POST['examDate'];
-        //    echo $levelID = $_POST['levelID'];
-        
-           echo $examCategoryID = $_POST['examCategoryID'];
-            echo 'inserted';
-
-            foreach($_POST['examNumber'] as $key=>$exNumber)
-                {
-                    var_dump("Reached after session_start2");
-
-                   echo $examNumber=$_POST['examNumber'][$key];
-                   echo $examScore=$_POST['score'][$key];
-                   echo  $status=$_POST['status'][$key];
-                   echo  $regNumber=$_POST['regNumber'][$key];
-
-                           /* $max_sfe_mark = $db->getExamCategoryMaxMark(2, $regNumber);
-                            if ($examScore > $max_sfe_mark) {
-                                $err[] = "Sorry-Final Exam Marks must be less than " . $max_sfe_mark . ", Review your Marks before you submit to the system";
-                                $statusMsg = "Sorry-Final Exam Marks must be less than " . $max_sfe_mark . ", Review your Marks before you submit to the system";
-                                $_SESSION['statusMsg'] = $statusMsg;
-                            }*/
-                           /* if (empty($err)) {
-                                if ($examScore < $db->getExamCategoryMark(2, $regNumber))
-                                    $supStatus = 1;
-                                else
-                                    $supStatus = 0;*/
-                                //$examNumber = $examNumber;
-                                $finalData = array(
-                                    'courseID' => $courseID,
-                                    'examNumber' => $examNumber,
-                                    'academicYearID' => $academicYearID,
-                                    'examCategoryID' => $examCategoryID,
-                                    'examDate' => $examDate,
-                                    'examSitting' => 1,
-                                    'examScore' => $db->encrypt($examScore),
-                                    'status' => 0,
-                                    'checked' => 0,
-                                    'present' => $status,
-                                    'comments' => 0
-                                );
-                                $score = $db->getRows('final_result', array('where' => array('examCategoryID' => $examCategoryID, 'examNumber' => $examNumber, 'courseID' => $courseID, 'academicYearID' => $academicYearID), ' order_by' => 'examNumber ASC'));
-                                if (!empty($score)) {
-                                    $condition = array('examNumber' => $examNumber, 'academicYearID' => $academicYearID, 'courseID' => $courseID, 'examCategoryID' => $examCategoryID);
-                                    $update = $db->update($tblFinal, $finalData, $condition);
-                                    $statusMsg = $update ? 'Exam Score data has been updated successfully.' : 'Some problem occurred, please try again.';
-                                    $_SESSION['statusMsg'] = $statusMsg;
-                                } else {
-                                    $insert = $db->insert($tblFinal, $finalData);
-                                    $statusMsg = $insert ? 'Exam Score data has been inserted successfully.' : 'Some problem occurred, please try again.';
-                                    $_SESSION['statusMsg'] = $statusMsg;
-                                }
-
-                    }
-                }
             }
                 // header("Location:index3.php?sp=add_score&cid=" . $db->encrypt($courseID) ."");
-                ob_end_flush();
-        }catch (PDOException $ex) {
+             ob_end_flush();
+        // }catch (PDOException $ex) {
           
-            error_log('PDOException: ' . $ex->getMessage());
+        //     error_log('PDOException: ' . $ex->getMessage());
         
            
-            echo 'An unexpected error occurred. Please try again later.';
+        //     echo 'An unexpected error occurred. Please try again later.';
         
            
-        }
+        // }
         
         /*else if ($_REQUEST['action_type'] == 'add_sup') {
             $number_student = $_POST['number_student'];
