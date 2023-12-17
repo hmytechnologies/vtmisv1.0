@@ -2597,7 +2597,7 @@ ORDER BY semesterSettingID DESC");
             s.registrationNumber = sp.regNumber and sp.programmeLevelID=:lvlID and 
             e.programmeID=:pID and  e.academicYearID = :acadID and cp.courseID  =:cid
             and sp.academicYearID=:acadID  and s.registrationNumber=e.regNumber
-             ORDER BY firstName");
+             ORDER BY e.examNumber");
             $query->execute(array(':pID' => $progID, ':cid' => $courseID, ':lvlID' => $levelID, ':acadID' => $academicYearID));
             $data = array();
             while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
