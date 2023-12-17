@@ -2588,6 +2588,26 @@ ORDER BY semesterSettingID DESC");
         }
     }
 
+
+    public function getStudentExams($courseID, $academicYearID, $levelID, $progID)
+    {
+        try {
+            $query = $this->conn->prepare("SELECT DISTINCT e.examNumber, registrationNumber,cp.courseID 
+            from student s,student_programme sp,exam_number e ,courseprogramme cp where
+            s.registrationNumber = sp.regNumber and sp.programmeLevelID=:lvlID and 
+            e.programmeID=:pID and  e.academicYearID = :acadID and cp.courseID  =:cid
+            and sp.academicYearID=:acadID  and s.registrationNumber=e.regNumber
+             ORDER BY firstName");
+            $query->execute(array(':pID' => $progID, ':cid' => $courseID, ':lvlID' => $levelID, ':acadID' => $academicYearID));
+            $data = array();
+            while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
+                $data[] = $row;
+            }
+            return $data;
+        } catch (PDOException $ex) {
+            echo "Getting Data Error: " . $ex->getMessage();
+        }
+    }
     //adding result for final exam
     public function getStudentExamList($courseID, $academicYearID, $levelID, $progID)
     {
