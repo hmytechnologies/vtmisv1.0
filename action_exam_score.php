@@ -3,7 +3,7 @@ session_start();
 ob_start(); 
 ini_set ('display_errors', 1);
 error_reporting (E_ALL | E_STRICT);
-//try {
+try {
     include 'DB.php';
     $db = new DBHelper();
     $tblName = 'exam_result';
@@ -13,17 +13,22 @@ error_reporting (E_ALL | E_STRICT);
     // if (isset($_REQUEST['action_type']) && !empty($_REQUEST['action_type'])) {
         
 
-        if (isset( $_POST['doSubmit'])) {
+        if ($_REQUEST['doSubmit'] == "Save Records") {
+            var_dump("Reached after session_start1");
+
             echo $number_student = $_POST['number_student'];
             echo $academicYearID = $_POST['academicYearID'];
            echo  $courseID = $_POST['courseID'];
             echo $examDate = $_POST['examDate'];
-           echo $levelID = $_POST['levelID'];
+        //    echo $levelID = $_POST['levelID'];
+        
            echo $examCategoryID = $_POST['examCategoryID'];
             echo 'inserted';
 
             foreach($_POST['examNumber'] as $key=>$exNumber)
                 {
+                    var_dump("Reached after session_start2");
+
                    echo $examNumber=$_POST['examNumber'][$key];
                    echo $examScore=$_POST['score'][$key];
                    echo  $status=$_POST['status'][$key];
@@ -70,7 +75,16 @@ error_reporting (E_ALL | E_STRICT);
                 }
                 // header("Location:index3.php?sp=add_score&cid=" . $db->encrypt($courseID) ."");
                 ob_end_flush();
-       // } //sup
+        }catch (PDOException $ex) {
+          
+            error_log('PDOException: ' . $ex->getMessage());
+        
+           
+            echo 'An unexpected error occurred. Please try again later.';
+        
+           
+        }
+        
         /*else if ($_REQUEST['action_type'] == 'add_sup') {
             $number_student = $_POST['number_student'];
             $semesterID = $_POST['semesterID'];
