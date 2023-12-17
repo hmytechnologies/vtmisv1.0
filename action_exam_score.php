@@ -83,8 +83,8 @@ error_reporting (E_ALL | E_STRICT);
 
         if (!empty($_POST['examNumbers']) ) {
             // echo   $examDate = $_POST['examDate'];
-             $courseid=$_POST['courseid'];
-            $academicYearid=$_POST['academicYearid'];
+            echo  $courseid=$_POST['courseid'];
+             $academicYearid=$_POST['academicYearid'];
                 foreach($_POST['examNumbers'] as $exNumber)
                 {
                     // echo $examNumber=$_POST['examNumbers'][$key];
