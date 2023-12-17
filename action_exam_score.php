@@ -10,22 +10,24 @@ error_reporting (E_ALL | E_STRICT);
     $tblFinal = 'final_result';
     $err = array();
     $mess = array();
-    if (isset($_REQUEST['action_type']) && !empty($_REQUEST['action_type'])) {
+    // if (isset($_REQUEST['action_type']) && !empty($_REQUEST['action_type'])) {
+        
 
-        if ($_REQUEST['action_type'] == 'add') {
-            $number_student = $_POST['number_student'];
-            $academicYearID = $_POST['academicYearID'];
-            $courseID = $_POST['courseID'];
-            $examDate = $_POST['examDate'];
-            $levelID = $_POST['levelID'];
-            $examCategoryID = $_POST['examCategoryID'];
+        if (isset( $_POST['doSubmit'])) {
+            echo $number_student = $_POST['number_student'];
+            echo $academicYearID = $_POST['academicYearID'];
+           echo  $courseID = $_POST['courseID'];
+            echo $examDate = $_POST['examDate'];
+           echo $levelID = $_POST['levelID'];
+           echo $examCategoryID = $_POST['examCategoryID'];
+            echo 'inserted';
 
             foreach($_POST['examNumber'] as $key=>$exNumber)
                 {
-                    $examNumber=$_POST['examNumber'][$key];
-                    $examScore=$_POST['score'][$key];
-                    $status=$_POST['status'][$key];
-                    $regNumber=$_POST['regNumber'][$key];
+                   echo $examNumber=$_POST['examNumber'][$key];
+                   echo $examScore=$_POST['score'][$key];
+                   echo  $status=$_POST['status'][$key];
+                   echo  $regNumber=$_POST['regNumber'][$key];
 
                            /* $max_sfe_mark = $db->getExamCategoryMaxMark(2, $regNumber);
                             if ($examScore > $max_sfe_mark) {
@@ -66,9 +68,9 @@ error_reporting (E_ALL | E_STRICT);
 
                     }
                 }
-                header("Location:index3.php?sp=add_score&cid=" . $db->encrypt($courseID) ."");
+                // header("Location:index3.php?sp=add_score&cid=" . $db->encrypt($courseID) ."");
                 ob_end_flush();
-        } //sup
+       // } //sup
         /*else if ($_REQUEST['action_type'] == 'add_sup') {
             $number_student = $_POST['number_student'];
             $semesterID = $_POST['semesterID'];
