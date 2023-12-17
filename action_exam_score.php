@@ -10,10 +10,10 @@ try {
     $tblFinal = 'final_result';
     $err = array();
     $mess = array();
-    // if (isset($_REQUEST['action_type']) && !empty($_REQUEST['action_type'])) {
+     if (isset($_REQUEST['action_type']) && !empty($_REQUEST['action_type'])) {
         
 
-        if ($_REQUEST['doSubmit'] == "Save Records") {
+        if (isset($_POST['doSubmit'])) {
             var_dump("Reached after session_start1");
 
             echo $number_student = $_POST['number_student'];
@@ -73,6 +73,7 @@ try {
 
                     }
                 }
+            }
                 // header("Location:index3.php?sp=add_score&cid=" . $db->encrypt($courseID) ."");
                 ob_end_flush();
         }catch (PDOException $ex) {
