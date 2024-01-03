@@ -270,7 +270,12 @@ if($_REQUEST['action']=="getPDF") {
                     $pdf->Cell(10, 6, "Marks", 1);
                     $pdf->Cell(10, 6, "Grade", 1);
                 }
+
+
                 $pdf->Cell(12, 6, "Remark", 1);
+
+
+
                 $pdf->Ln();
 
                 $count=0;$totalPass=0;$totalSupp=0;
@@ -525,13 +530,29 @@ if($_REQUEST['action']=="getPDF") {
                     }
                 */
 
-                        $pdf->Cell(10, 6, round($totalMarks), 1);
+                if ($totalMarks == 0) {
+
+                    $totalMarks = "n/a";
+                    $grade = "-";
+                    $pdf->Cell(10, 6, $totalMarks, 1);
                         if ($grade=="F") {
                             $pdf->SetFillColor(169, 169, 169);
                             $pdf->Cell(10, 6, $grade, 1,0,'L',1);
                         }else {
                             $pdf->Cell(10, 6, $grade, 1);
                         }
+                    # code...
+                } else {
+                    # code...
+
+                    $pdf->Cell(10, 6, round($totalMarks), 1);
+                        if ($grade=="F") {
+                            $pdf->SetFillColor(169, 169, 169);
+                            $pdf->Cell(10, 6, $grade, 1,0,'L',1);
+                        }else {
+                            $pdf->Cell(10, 6, $grade, 1);
+                        }
+                }
                     }
             // $gsaverage = round(($gstotal / $countgs));
             // $csaverage = round(($cstotal / $countcs));
@@ -550,7 +571,15 @@ if($_REQUEST['action']=="getPDF") {
 
 //             /* $pdf->Cell(13, 6, $csaverage, 1);
 //             $pdf->Cell(13, 6, $gsaverage, 1); */
-            $pdf->Cell(12, 6, $gparemarks, 1);
+            if ($totalMarks == 'n/a' ){
+                        $pdf->Cell(12, 6, '-', 1);
+               
+                        
+                    }else {
+                       
+                        $pdf->Cell(12, 6, $gparemarks, 1);
+               
+                    }
             $pdf->Ln();
 
             if($gender=="M")

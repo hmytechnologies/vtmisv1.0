@@ -17,7 +17,8 @@ if($examDate=="")
     <form name="" method="post" action="action_exam_score.php">
     <?php
 
-        $student= $db->getStudentExams($courseID,$academicYearID,$levelID,$programmeID);
+        // $student= $db->getStudentExams($courseID,$academicYearID,$levelID,$programmeID);
+        $student= $db->getStudentExamList($courseID,$academicYearID,$levelID,$programmeID);
         
         if(!empty($student))
         {
