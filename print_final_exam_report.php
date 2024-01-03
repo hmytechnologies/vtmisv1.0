@@ -387,6 +387,7 @@ if($_REQUEST['action']=="getPDF") {
                             }
                         }
 
+
                         $term1m = ($term1Score / $mMark) * $wMark;
                         $term2m = ($term2Score / $mMark) * $wMark;
 
@@ -497,21 +498,42 @@ if($_REQUEST['action']=="getPDF") {
                         $pdf->Cell($wdth,6,$tmarks."-".$grade,1);
                     }
                 */
+               
+            
 
-                        $pdf->Cell(10, 6, round($totalMarks), 1);
+                if ($totalMarks == 0) {
+
+                    $totalMarks = "n/a";
+                    $grade = "-";
+                    $pdf->Cell(10, 6, $totalMarks, 1);
                         if ($grade=="F") {
                             $pdf->SetFillColor(169, 169, 169);
                             $pdf->Cell(10, 6, $grade, 1,0,'L',1);
                         }else {
                             $pdf->Cell(10, 6, $grade, 1);
                         }
+                    # code...
+                } else {
+                    # code...
+
+                    $pdf->Cell(10, 6, round($totalMarks), 1);
+                        if ($grade=="F") {
+                            $pdf->SetFillColor(169, 169, 169);
+                            $pdf->Cell(10, 6, $grade, 1,0,'L',1);
+                        }else {
+                            $pdf->Cell(10, 6, $grade, 1);
+                        }
+                }
+                
+                        
                     }
             // $gsaverage = round(($gstotal / $countgs));
             // $csaverage = round(($cstotal / $countcs));
 
-            if ($totalMarks >= 40 )
-                $gparemarks = "Pass";
             
+           if ($totalMarks >= 40 )
+                $gparemarks = "Pass";
+          
             else 
                 $gparemarks="Supp";
 
@@ -521,9 +543,24 @@ if($_REQUEST['action']=="getPDF") {
                     $totalSupp+=1;
                     //$pdf->Ln();
 
+                    
 //             /* $pdf->Cell(13, 6, $csaverage, 1);
 //             $pdf->Cell(13, 6, $gsaverage, 1); */
-            $pdf->Cell(12, 6, $gparemarks, 1);
+
+               
+                    if ($totalMarks == 'n/a' ){
+                        $pdf->Cell(12, 6, '-', 1);
+               
+                        
+                    }else {
+                       
+                        $pdf->Cell(12, 6, $gparemarks, 1);
+               
+                    }
+
+                  
+
+            
             $pdf->Ln();
 
             if($gender=="M")
