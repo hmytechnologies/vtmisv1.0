@@ -687,10 +687,12 @@ where  regNumber =:regNumber And sp.programmeID =ps.programmeID and sp.programme
 
     public function getCourseCredit($levelID, $progID)
     {
-        $query = $this->conn->prepare("SELECT DISTINCT(cp.courseID),cp.courseID,courseName,courseCode,units,courseTypeID,courseRank,courseCategoryID from programmemaping cp,course c
+        $query = $this->conn->prepare("SELECT DISTINCT(cp.courseID),cp.courseID,courseName,courseCode,units,courseTypeID,courseRank,c.courseCategoryID from programmemaping cp,course c
+        
         where c.courseID=cp.courseID
         AND cp.programmeID=:progID 
         AND cp.programmeLevelID=:levelID
+     
         AND status=:st
         ORDER BY courseRank ASC");
         $query->execute(array('progID' => $progID, ':levelID' => $levelID, ':st' => 1));
