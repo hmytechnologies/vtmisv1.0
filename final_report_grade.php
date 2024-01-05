@@ -220,7 +220,7 @@ if($_REQUEST['action']=="getPDF") {
                             if ($courseType== 'Theory') { 
                                 $codeCode = $code . '21';
                             } 
-                            elseif ($courseType== 'Field Training') {
+                            elseif ($courseType== 'Practical') {
                                 # code...
                                 $codeCode = $code . '22';
                             }
@@ -379,6 +379,7 @@ if($_REQUEST['action']=="getPDF") {
                         // $term2Score = $db->decrypt($db->getTermGrade($academicYearID, $courseID, $regNumber, 2));
                         // $finalScore = $db->decrypt($db->getFinalTermGrade($academicYearID, $courseID, $examNumber, 3));
                         // $suppScore = $db->decrypt($db->getFinalTermGrade($academicYearID, $courseID, $examNumber, 5));
+                        
                          $finalScore = $db->decrypt($db->getFinalTermGrade($academicYearID, $courseID, $exam_nr, 3));
                         $term1Score = $db->decrypt($db->getTermGrade($academicYearID, $courseID, $regNumber, 1));
                         $term2Score = $db->decrypt($db->getTermGrade($academicYearID, $courseID, $regNumber, 2));
