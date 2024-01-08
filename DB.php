@@ -694,7 +694,7 @@ where  regNumber =:regNumber And sp.programmeID =ps.programmeID and sp.programme
         AND cp.programmeLevelID=:levelID
      
         AND status=:st
-        ORDER BY courseRank ASC");
+        ORDER BY courseCode ASC");
         $query->execute(array('progID' => $progID, ':levelID' => $levelID, ':st' => 1));
         $data = array();
         while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
@@ -4809,7 +4809,7 @@ WHERE
 
     public function getName($tableName, $attributeID, $attributeID2)
     {
-        $data = $this->getRows($tableName, array('where' => array($attributeID => $attributeID2), ' order_by' => firstName . ' ASC'));
+        $data = $this->getRows($tableName, array('where' => array($attributeID => $attributeID2)));
         if (!empty($data)) {
             foreach ($data as $dt) {
                 $fname = $dt['firstName'];
@@ -5153,23 +5153,23 @@ WHERE
         return $data;
     }*/
 
-    public function utf8ize($d)
-    {
-        if (is_array($d)) {
-            foreach ($d as $k => $v) {
-                $d[$k] = $this->utf8ize($v);
-            }
-        } else if (is_string($d)) {
-            return utf8_decode($d);
-        }
-        return $d;
-    }
+    // public function utf8ize($d)
+    // {
+    //     if (is_array($d)) {
+    //         foreach ($d as $k => $v) {
+    //             $d[$k] = $this->utf8ize($v);
+    //         }
+    //     } else if (is_string($d)) {
+    //         return utf8_decode($d);
+    //     }
+    //     return $d;
+    // }
 
-    private function system_logs($log_data)
-    {
-        $file = "logs";
-        // create directory/folder uploads. 
-        if (!file_exists($file)) mkdir($file, 0777, true);
+    // private function system_logs($log_data)
+    // {
+    //     $file = "logs";
+    //     // create directory/folder uploads. 
+    //     if (!file_exists($file)) mkdir($file, 0777, true);
 
         // user existence
        /*  $cnd['userCode'] = $_SESSION['user_session'];
@@ -5178,9 +5178,9 @@ WHERE
         $cond['return_type'] = "single";
         $user = $this->getRows("userroles", $cond)['roleCode']; */
         // end of find...
-        $file .= "/userlog";
-        file_put_contents($file . '.log', $log_data . "\n", FILE_APPEND);
-    }
+    //     $file .= "/userlog";
+    //     file_put_contents($file . '.log', $log_data . "\n", FILE_APPEND);
+    // }
     // private function system_logs($log_data)
     // {
     //     $file = "logs";
@@ -5227,6 +5227,33 @@ WHERE
 //     file_put_contents($logFile, $log_data . "\n", FILE_APPEND);
 // }
 
-    
+public function utf8ize($d)
+    {
+        if (is_array($d)) {
+            foreach ($d as $k => $v) {
+                $d[$k] = $this->utf8ize($v);
+            }
+        } else if (is_string($d)) {
+            return utf8_decode($d);
+        }
+        return $d;
+    }
+
+    private function system_logs($log_data)
+    {
+        $file = "logs";
+        // create directory/folder uploads. 
+        if (!file_exists($file)) mkdir($file, 0777, true);
+
+        // user existence
+       /*  $cnd['userCode'] = $_SESSION['user_session'];
+        $cond['where'] = $cnd;
+        $cond['select'] = "roleCode";
+        $cond['return_type'] = "single";
+        $user = $this->getRows("userroles", $cond)['roleCode']; */
+        // end of find...
+        $file .= "/userlog";
+        file_put_contents($file . '.log', $log_data . "\n", FILE_APPEND);
+    }    
     
 }

@@ -1,6 +1,7 @@
 <?php
 session_start();
-
+ini_set ('display_errors', 1);
+error_reporting (E_ALL | E_STRICT);
 
 if($_REQUEST['action']=="getPDF") {
     include 'DB.php';
@@ -296,13 +297,14 @@ if($_REQUEST['action']=="getPDF") {
                     $pdf->Cell(10, 6, $count, 1);
                     $pdf->Cell(35, 6, $examNumber, 1, 0, 'C');
                     $pdf->Cell(40, 6, $name, 1, 0);
-                    $pdf->Cell(10, 6, $gender, 1, 0);
+                    $pdf->Cell(10, 6, $gender, 1, 0, 'C');
                    
 
                     //course marks
                     $course = $db->getCourseCredit($levelID, $programmeID);
                     $tunits = 0;
                     $tpoints = 0;
+                    $gparemarks = '';
                     $countpass = 0;
                     $countsupp = 0;
                     $gstotal = 0;
@@ -456,23 +458,24 @@ if($_REQUEST['action']=="getPDF") {
 
                     $totalMarks = "NA";
                     $grade = "-";
-                    $pdf->Cell(10, 6, $totalMarks, 1);
+                    // $pdf->Cell(35, 6, $examNumber, 1, 0, 'C');
+                    $pdf->Cell(10, 6, $totalMarks, 1,0, 'C');
                         if ($grade=="F") {
                             $pdf->SetFillColor(169, 169, 169);
                             $pdf->Cell(10, 6, $grade, 1,0,'L',1);
                         }else {
-                            $pdf->Cell(10, 6, $grade, 1);
+                            $pdf->Cell(10, 6, $grade, 1,0, 'C');
                         }
                     # code...
                 } else {
                     # code...
 
-                    $pdf->Cell(10, 6, round($totalMarks), 1);
+                    $pdf->Cell(10, 6, round($totalMarks), 1,0, 'C');
                         if ($grade=="F") {
                             $pdf->SetFillColor(169, 169, 169);
                             $pdf->Cell(10, 6, $grade, 1,0,'L',1);
                         }else {
-                            $pdf->Cell(10, 6, $grade, 1);
+                            $pdf->Cell(10, 6, $grade, 1,0, 'C');
                         }
                 }
                     }
@@ -480,7 +483,7 @@ if($_REQUEST['action']=="getPDF") {
             $csaverage = round(($cstotal / $countcs));
 
             if ($totalMarks == 'NA' ){
-                $pdf->Cell(12, 6, '-', 1);
+                $pdf->Cell(12, 6, '-', 1,0, 'C');
        
                 
             }else {
@@ -499,7 +502,7 @@ if($_REQUEST['action']=="getPDF") {
                     else 
                         $totalSupp+=1;
                
-                $pdf->Cell(12, 6, $gparemarks, 1);
+                $pdf->Cell(12, 6, $gparemarks, 1,0, 'C');
        
             }
             $pdf->Ln();
@@ -524,9 +527,16 @@ if($_REQUEST['action']=="getPDF") {
 
 
     //end report
-    $ppass = round(($totalPass / ($totalPass + $totalSupp)) * 100, 2);
-    $pfail = round(($totalSupp / ($totalPass + $totalSupp)) * 100, 2);
-
+    // $ppass = round(($totalPass / ($totalPass + $totalSupp)) * 100, 2);
+    // $pfail = round(($totalSupp / ($totalPass + $totalSupp)) * 100, 2);
+    if (($totalPass + $totalSupp) > 0) {
+        $ppass = round(($totalPass / ($totalPass + $totalSupp)) * 100, 2);
+        $pfail = round(($totalSupp / ($totalPass + $totalSupp)) * 100, 2);
+    } else {
+        $ppass = 0;
+        $pfail = 0;
+    }
+    
     
 
     $tpass=$npassmale+$npassfemale;
